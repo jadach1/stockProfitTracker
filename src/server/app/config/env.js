@@ -1,7 +1,7 @@
 const envv = {
   database: 'postgres',
   username: 'jacob',
-  password: 'f1r3place',
+  password: 'jacob',
   host: 'localhost',
   dialect: 'postgres',
   pool: {
