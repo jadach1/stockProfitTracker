@@ -23,3 +23,14 @@ dbb.sequelize = sequelize;
 dbb.customers = require('../model/customer.model.js')(sequelize, Sequelize);
  
 module.exports = dbb;
+
+const assetdb = {};
+ 
+assetdb.Sequelize = Sequelize;
+assetdb.sequelize = sequelize;
+ 
+//Models/tables
+assetdb.currAssets = require('../model/CurrentAssets.model.js')(sequelize, Sequelize);
+ 
+
+module.exports = assetdb;
