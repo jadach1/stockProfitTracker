@@ -4,6 +4,9 @@ import { CustomerComponent } from '../customer/customer.component';
 import { AddCustomerComponent } from '../add-customer/add-customer.component';
 import { CustomerDetailsComponent } from '../customer-details/customer-details.component';
 
+import { CurrentAssetsComponent } from '../current-assets/current-assets.component';
+import { AddCurrentAssetComponent } from '../add-current-asset/add-current-asset.component';
+
 const routes: Routes = [
    { 
      path: 'customers', 
@@ -18,8 +21,16 @@ const routes: Routes = [
      component: CustomerDetailsComponent 
    },
    { 
+    path: 'currentAssets', 
+    component: CurrentAssetsComponent 
+  },
+  { 
+    path: 'currentAssets/add', 
+    component: AddCurrentAssetComponent 
+  },
+   { 
      path: '', 
-     redirectTo: 'customers', 
+     redirectTo: 'currentAssets', 
      pathMatch: 'full'
    }, 
 ];

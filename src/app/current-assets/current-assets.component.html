@@ -1,0 +1,4 @@
+<h5>All My Assets</h5>
+<div *ngFor="let asset of assets">
+  <a [routerLink]="['/current', cust.id]" style="color:black"><span class="badge badge-dark">{{asset.id}}</span> -> {{ asset.symbol }}</a>
+</div>
