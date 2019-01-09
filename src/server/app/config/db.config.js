@@ -13,24 +13,11 @@ const sequelize = new Sequelize(env.database, env.username, env.password, {
     idle: env.pool.idle
   }
 });
+
+const db = {};
  
-const dbb = {};
- 
-dbb.Sequelize = Sequelize;
-dbb.sequelize = sequelize;
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
  
 //Models/tables
-dbb.customers = require('../model/customer.model.js')(sequelize, Sequelize);
- 
-module.exports = dbb;
-
-const assetdb = {};
- 
-assetdb.Sequelize = Sequelize;
-assetdb.sequelize = sequelize;
- 
-//Models/tables
-assetdb.currAssets = require('../model/CurrentAssets.model.js')(sequelize, Sequelize);
- 
-
-module.exports = assetdb;
+db.currentassets = require('../model/CurrentAssets.model.js')(sequelize, Sequelize);

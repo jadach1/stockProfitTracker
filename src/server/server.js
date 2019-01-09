@@ -13,12 +13,15 @@ app.use(cors(corsOptions))
  
 const db = require('./app/config/db.config.js');
   
+
+
 // create table if it DOES NOT exist
 db.sequelize.sync().then(() => {
   console.log('Sync with table');
 });
  
 require('./app/route/currentAssets.route.js')(app);
+
  
 // Create a Server
 var server = app.listen(8080, function () {
@@ -29,4 +32,4 @@ var server = app.listen(8080, function () {
   console.log("App listening at http://%s:%s", host, port);
 })
  
-function initial(){}
+

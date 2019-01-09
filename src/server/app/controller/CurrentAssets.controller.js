@@ -5,11 +5,12 @@ const CurrentAsset = db.CurrentAssets;
 exports.create = (req, res) => {	
 	// Save to PostgreSQL database
 	CurrentAsset.create({
-				"symbol": req.body.firstname, 
-				"shares": req.body.lastname,
+				"symbol": req.body.symbol, 
+				"shares": req.body.shares,
 				"price": req.body.price,
 				"buydate": req.body.buydate
 			}).then(CurrentAsset => {		
+			console.log("Creating Asset");	
 			// Send created CurrentAsset to client
 			res.json(CurrentAsset);
 		}).catch(err => {
