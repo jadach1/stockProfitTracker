@@ -21,5 +21,3 @@ db.sequelize = sequelize;
  
 //Models/tables
 db.currentassets = require('../model/CurrentAssets.model.js')(sequelize, Sequelize);
- 
-module.exports = db;

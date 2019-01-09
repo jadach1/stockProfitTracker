@@ -13,12 +13,15 @@ app.use(cors(corsOptions))
  
 const db = require('./app/config/db.config.js');
   
-// force: true will drop the table if it already exists
-db.sequelize.sync({force: true}).then(() => {
-  console.log('Drop and Resync with { force: true }');
+
+
+// create table if it DOES NOT exist
+db.sequelize.sync().then(() => {
+  console.log('Sync with table');
 });
  
-require('./app/route/CurrentAssets.route.js')(app);
+require('./app/route/currentAssets.route.js')(app);
+
  
 // Create a Server
 var server = app.listen(8080, function () {
@@ -29,3 +32,4 @@ var server = app.listen(8080, function () {
   console.log("App listening at http://%s:%s", host, port);
 })
  
+

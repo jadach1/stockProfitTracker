@@ -10,7 +10,7 @@ exports.create = (req, res) => {
 				"price": req.body.price,
 				"buydate": req.body.buydate
 			}).then(CurrentAsset => {		
-			console.log("Creating Asset");
+			console.log("Creating Asset");	
 			// Send created CurrentAsset to client
 			res.json(CurrentAsset);
 		}).catch(err => {
