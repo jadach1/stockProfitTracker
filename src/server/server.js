@@ -21,7 +21,7 @@ db.sequelize.sync().then(() => {
 });
  
 require('./app/route/currentAssets.route.js')(app);
-
+require('./app/route/customer.route.js')(app);
  
 // Create a Server
 var server = app.listen(8080, function () {

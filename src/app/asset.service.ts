@@ -11,15 +11,15 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class AssetService {
-  private customersUrl = 'http://localhost:8080/api/currentassets';  // URL to web api
+  private Url = 'http://localhost:8080/api/currentassets';  // URL to web api
 
   constructor(private http: HttpClient) { }
 
   getCurrentAssets (): Observable<currentAssets[]> {
-    return this.http.get<currentAssets[]>(this.customersUrl)
+    return this.http.get<currentAssets[]>(this.Url)
   }
 
   addAsset (asset: currentAssets): Observable<currentAssets> {
-    return this.http.post<currentAssets>(this.customersUrl, asset, httpOptions);
+    return this.http.post<currentAssets>(this.Url, asset, httpOptions);
   }
 }

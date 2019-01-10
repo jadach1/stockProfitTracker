@@ -1,0 +1,62 @@
+<h3>Add Asset 2.0</h3>
+<div [hidden]="submitted">
+    <form #addAssetFrom="ngForm">
+
+      <div class="form-group">
+        <label for="symbol">Compnay Symbol</label>
+        <input type="text" class="form-control" id="symbol" placeholder="Give Companies symbol" 
+        required
+        [(ngModel)]="Asset.symbol" name="symbol" #symbol="ngModel">
+        <div [hidden]="symbol.valid || shares.pristine"
+             class="alert alert-danger">
+            shares is required
+        </div>
+      </div>
+      
+	    <div class="form-group">
+        <label for="shares">Shares Purchased</label>
+        <input type="number" class="form-control" id="shares" placeholder="Number of shares" 
+        required
+        [(ngModel)]="Asset.shares" name="shares" #shares="ngModel">
+        <div [hidden]="shares.valid || shares.pristine"
+             class="alert alert-danger">
+            shares is required
+        </div>
+      </div>
+     
+	    <div class="form-group">
+        <label for="price">Price </label>
+        <input type="number" class="form-control" id="price" placeholder="price per share" 
+        required
+        [(ngModel)]="Asset.price" name="price" #price="ngModel">
+        <div [hidden]="price.valid || price.pristine"
+             class="alert alert-danger">
+            price is required
+        </div>
+      </div>
+      
+	      <div class="form-group">
+        <label for="buydate">Purchase buydate </label>
+        <input type="date" class="form-control" id="buydate" placeholder="date purchased" 
+        required
+        [(ngModel)]="Asset.buydate" name="buydate" #buydate="ngModel">
+        <div [hidden]="buydate.valid || buydate.pristine"
+             class="alert alert-danger">
+            date is required
+        </div>
+      </div>
+	  
+      <div class="btn-group btn-group-sm">
+      	<button type="button" class="btn btn-dark" (click)="goBack()">Back</button>
+      	<button type="button" class="btn btn-dark" (click)="addAsset()" (click)="changedate()" [disabled]="!addAssetFrom.form.valid">Add</button>
+      </div>
+    </form>
+</div>
+
+<div [hidden]="!submitted">
+  <p>Submitted Successfully! -> <span class="badge badge-light">{{Asset.symbol}} {{Asset.shares}} {{Asset.price}} {{Asset.buydate}} </span></p>
+	<div class="btn-group btn-group-sm">
+    	<button type="button" class="btn btn-dark" (click)="goBack()">Back</button>
+    	<button type="button" class="btn btn-dark" (click)="newAsset(); addAssetFrom.reset()">Continue</button>
+    </div>
+</div>

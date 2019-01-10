@@ -1,5 +1,5 @@
 const db = require('../config/db.config.js');
-const CurrentAsset = db.assets;
+const CurrentAsset = db.CurrentAssets;
 
 // Post a CurrentAsset
 exports.create = (req, res) => {	

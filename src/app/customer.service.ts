@@ -25,6 +25,7 @@ export class CustomerService {
   }
 
   addCustomer (customer: Customer): Observable<Customer> {
+  alert("adding customer");
     return this.http.post<Customer>(this.customersUrl, customer, httpOptions);
   }
 

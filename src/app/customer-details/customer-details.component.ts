@@ -20,7 +20,9 @@ export class CustomerDetailsComponent implements OnInit {
     private customerService: CustomerService,
     private route: ActivatedRoute,
     private location: Location
-  ) {}
+  ) {
+  alert("customer details");
+  }
 
   ngOnInit(): void {
     const id = +this.route.snapshot.paramMap.get('id');
