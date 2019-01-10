@@ -1,0 +1,23 @@
+<h5>All My Assets</h5>
+<div>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Symbol</th>
+      <th>Shares</th>
+      <th>Price</th>
+	  <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let asset of assets">
+      <td>{{ asset.id }}</td>
+      <a [routerLink]="['/current', asset.symbol]" style="color:black"><td><span class="badge badge-dark">{{ asset.symbol }}</span> </td></a>
+      <td>{{ asset.shares }}</td>
+      <td>{{ asset.price }}</td>
+	  <td>{{ asset.buydate }}</td>
+    </tr>
+  </tbody>
+</table>
+</div>

@@ -8,7 +8,8 @@ exports.create = (req, res) => {
 				"firstname": req.body.firstname, 
 				"lastname": req.body.lastname, 
 				"age": req.body.age
-			}).then(customer => {		
+			}).then(customer => {	
+				console.log("here i am");
 			// Send created customer to client
 			res.json(customer);
 		}).catch(err => {
@@ -20,6 +21,7 @@ exports.create = (req, res) => {
 // FETCH All Customers
 exports.findAll = (req, res) => {
 	Customer.findAll().then(customers => {
+				console.log("findall customers");
 			// Send All Customers to Client
 			res.json(customers.sort(function(c1, c2){return c1.id - c2.id}));
 		}).catch(err => {
