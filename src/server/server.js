@@ -20,7 +20,7 @@ db.sequelize.sync().then(() => {
   console.log('Sync with table');
 });
  
-require('./app/route/currentAssets.route.js')(app);
+require('./app/route/transactions.route.js')(app);
 require('./app/route/customer.route.js')(app);
  
 // Create a Server

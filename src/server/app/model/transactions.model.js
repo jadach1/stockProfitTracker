@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-	const thiscanbeanything = sequelize.define('currentassets', {
+	const thiscanbeanything = sequelize.define('transactions', {
 	  symbol: {
 		    type: Sequelize.STRING
 	  },
@@ -10,7 +10,10 @@ module.exports = (sequelize, Sequelize) => {
 		  type: Sequelize.FLOAT
       },
       buydate: {
-          type: Sequelize.DATE
+          type: Sequelize.DATEONLY
+      },
+      transaction: {
+          type: Sequelize.BOOLEAN
       }
     });
 	
