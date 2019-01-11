@@ -1,5 +1,5 @@
 module.exports = function(capp) {
-    const CurrentAssets = require('../controller/CurrentAssets.controller.js');
+    const CurrentAssets = require('../controller/transactions.controller.js');
  
     // Create a new CurrentAsset
     capp.post('/api/currentAssets', CurrentAssets.create);

@@ -5,7 +5,7 @@ import { AddCustomerComponent } from '../add-customer/add-customer.component';
 import { CustomerDetailsComponent } from '../customer-details/customer-details.component';
 
 import { CurrentAssetsComponent } from '../current-assets/current-assets.component';
-import { AddAssetComponent } from '../add-asset/add-asset.component';
+import { TransactionComponent } from '../transaction/transaction.component';
 
 const routes: Routes = [
    { 
@@ -25,8 +25,8 @@ const routes: Routes = [
     component: CurrentAssetsComponent 
   },
   { 
-    path: 'currentAssets/add', 
-    component: AddAssetComponent 
+    path: 'currentTransactions/add', 
+    component: TransactionComponent 
   },
    { 
      path: '', 

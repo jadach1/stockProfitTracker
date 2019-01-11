@@ -8,7 +8,8 @@ exports.create = (req, res) => {
 				"symbol": req.body.symbol, 
 				"shares": req.body.shares,
 				"price": req.body.price,
-				"buydate": req.body.buydate
+                "buydate": req.body.buydate,
+                "transaction": req.body.transaction
 			}).then(CurrentAsset => {		
 			console.log("Creating Asset");	
 			// Send created CurrentAsset to client

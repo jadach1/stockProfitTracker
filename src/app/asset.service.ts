@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { currentAssets } from './currentAssets';
+import { transaction } from './transactions';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -15,11 +15,11 @@ export class AssetService {
 
   constructor(private http: HttpClient) { }
 
-  getCurrentAssets (): Observable<currentAssets[]> {
-    return this.http.get<currentAssets[]>(this.Url)
+  getCurrentAssets (): Observable<transaction[]> {
+    return this.http.get<transaction[]>(this.Url)
   }
 
-  addAsset (asset: currentAssets): Observable<currentAssets> {
-    return this.http.post<currentAssets>(this.Url, asset, httpOptions);
+  addAsset (asset: transaction): Observable<transaction> {
+    return this.http.post<transaction>(this.Url, asset, httpOptions);
   }
 }

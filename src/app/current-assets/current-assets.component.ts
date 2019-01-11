@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { currentAssets } from '../currentAssets';
+import { transaction } from '../transactions';
 import { AssetService } from '../asset.service';
 
 @Component({
@@ -9,11 +9,12 @@ import { AssetService } from '../asset.service';
 })
 export class CurrentAssetsComponent implements OnInit {
 
-  assets: currentAssets[];
+  assets: transaction[];
   constructor(private assetService: AssetService) { }
 
   ngOnInit(): void {
     this.getAssets();
+    
   }
 
   getAssets(){
@@ -24,5 +25,11 @@ export class CurrentAssetsComponent implements OnInit {
        this.assets = assets
       }
      );
+  }
+
+  checkTransaction(): void{
+    alert("i am on it");
+   // document.getElementById("talberow").style.background="red";
+   // document.getElementById("tablerow").style.color="white";
   }
 }

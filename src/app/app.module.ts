@@ -11,7 +11,7 @@ import { CustomerComponent } from './customer/customer.component';
 import { CustomerDetailsComponent } from './customer-details/customer-details.component';
 import { AddCustomerComponent } from './add-customer/add-customer.component';
 import { CurrentAssetsComponent } from './current-assets/current-assets.component';
-import { AddAssetComponent } from './add-asset/add-asset.component';
+import { TransactionComponent } from './transaction/transaction.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +20,7 @@ import { AddAssetComponent } from './add-asset/add-asset.component';
     CustomerDetailsComponent,
     AddCustomerComponent,
     CurrentAssetsComponent,
-    AddAssetComponent
+    TransactionComponent
   ],
   imports: [
     BrowserModule,
