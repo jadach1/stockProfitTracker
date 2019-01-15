@@ -5,4 +5,8 @@ export class transaction {
     price: number;
     buydate: Date;
     transaction: Boolean;
+    total: number;
 }
+
+
+// add total

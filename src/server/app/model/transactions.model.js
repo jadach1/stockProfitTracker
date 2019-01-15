@@ -14,7 +14,10 @@ module.exports = (sequelize, Sequelize) => {
       },
       transaction: {
           type: Sequelize.BOOLEAN
-      }
+	  },
+	  total: {
+		type: Sequelize.FLOAT
+	}
     });
 	
 	return thiscanbeanything;

@@ -9,7 +9,8 @@ exports.create = (req, res) => {
 				"shares": req.body.shares,
 				"price": req.body.price,
                 "buydate": req.body.buydate,
-                "transaction": req.body.transaction
+				"transaction": req.body.transaction,
+				"total": req.body.total
 			}).then(CurrentAsset => {		
 			console.log("Creating Asset");	
 			// Send created CurrentAsset to client
@@ -20,11 +21,24 @@ exports.create = (req, res) => {
 		});
 };
  
-// FETCH All CurrentAssets
+// FETCH All Transactions
 exports.findAll = (req, res) => {
 	CurrentAsset.findAll().then(CurrentAssets => {
 			// Send All CurrentAssets to Client
 			res.json(CurrentAssets.sort(function(c1, c2){return c1.id - c2.id}));
+		}).catch(err => {
+			console.log(err);
+			res.status(500).json({msg: "error", details: err});
+		});
+};
+
+// FETCH All CurrentAssets
+exports.findDistinct = (req, res) => {
+	CurrentAsset.findAll({
+			attributes: { include: [[CurrentAsset.fn('DISTINCT', CurrentAsset.col('symbol')), 'symbols']] }
+	  	}).then(CurrentAssets => {
+			// Send All CurrentAssets to Client
+			res.json(CurrentAssets);
 		}).catch(err => {
 			console.log(err);
 			res.status(500).json({msg: "error", details: err});

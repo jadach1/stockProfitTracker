@@ -1,4 +1,4 @@
-<h3 style="color:royalblue">Add Transaction</h3>
+<h3 style="color:royalblue">Add New Transaction</h3>
 
 <hr>
 <div [hidden]="submitted" class="container">
@@ -73,7 +73,7 @@
 </div>
 
 <div [hidden]="!submitted">
-  <p>Submitted Successfully! -> <span class="badge badge-light">{{Asset.symbol}} {{Asset.shares}} {{Asset.price}} {{Asset.buydate}} {{Asset.transaction}} </span></p>
+  <p>Submitted Successfully! -> <span class="badge badge-light">{{Asset.symbol}} {{Asset.shares}} {{Asset.price}} {{Asset.buydate}} {{Asset.transaction}} {{Asset.total}} </span></p>
 	<div class="btn-group btn-group-sm">
     	<button type="button" class="btn btn-dark" (click)="goBack()">Back</button>
     	<button type="button" class="btn btn-dark" (click)="newAsset(); addAssetFrom.reset()">Continue</button>

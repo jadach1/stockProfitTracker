@@ -5,14 +5,14 @@ module.exports = function(capp) {
     capp.post('/api/currentAssets', CurrentAssets.create);
  
     // Retrieve all CurrentAsset
-    capp.get('/api/currentAssets', CurrentAssets.findAll);
- 
-    // Retrieve a single CurrentAsset by Id
-    capp.get('/api/currentAssets/:id', CurrentAssets.findById);
- 
+    capp.get('/api/currentAssets', CurrentAssets.findDistinct);
+
     // Update a CurrentAsset with Id
     capp.put('/api/currentAssets', CurrentAssets.update);
  
     // Delete a CurrentAsset with Id
     capp.delete('/api/currentAssets/:id', CurrentAssets.delete);
+
+    // Retrieve all Transactions
+    capp.get('/api/allTransactions', CurrentAssets.findAll);
 }
