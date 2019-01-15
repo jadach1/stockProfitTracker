@@ -3,15 +3,14 @@ import { transaction } from '../transactions';
 import { AssetService } from '../asset.service';
 
 @Component({
-  selector: 'app-current-assets',
-  templateUrl: './current-assets.component.html',
-  styleUrls: ['./current-assets.component.css']
+  selector: 'app-all-transaction',
+  templateUrl: './all-transaction.component.html',
+  styleUrls: ['./all-transaction.component.css']
 })
-export class CurrentAssetsComponent implements OnInit {
+export class AllTransactionComponent implements OnInit {
 
   assets: transaction[];
   constructor(private assetService: AssetService) { }
-  total;
 
   ngOnInit(): void {
     this.getAssets();
@@ -19,7 +18,7 @@ export class CurrentAssetsComponent implements OnInit {
   }
 
   getAssets(){
-    return this.assetService.getCurrentAssets()
+    return this.assetService.getAllTransctions()
     .subscribe(
       assets => {
        console.log(assets);
@@ -28,5 +27,4 @@ export class CurrentAssetsComponent implements OnInit {
      );
   }
 
-  
 }

@@ -1,31 +1,26 @@
 <h5 style=" color: purple;" >All Assets I Am Currently Holding</h5>
 <div>
-<table>
+<table id="talberow">
   <thead>
     <tr>
-      <th>ID</th>
       <th>Symbol</th>
-      <th>Shares</th>
-      <th>Price</th>
-	  <th>Date</th>
+      <th>Total Shares</th>
+      <th>Average Price</th>
+      <th>Total $$$</th>
     </tr>
   </thead>
   <tbody>
       
-    <tr *ngFor="let asset of assets" id="talberow" 
-    [style.background-color]="asset.transaction == false ? 'red' : 'green'" 
-    style="color:white">
-
-      
-      <td>{{ asset.id }}</td>
+    <tr *ngFor="let asset of assets" >
       <a [routerLink]="['/current', asset.symbol]" >
-      <td><span class="badge badge-dark">{{ asset.symbol }}</span> </td>
+      <span class="badge badge-dark" id ="span">
+        <td>{{ asset.symbol }}</td>
+      </span> 
       </a>
       <td>{{ asset.shares }}</td>
-      <td>${{ asset.price }}</td>
-      <td>{{ asset.buydate }}</td>
-     
-
+      <td>${{ asset.price }}</td>  
+      <td>${{ asset.total }}</td>
+      <br>
     </tr>
   
   </tbody>
