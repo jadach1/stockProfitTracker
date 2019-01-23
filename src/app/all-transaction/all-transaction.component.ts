@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { transaction } from '../transactions';
-import { AssetService } from '../asset.service';
+import { TransactionsService } from '../transactions.service';
 
 @Component({
   selector: 'app-all-transaction',
@@ -9,22 +9,31 @@ import { AssetService } from '../asset.service';
 })
 export class AllTransactionComponent implements OnInit {
 
-  assets: transaction[];
-  constructor(private assetService: AssetService) { }
+ assets: transaction[];
+ newAssets = new transaction();
+
+ constructor(private transactionService: TransactionsService) { }
 
   ngOnInit(): void {
-    this.getAssets();
-    
+    this.getAssets(function(){
+
+     alert("Test " + this.assets[0]);
+    });
+    this.getTest();   
   }
 
-  getAssets(){
-    return this.assetService.getAllTransctions()
+  getAssets(callback){
+     return this.transactionService.getAllTransactions()
     .subscribe(
       assets => {
-       console.log(assets);
-       this.assets = assets
+       this.assets = assets;
+       alert("subrscirbed 2");
+       callback();
       }
-     );
+     );    
   }
 
+    getTest() {
+      
+    }
 }

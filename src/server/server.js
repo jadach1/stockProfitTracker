@@ -22,6 +22,7 @@ db.sequelize.sync().then(() => {
  
 require('./app/route/transactions.route.js')(app);
 require('./app/route/customer.route.js')(app);
+require('./app/route/asset.route.js')(app);
  
 // Create a Server
 var server = app.listen(8080, function () {
