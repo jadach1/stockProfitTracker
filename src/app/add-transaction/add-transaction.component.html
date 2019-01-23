@@ -1,4 +1,6 @@
 <h3 style="color:royalblue">Add New Transaction</h3>
+<p>Submitted Successfully! -> <span class="badge badge-light">{{Transaction.symbol}} {{Transaction.shares}} {{Transaction.price}} {{Transaction.buydate}} {{Transaction.transaction}} {{Transaction.total}} </span></p>
+<p>pulled asset! -> <span class="badge badge-light">{{newAsset.symbol}} {{newAsset.shares}} {{newAsset.price}} {{newAsset.total}} </span></p>
 
 <hr>
 <div [hidden]="submitted" class="container">
@@ -25,7 +27,7 @@
         <label for="symbol">Compnay Symbol</label>
         <input type="text" class="form-control" id="symbol" placeholder="Give Companies symbol" 
         required
-        [(ngModel)]="Asset.symbol" name="symbol" #symbol="ngModel">
+        [(ngModel)]="Transaction.symbol" name="symbol" #symbol="ngModel">
         <div [hidden]="symbol.valid || symbol.pristine"
              class="alert alert-danger">
             symbol is required
@@ -36,7 +38,7 @@
         <label for="shares">Shares Purchased</label>
         <input type="number" class="form-control" id="shares" placeholder="Number of shares" 
         required
-        [(ngModel)]="Asset.shares" name="shares" #shares="ngModel">
+        [(ngModel)]="Transaction.shares" name="shares" #shares="ngModel">
         <div [hidden]="shares.valid || shares.pristine"
              class="alert alert-danger">
             shares is required
@@ -47,7 +49,7 @@
         <label for="price">Price </label>
         <input type="number" class="form-control" id="price" placeholder="price per share" 
         required
-        [(ngModel)]="Asset.price" name="price" #price="ngModel">
+        [(ngModel)]="Transaction.price" name="price" #price="ngModel">
         <div [hidden]="price.valid || price.pristine"
              class="alert alert-danger">
             price is required
@@ -58,7 +60,7 @@
         <label for="buydate">Purchase buydate </label>
         <input type="date" class="form-control" id="buydate" placeholder="date purchased" 
         required
-        [(ngModel)]="Asset.buydate" name="buydate" #buydate="ngModel">
+        [(ngModel)]="Transaction.buydate" name="buydate" #buydate="ngModel">
         <div [hidden]="buydate.valid || buydate.pristine"
              class="alert alert-danger">
             date is required
@@ -67,15 +69,16 @@
 	  
       <div class="btn-group btn-group-sm">
       	<button type="button" class="btn btn-dark" (click)="goBack()">Back</button>
-      	<button type="button" class="btn btn-dark" (click)="addAsset()" [disabled]="!addAssetFrom.form.valid">Add</button>
+      	<button type="button" class="btn btn-dark" (click)="addTransaction()" [disabled]="!addAssetFrom.form.valid">Add</button>
       </div>
     </form>
 </div>
 
 <div [hidden]="!submitted">
-  <p>Submitted Successfully! -> <span class="badge badge-light">{{Asset.symbol}} {{Asset.shares}} {{Asset.price}} {{Asset.buydate}} {{Asset.transaction}} {{Asset.total}} </span></p>
-	<div class="btn-group btn-group-sm">
+  <p>Submitted Successfully! -> <span class="badge badge-light">{{Transaction.symbol}} {{Transaction.shares}} {{Transaction.price}} {{Transaction.buydate}} {{Transaction.transaction}} {{Transaction.total}} </span></p>
+ 
+  <div class="btn-group btn-group-sm">
     	<button type="button" class="btn btn-dark" (click)="goBack()">Back</button>
-    	<button type="button" class="btn btn-dark" (click)="newAsset(); addAssetFrom.reset()">Continue</button>
+    	<button type="button" class="btn btn-dark" (click)="newTransaction(); addAssetFrom.reset()">Continue</button>
     </div>
 </div>

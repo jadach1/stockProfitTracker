@@ -14,6 +14,7 @@ import { CurrentAssetsComponent } from './current-assets/current-assets.componen
 import { AddTransactionComponent } from './add-transaction/add-transaction.component';
 import { AllTransactionComponent } from './all-transaction/all-transaction.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,

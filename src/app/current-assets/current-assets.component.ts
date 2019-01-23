@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { transaction } from '../transactions';
+import { asset } from '../asset';
 import { AssetService } from '../asset.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { AssetService } from '../asset.service';
 })
 export class CurrentAssetsComponent implements OnInit {
 
-  assets: transaction[];
+  assets: asset[];
   constructor(private assetService: AssetService) { }
   total;
 
@@ -19,11 +19,10 @@ export class CurrentAssetsComponent implements OnInit {
   }
 
   getAssets(){
-    return this.assetService.getCurrentAssets()
+    return this.assetService.getAllAssets()
     .subscribe(
-      assets => {
-       console.log(assets);
-       this.assets = assets
+      thisCanBeAnything => {
+       this.assets = thisCanBeAnything
       }
      );
   }

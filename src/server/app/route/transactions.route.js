@@ -1,18 +1,19 @@
 module.exports = function(capp) {
-    const CurrentAssets = require('../controller/transactions.controller.js');
+    const Transaction = require('../controller/transactions.controller.js');
  
     // Create a new CurrentAsset
-    capp.post('/api/currentAssets', CurrentAssets.create);
+    capp.post('/api/Transaction', Transaction.create);
  
     // Retrieve all CurrentAsset
-    capp.get('/api/currentAssets', CurrentAssets.findDistinct);
+    capp.get('/api/Transaction', Transaction.findDistinct);
 
     // Update a CurrentAsset with Id
-    capp.put('/api/currentAssets', CurrentAssets.update);
+    capp.put('/api/Transaction', Transaction.update);
  
     // Delete a CurrentAsset with Id
-    capp.delete('/api/currentAssets/:id', CurrentAssets.delete);
+    capp.delete('/api/Transaction/:id', Transaction.delete);
 
     // Retrieve all Transactions
-    capp.get('/api/allTransactions', CurrentAssets.findAll);
+    capp.get('/api/allTransactions', Transaction.findAll);
+
 }

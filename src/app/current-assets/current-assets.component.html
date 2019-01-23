@@ -1,19 +1,19 @@
 <h5 style=" color: purple;" >All Assets I Am Currently Holding</h5>
 <div>
-<table id="talberow">
+<table >
   <thead>
-    <tr>
+    <tr> 
       <th>Symbol</th>
       <th>Total Shares</th>
       <th>Average Price</th>
       <th>Total $$$</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody >
       
-    <tr *ngFor="let asset of assets" >
+    <tr *ngFor="let asset of assets" [ngClass]="'tablerow'">
       <a [routerLink]="['/current', asset.symbol]" >
-      <span class="badge badge-dark" id ="span">
+      <span class="badge badge-dark">
         <td>{{ asset.symbol }}</td>
       </span> 
       </a>

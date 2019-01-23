@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { transaction } from './transactions';
+import { asset } from './asset';
+import {map} from 'rxjs/operators';
+import { Observable} from 'rxjs';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -15,15 +16,28 @@ export class AssetService {
 
   constructor(private http: HttpClient) { }
 
-  getCurrentAssets (): Observable<transaction[]> {
-    return this.http.get<transaction[]>(this.Url+'currentassets')
-  }
- 
-  getAllTransctions (): Observable<transaction[]> {
-    return this.http.get<transaction[]>(this.Url+'allTransactions')
+  getAsset(symbol: string): Observable<asset> {
+    const url = `${this.Url + 'currentassets'}/${symbol}`;
+    //return this.http.get<asset>(this.Url+'currentassets'+'/'+symbol);
+    return this.http.get<asset>(url);
   }
 
-  addAsset (asset: transaction): Observable<transaction> {
-    return this.http.post<transaction>(this.Url+'currentassets', asset, httpOptions);
+  getAllAssets (): Observable<asset[]> {
+    return this.http.get<asset[]>(this.Url+'currentassets')
+  }
+
+  createAsset(asset: asset): Observable<asset> {
+    return this.http.post<asset>(this.Url+'currentassets', asset, httpOptions);
+  }
+
+  checkIfExist(name: string) {
+    let checker;
+  
+    const url = `${this.Url + 'currentassets/checkIfExist'}/${name}`;
+    checker = this.http.get<any>(url)
+            .pipe(
+              map(data => data.expires)
+            )
+            return checker;
   }
 }
