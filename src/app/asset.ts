@@ -1,8 +1,11 @@
 export class asset {
-    id: number;
     symbol: string;
     shares: number;
+    avgprice: number;
+    originalMoney: number;
+    totalMoneyIn: number;
+    totalMoneyOut: number;
     price: number;
-    total: number;
+    currentTotal: number;
 }
 

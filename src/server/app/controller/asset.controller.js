@@ -39,12 +39,12 @@ exports.findAsset = (req, res) => {
 	});
 	};
  
-// Update a CurrentAsset
+// Update an Asset
 exports.update = (req, res) => {
-	const id = req.body.id;
+	const symbol = req.body.symbol;
 	CurrentAsset.update( req.body, 
-			{ where: {id: id} }).then(() => {
-				res.status(200).json( { mgs: "Updated Successfully -> CurrentAsset Id = " + id } );
+			{ where: {symbol: symbol} }).then(() => {
+				res.status(200).json( { mgs: "Updated Successfully -> CurrentAsset Symbol = " + symbol } );
 			}).catch(err => {
 				console.log(err);
 				res.status(500).json({msg: "error", details: err});

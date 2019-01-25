@@ -16,20 +16,29 @@ export class AssetService {
 
   constructor(private http: HttpClient) { }
 
+  // Return a single asset from the database table assets
   getAsset(symbol: string): Observable<asset> {
     const url = `${this.Url + 'currentassets'}/${symbol}`;
     //return this.http.get<asset>(this.Url+'currentassets'+'/'+symbol);
     return this.http.get<asset>(url);
   }
 
+  // return all assets from the database table assets
   getAllAssets (): Observable<asset[]> {
     return this.http.get<asset[]>(this.Url+'currentassets')
   }
 
+  // create an asset
   createAsset(asset: asset): Observable<asset> {
     return this.http.post<asset>(this.Url+'currentassets', asset, httpOptions);
   }
 
+  // update an asset in database
+  updateAsset (asset: asset): Observable<any> {
+    return this.http.put(this.Url+'currentassets', asset, httpOptions);
+  }
+
+  // this function is not working right now, trying to play around with parsing json from server
   checkIfExist(name: string) {
     let checker;
   

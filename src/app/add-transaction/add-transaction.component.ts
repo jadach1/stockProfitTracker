@@ -20,7 +20,6 @@ export class AddTransactionComponent  implements OnInit{
   // upon initialization set the transaction to true/buy and the colors to green
   ngOnInit()
   {
-      //this.checkIfAssetExists("A");
       this.Transaction.transaction = true;
       document.getElementById("symbol").style.background="rgb(76, 243, 76)";
       document.getElementById("shares").style.background="rgb(76, 243, 76)";
@@ -59,73 +58,136 @@ export class AddTransactionComponent  implements OnInit{
 
   // new form, reset the state excep for the transaction state we will keep that the same
   newTransaction(): void {
-    
     const saveTransaction = this.Transaction.transaction;
     this.Transaction = new transaction();
     this.newAsset = new asset();
-
     if ( saveTransaction === true ) {
       this.setTransaction(true);
       }
     else  {
       this.setTransaction(false);
-      }
-
-    
+      } 
     this.submitted = false;
   }
 
  // set the submitted variable to true so we can view the hidden aspects in the form;
  // calculate the total for the asset and call the save function
- addTransaction() {
-   this.submitted = true;
+ // start the process to update the existing or new asset this transaction belongs too
+ addTransaction(currentTransaction: transaction) {
    this.Transaction.total = this.Transaction.shares * this.Transaction.price;
-   this.createAsset(this.Transaction.symbol);
-   this.save();
+   if (this.Transaction.symbol.length > 6 )
+   {
+      alert("Error:  Symbol must be less than 6 characters long")
+   }else {
+      this.createAsset(this.Transaction.symbol);
+   }
  }
 
+// Create the asset we are adding a transaction for,
+// If the asset fails to create it means it is already in the database, 
+// in either case we will call the grabAsset function to get it ready to update new trasnaction details
+private createAsset(symbol : string): void{
+  this.newAsset.symbol = symbol;
+  alert("creating asset " + symbol);
+  this.assetService.createAsset(this.newAsset)
+    .subscribe( 
+                value => {  alert("success, asset created"); this.grabAsset(symbol); },
+                error => {  alert("asset already exsists");  this.grabAsset(symbol);          }
+                );
+}
+
+  // This function will grab the asset with the symbolName from the database and call the updateAsset functio, 
+  // or return an error
+  private grabAsset(symbolName: string): void{
+      this.assetService.getAsset(symbolName)
+        .subscribe(value => { alert("successfully pulled asset"), 
+                              this.newAsset = value,
+                              // update asset we grabbed with transaction details
+                              this.updateExistingAsset(this.newAsset, this.Transaction, this.assetService,this.transactionService) }, 
+                   error =>  { alert("This symbol does not exist") }
+                  );           
+}
+
+  // This takes 5 arguments and updates the asset in the database with the transaction recorded
+  // depending on whether it is a buy or a sell order we will increase/decrease the totals
+  private updateExistingAsset(assetToUpdate : asset, currentTransaction : transaction,
+                               currentAssetService : AssetService, 
+                              currentTransactionService : TransactionsService): void {   
+      // Because some calculations rely on others to complete first, we will execute these in a nested promise
+      new Promise( function(resolve, reject) { 
+            // Check to see if price is more than 2 decimal places and alert user it will be truncated if it is
+            var regexp = /^\d+\.\d{0,2}$/;
+            if ( !regexp.test(currentTransaction.price.toString()) )
+            {
+              alert("Your price has more than 2 decimal places, please be aware it will be rounded down upon execution")
+            }
+            var regexp2 = /^\d{8}$/;
+            if ( regexp2.test(currentTransaction.shares.toString()) )
+            {
+              throw("The number of shares you are trying to purchase exceeds 8 digits")
+            }
+            // Check to see whether this is a buy(true) or sell(false) and act accordingly
+            if (currentTransaction.transaction === true )
+            {
+              assetToUpdate.shares += currentTransaction.shares;
+              //assetToUpdate.totalMoneyIn += currentTransaction.total;
+              assetToUpdate.totalMoneyIn += currentTransaction.total;
+              alert("total = " + currentTransaction.total + " new total " + assetToUpdate.totalMoneyIn)
+            }
+            else {
+              assetToUpdate.shares -= currentTransaction.shares;
+              assetToUpdate.totalMoneyOut += currentTransaction.total;
+            }
+            return resolve(assetToUpdate.totalMoneyIn);
+      }).then(res=> { 
+            // check and throw an error if this order will push shares below 0
+            if ( assetToUpdate.shares < 0 )
+            {
+              throw ("Sorry, you do not have enough shares to fill this order");
+            }
+            // check to make sure the shares we are trying to buy are a whole number
+            if ( !Number.isInteger(assetToUpdate.shares) )
+            {
+              throw ("The number of shares entered is NOT a whole number");
+            }
+            assetToUpdate.originalMoney = assetToUpdate.totalMoneyIn - assetToUpdate.totalMoneyOut;
+            return assetToUpdate.originalMoney;
+      }).then(res=> { 
+            // If originalMoney is less than 0, change the value to 0, means "we are in the money"
+            if (assetToUpdate.originalMoney < 0 )
+            {
+              assetToUpdate.originalMoney = 0;
+            }
+            // Only calculate avgprice if shares and originalMoney are over 0.
+            if (assetToUpdate.shares > 0 && assetToUpdate.originalMoney > 0)
+            {
+              assetToUpdate.avgprice = assetToUpdate.originalMoney / assetToUpdate.shares;
+            } else {
+              assetToUpdate.avgprice = 0;
+            }
+            return assetToUpdate.avgprice;
+      }).then(res=>{
+            // Call the function to update our existing asset with the new one in the database, or return an error
+            currentAssetService.updateAsset(assetToUpdate)
+            .subscribe(
+                success => {alert("updated asset successfully"), this.submitted = true},
+                error   => {throw "Failed to update asset" }
+            );
+            return "result";  
+      }).then(res=>{
+            // If we have made it up to this point then it is safe to save the transaction as well.
+            currentTransactionService.addTransaction(currentTransaction)
+            .subscribe();
+            // And we can also set the submit variable to true, indicating a successful transaction
+            
+      }).catch(error=>{
+            // Catch any errors that occur
+            alert("error occured: " + error);
+      });
+
+  }
+  
   goBack(): void {
     this.location.back();
   }
-
-  // This function will check to see if the symbol for the transaction being added alfready exists in the database
-  private grabAsset(symbolName: string): void{
-      this.assetService.checkIfExist(symbolName)
-        .subscribe(value => {
-                              this.newAsset = value }, 
-                  error =>  {
-                                alert("error does not exists symbol ")}
-                  );   
-}
-// Create the asset we are adding a transaction for,
-// This will return false if the asset already exists in the database
-  private createAsset(symbol : string): void{
-    //this.grabAsset(this.Transaction.symbol);
-   
-    this.newAsset.symbol =  symbol;
-    alert("creating asset " + symbol);
-    this.assetService.createAsset(this.newAsset)
-      .subscribe( 
-                  value => {  alert("success, asset created"); this.updateAsset(this.newAsset); },
-                  error => {  alert("asset already exsists");  this.grabAsset(symbol);          }
-                  );
-    //this.updateAsset();
-  }
-  // create an asset if the symbol for the transction being entered is not already in database
-  private updateAsset(assetToUpdate : asset ): void {
-    
-    // set values for new asset to be passed to service injection, assetService
-    assetToUpdate.shares = this.Transaction.shares;
-    this.newAsset.total = this.Transaction.total;
-    this.newAsset.price = this.newAsset.total / this.newAsset.shares;
-   // this.assetService.addAsset(this.newAsset)
-   //     .subscribe();
-  }
-
-  // call function in service injection and show all paramteres being passed buy the user
-  private save(): void {
-    this.transactionService.addTransaction(this.Transaction)
-        .subscribe();
-  }
-
 }
