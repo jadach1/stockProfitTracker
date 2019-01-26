@@ -1,7 +1,4 @@
 <h3 style="color:royalblue">Add New Transaction</h3>
-<p>Submitted Successfully! -> <span class="badge badge-light">{{Transaction.symbol}} {{Transaction.shares}} {{Transaction.price}} {{Transaction.buydate}} {{Transaction.transaction}} {{Transaction.total}} </span></p>
-<p>pulled asset! -> <span class="badge badge-light">{{newAsset.symbol}} {{newAsset.shares}} {{newAsset.price}} {{newAsset.total}} </span></p>
-
 <hr>
 <div [hidden]="submitted" class="container">
   <div class="row">
@@ -21,7 +18,7 @@
 <hr>
 
 <div [hidden]="submitted">
-    <form #addAssetFrom="ngForm" >
+    <form #transactionForm="ngForm" >
 
       <div class="form-group">
         <label for="symbol">Compnay Symbol</label>
@@ -35,7 +32,7 @@
       </div>
       
 	    <div class="form-group">
-        <label for="shares">Shares Purchased</label>
+        <label for="shares">Shares Purchased/Sold</label>
         <input type="number" class="form-control" id="shares" placeholder="Number of shares" 
         required
         [(ngModel)]="Transaction.shares" name="shares" #shares="ngModel">
@@ -57,7 +54,7 @@
       </div>
       
 	      <div class="form-group">
-        <label for="buydate">Purchase buydate </label>
+        <label for="buydate">Purchase (buy/sell)date </label>
         <input type="date" class="form-control" id="buydate" placeholder="date purchased" 
         required
         [(ngModel)]="Transaction.buydate" name="buydate" #buydate="ngModel">
@@ -67,9 +64,10 @@
         </div>
       </div>
 	  
-      <div class="btn-group btn-group-sm">
-      	<button type="button" class="btn btn-dark" (click)="goBack()">Back</button>
-      	<button type="button" class="btn btn-dark" (click)="addTransaction()" [disabled]="!addAssetFrom.form.valid">Add</button>
+      <div class="btn-group btn-group-md">
+        <button type="button" class="btn btn-dark" (click)="goBack()">Back</button>
+      	<button type="button" class="btn btn-dark" (click)="addTransaction()" [disabled]="!transactionForm.form.valid">Submit</button>      
+        <button type="button" class="btn btn-dark" (click)="newTransaction()" >Clear</button>
       </div>
     </form>
 </div>
@@ -79,6 +77,6 @@
  
   <div class="btn-group btn-group-sm">
     	<button type="button" class="btn btn-dark" (click)="goBack()">Back</button>
-    	<button type="button" class="btn btn-dark" (click)="newTransaction(); addAssetFrom.reset()">Continue</button>
+    	<button type="button" class="btn btn-dark" (click)="newTransaction(); transactionForm.reset()">Add Another Transaction</button>
     </div>
 </div>

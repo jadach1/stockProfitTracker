@@ -1,13 +1,13 @@
 module.exports = (sequelize, Sequelize) => {
 	const thiscanbeanything = sequelize.define('transactions', {
 	  symbol: {
-		    type: Sequelize.STRING
+		    type: Sequelize.STRING(6)
 	  },
 	  shares: {
 		    type: Sequelize.INTEGER
 	  },
 	  price: {
-		  type: Sequelize.FLOAT
+		  type: Sequelize.DECIMAL(6,2)
       },
       buydate: {
           type: Sequelize.DATEONLY
@@ -16,7 +16,7 @@ module.exports = (sequelize, Sequelize) => {
           type: Sequelize.BOOLEAN
 	  },
 	  total: {
-		type: Sequelize.FLOAT
+		type: Sequelize.DECIMAL(10,2)
 	}
     });
 	
