@@ -126,11 +126,16 @@ private createAsset(symbol : string): void{
             {
               throw("The number of shares you are trying to purchase exceeds 8 digits")
             }
+            // Inside the database these are stored as decimals, so we need to convert them into numbers
+            assetToUpdate.totalMoneyIn *= 100;
+            assetToUpdate.totalMoneyOut *= 100;
+            assetToUpdate.originalMoney *= 100;
+            return resolve();
+      }).then(res=>{
             // Check to see whether this is a buy(true) or sell(false) and act accordingly
             if (currentTransaction.transaction === true )
             {
               assetToUpdate.shares += currentTransaction.shares;
-              //assetToUpdate.totalMoneyIn += currentTransaction.total;
               assetToUpdate.totalMoneyIn += currentTransaction.total;
               alert("total = " + currentTransaction.total + " new total " + assetToUpdate.totalMoneyIn)
             }
@@ -138,7 +143,7 @@ private createAsset(symbol : string): void{
               assetToUpdate.shares -= currentTransaction.shares;
               assetToUpdate.totalMoneyOut += currentTransaction.total;
             }
-            return resolve(assetToUpdate.totalMoneyIn);
+            return ;
       }).then(res=> { 
             // check and throw an error if this order will push shares below 0
             if ( assetToUpdate.shares < 0 )
@@ -151,7 +156,7 @@ private createAsset(symbol : string): void{
               throw ("The number of shares entered is NOT a whole number");
             }
             assetToUpdate.originalMoney = assetToUpdate.totalMoneyIn - assetToUpdate.totalMoneyOut;
-            return assetToUpdate.originalMoney;
+            return ;
       }).then(res=> { 
             // If originalMoney is less than 0, change the value to 0, means "we are in the money"
             if (assetToUpdate.originalMoney < 0 )
@@ -165,7 +170,7 @@ private createAsset(symbol : string): void{
             } else {
               assetToUpdate.avgprice = 0;
             }
-            return assetToUpdate.avgprice;
+            return ;
       }).then(res=>{
             // Call the function to update our existing asset with the new one in the database, or return an error
             currentAssetService.updateAsset(assetToUpdate)
@@ -173,7 +178,7 @@ private createAsset(symbol : string): void{
                 success => {alert("updated asset successfully"), this.submitted = true},
                 error   => {throw "Failed to update asset" }
             );
-            return "result";  
+            return ;  
       }).then(res=>{
             // If we have made it up to this point then it is safe to save the transaction as well.
             currentTransactionService.addTransaction(currentTransaction)

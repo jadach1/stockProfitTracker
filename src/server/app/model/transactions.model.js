@@ -16,7 +16,7 @@ module.exports = (sequelize, Sequelize) => {
           type: Sequelize.BOOLEAN
 	  },
 	  total: {
-		type: Sequelize.DECIMAL(10,2)
+		type: Sequelize.DECIMAL(15,2)
 	}
     });
 	
