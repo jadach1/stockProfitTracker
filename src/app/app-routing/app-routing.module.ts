@@ -24,15 +24,23 @@ const routes: Routes = [
    { 
     path: 'currentAssets', 
     component: CurrentAssetsComponent 
-  },
-  { 
+   }, 
+   { 
+    path: 'currentAssets/:symbol', 
+    component: CurrentAssetsComponent 
+   },
+   { 
     path: 'Transactions/history', 
     component: AllTransactionComponent 
-  },
-  { 
+   },
+   { 
+    path: 'Transactions/add/:symbol/:shares', 
+    component: AddTransactionComponent 
+   },
+   { 
     path: 'Transactions/add', 
     component: AddTransactionComponent 
-  },
+   },
    { 
      path: '', 
      redirectTo: 'customers', 

@@ -1,25 +1,50 @@
-<h5 style=" color: purple;" >All Assets I Am Currently Holding</h5>
 <div>
+<h4 style=" color: purple;" >OVERALL   </h4>
+<table>
+  <thead>
+    <th>CURRENT TOTAL:</th>
+    <th>ORIGINAL MONEY IN: </th>
+    <th>TOTAL IN: </th>
+    <th>TOTAL OUT: </th>
+  </thead>
+  <tbody>
+    <tr>
+      <th>${{currTotal}}</th>
+      <th>${{orgMoney}}</th>
+      <th>${{totIn}}</th>
+      <th>${{totOut}}</th>
+    </tr>
+  </tbody>
+</table>
+</div>
+<hr>
+<h5 style=" color: purple;" >All Assets I Am Currently Holding</h5>
+<div class="btn-group btn-group-sm">
 <table >
   <thead>
     <tr> 
       <th>Symbol</th>
+      <th>Current Price</th>
       <th>Total Shares</th>
+      <th>Current Total</th>
       <th>Average Price</th>
-      <th>Total $$$</th>
+      <th>Original Money Remaining</th>
+      <th>Total Money In</th>
+      <th>Total Money Out</th>
     </tr>
   </thead>
   <tbody >
       
     <tr *ngFor="let asset of assets" [ngClass]="'tablerow'">
-      <a [routerLink]="['/current', asset.symbol]" >
-      <span class="badge badge-dark">
-        <td>{{ asset.symbol }}</td>
-      </span> 
-      </a>
-      <td>{{ asset.shares }}</td>
-      <td>${{ asset.price }}</td>  
-      <td>${{ asset.total }}</td>
+        <td><button type="button" (click)="details()" >{{ asset.symbol }}</button></td>
+        <td>${{ asset.price }}</td>
+        <td>{{ asset.shares }}</td>
+        <td>${{ asset.currentTotal }}</td>
+        <td>${{ asset.avgprice }}</td>  
+        <td>${{ asset.originalMoney }}</td>
+        <td>${{ asset.totalMoneyIn }}</td>
+        <td>${{ asset.totalMoneyOut }}</td>
+        <button [routerLink]="['/Transactions/add', asset.symbol, asset.shares]" routerLinkActive="active" type="button" >Trade</button>
       <br>
     </tr>
   

@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { transaction } from '../transactions';
 import { asset } from '../asset';
 import { AssetService } from '../asset.service';
 import { TransactionsService } from '../transactions.service';
-
+import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 
 @Component({
@@ -16,10 +16,26 @@ export class AddTransactionComponent  implements OnInit{
   Transaction = new transaction();
   submitted = false;
   newAsset = new asset();
+  passedInShares: number;
+  shareCount: string;
+
+  constructor(
+    private assetService: AssetService,
+    private transactionService: TransactionsService,
+    private location: Location,
+    private route: ActivatedRoute,
+  ) { }
 
   // upon initialization set the transaction to true/buy and the colors to green
   ngOnInit()
   {
+      // Get any parmaeter passed in from url
+      const passedInSymbol =  this.route.snapshot.paramMap.get('symbol');
+      this.Transaction.symbol = passedInSymbol;
+      this.passedInShares = +this.route.snapshot.paramMap.get('shares');
+      if ( this.passedInShares > 0 )
+      { this.shareCount = "number of current shares is : "+this.passedInShares;}
+      // Set default value to true/buy, and set color scheme for form
       this.Transaction.transaction = true;
       document.getElementById("symbol").style.background="rgb(76, 243, 76)";
       document.getElementById("shares").style.background="rgb(76, 243, 76)";
@@ -30,12 +46,6 @@ export class AddTransactionComponent  implements OnInit{
       document.getElementById("price").style.color="white";
       document.getElementById("buydate").style.color="white";
   }
-
-  constructor(
-    private assetService: AssetService,
-    private transactionService: TransactionsService,
-    private location: Location,
-  ) { }
 
   // Change the trasnaction from buy to sell or vice versa, change colors of input fields
   setTransaction(value: boolean): void {
@@ -116,20 +126,25 @@ private createAsset(symbol : string): void{
       // Because some calculations rely on others to complete first, we will execute these in a nested promise
       new Promise( function(resolve, reject) { 
             // Check to see if price is more than 2 decimal places and alert user it will be truncated if it is
-            var regexp = /^\d+\.\d{0,2}$/;
-            if ( !regexp.test(currentTransaction.price.toString()) )
-            {
-              alert("Your price has more than 2 decimal places, please be aware it will be rounded down upon execution")
-            }
+            // var regexp = /^\d+\.\d{0,2}$/;
+            // if ( !regexp.test(currentTransaction.price.toString()) )
+            // {
+            //   alert("Your price has more than 2 decimal places, please be aware it will be rounded down upon execution")
+            //   //Math.round(currentTransaction.price * 100) / 100;
+            // }
+            // Check to make sure use is not trying to buy over the limit
             var regexp2 = /^\d{8}$/;
             if ( regexp2.test(currentTransaction.shares.toString()) )
             {
-              throw("The number of shares you are trying to purchase exceeds 8 digits")
+              throw("The number of shares you are trying to purchase is too high")
             }
             // Inside the database these are stored as decimals, so we need to convert them into numbers
-            assetToUpdate.totalMoneyIn *= 100;
-            assetToUpdate.totalMoneyOut *= 100;
-            assetToUpdate.originalMoney *= 100;
+               assetToUpdate.totalMoneyIn *= 100;
+              assetToUpdate.totalMoneyOut *= 100;
+              assetToUpdate.originalMoney *= 100;
+            // assetToUpdate.originalMoney = parseInt("assetToUpdate.originalMoney");
+            // assetToUpdate.totalMoneyOut = parseInt("assetToUpdate.totalMoneyOut");
+            // assetToUpdate.totalMoneyIn =  parseInt("assetToUpdate.totalMoneyIn");
             return resolve();
       }).then(res=>{
             // Check to see whether this is a buy(true) or sell(false) and act accordingly
@@ -137,7 +152,6 @@ private createAsset(symbol : string): void{
             {
               assetToUpdate.shares += currentTransaction.shares;
               assetToUpdate.totalMoneyIn += currentTransaction.total;
-              alert("total = " + currentTransaction.total + " new total " + assetToUpdate.totalMoneyIn)
             }
             else {
               assetToUpdate.shares -= currentTransaction.shares;
