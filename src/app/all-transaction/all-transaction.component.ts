@@ -10,30 +10,22 @@ import { TransactionsService } from '../transactions.service';
 export class AllTransactionComponent implements OnInit {
 
  assets: transaction[];
- newAssets = new transaction();
 
  constructor(private transactionService: TransactionsService) { }
 
   ngOnInit(): void {
-    this.getAssets(function(){
-
-     alert("Test " + this.assets[0]);
-    });
-    this.getTest();   
+    this.getAssets();
+   
   }
 
-  getAssets(callback){
+  getAssets(){
      return this.transactionService.getAllTransactions()
     .subscribe(
       assets => {
        this.assets = assets;
-       alert("subrscirbed 2");
-       callback();
       }
      );    
   }
 
-    getTest() {
-      
-    }
+
 }

@@ -1,3 +1,18 @@
-<p>
-  asset-details works!
-</p>
+<h6>Asset - {{myAsset.symbol}}  - OVERVIEW</h6>
+<div id="container">
+  <div id="leftThing">
+      CURRENT PRICE 
+  </div>
+    
+  <div id="content">
+      {{myAsset.price}}
+  </div>
+
+  <div id="rightThing">
+      <input type="number" class="form-control" id="price" placeholder="new price" 
+        [(ngModel)]="test" #symbol="ngModel" name="price" >
+      <button type="button" (click)="check(test)" >UPDATE PRICE</button>
+  </div>
+  
+</div>
+

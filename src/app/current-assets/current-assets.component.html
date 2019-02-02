@@ -2,10 +2,10 @@
 <h4 style=" color: purple;" >OVERALL   </h4>
 <table>
   <thead>
-    <th>CURRENT TOTAL:</th>
-    <th>ORIGINAL MONEY IN: </th>
-    <th>TOTAL IN: </th>
-    <th>TOTAL OUT: </th>
+    <th>CURRENT TOTAL (UNREALIZED):</th>
+    <th>ORIGINAL INVESTMENT $ LEFT: </th>
+    <th>TOTAL $ INVESTED: </th>
+    <th>TOTAL $ PULLED OUT: </th>
   </thead>
   <tbody>
     <tr>
@@ -27,23 +27,32 @@
       <th>Current Price</th>
       <th>Total Shares</th>
       <th>Current Total</th>
+      <th>Profit (unrealized)</th>
+      <th>Margin</th>
       <th>Average Price</th>
       <th>Original Money Remaining</th>
       <th>Total Money In</th>
       <th>Total Money Out</th>
+      <th>Profit (realized)</th>
+      <th>Margin</th>
+      
     </tr>
   </thead>
   <tbody >
       
     <tr *ngFor="let asset of assets" [ngClass]="'tablerow'">
-        <td><button type="button" (click)="details()" >{{ asset.symbol }}</button></td>
+        <td><button type="button"  [routerLink]="['/currentAssets/', asset.symbol]" routerLinkActive="active" >{{ asset.symbol }}</button></td>
         <td>${{ asset.price }}</td>
         <td>{{ asset.shares }}</td>
         <td>${{ asset.currentTotal }}</td>
+        <td>${{asset.realProfit}}</td>
+        <td>%{{asset.realMargin}}</td>
         <td>${{ asset.avgprice }}</td>  
         <td>${{ asset.originalMoney }}</td>
         <td>${{ asset.totalMoneyIn }}</td>
         <td>${{ asset.totalMoneyOut }}</td>
+        <td>${{asset.unRealProfit}}</td>
+        <td>%{{asset.unRealMargin}}</td>
         <button [routerLink]="['/Transactions/add', asset.symbol, asset.shares]" routerLinkActive="active" type="button" >Trade</button>
       <br>
     </tr>

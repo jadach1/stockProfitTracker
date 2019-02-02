@@ -56,6 +56,34 @@ module.exports = (sequelize, Sequelize) => {
 			validate: {
 				isDecimal: true,
 			}
+	},
+		realProfit : { // totMoneyOut - TotalMoneyIn
+			type: Sequelize.DECIMAL(12,2),
+			defaultValue: 0,
+			validate: {
+				isDecimal: true,
+			}
+	},
+		realMargin : { // RealProfit / totalMoneyIn * 100
+			type: Sequelize.DECIMAL(12,2),
+			defaultValue: 0,
+			validate: {
+				isDecimal: true,
+			}
+	},
+		unRealProfit : { // currentTotal + totMoneyOut - TotalMoneyIn
+			type: Sequelize.DECIMAL(12,2),
+			defaultValue: 0,
+			validate: {
+				isDecimal: true,
+			}
+	},
+		unRealMargin : { // UnRealProfit / totalMoneyIn * 100
+			type: Sequelize.DECIMAL(12,2),
+			defaultValue: 0,
+			validate: {
+				isDecimal: true,
+			}
 	}
 	
     });

@@ -11,11 +11,13 @@ import { promise } from 'protractor';
 export class CurrentAssetsComponent implements OnInit {
 
   assets: asset[];
-  constructor(private assetService: AssetService) { }
   totOut: number = 0;
   totIn: number = 0;
   currTotal: number = 0;
   orgMoney: number = 0;
+  test:number =200;
+  constructor(private assetService: AssetService) { }
+ 
 
   ngOnInit(): void {
    this.getAssets(); 

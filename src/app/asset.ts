@@ -7,5 +7,9 @@ export class asset {
     totalMoneyOut: number;
     price: number;
     currentTotal: number;
+    realProfit: number;
+    realMargin: number;
+    unRealProfit: number;
+    unRealMargin: number;
 }
 

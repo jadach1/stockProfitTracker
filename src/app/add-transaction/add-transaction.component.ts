@@ -138,24 +138,18 @@ private createAsset(symbol : string): void{
             {
               throw("The number of shares you are trying to purchase is too high")
             }
-            // Inside the database these are stored as decimals, so we need to convert them into numbers
-               assetToUpdate.totalMoneyIn *= 100;
-              assetToUpdate.totalMoneyOut *= 100;
-              assetToUpdate.originalMoney *= 100;
-            // assetToUpdate.originalMoney = parseInt("assetToUpdate.originalMoney");
-            // assetToUpdate.totalMoneyOut = parseInt("assetToUpdate.totalMoneyOut");
-            // assetToUpdate.totalMoneyIn =  parseInt("assetToUpdate.totalMoneyIn");
             return resolve();
       }).then(res=>{
             // Check to see whether this is a buy(true) or sell(false) and act accordingly
             if (currentTransaction.transaction === true )
             {
               assetToUpdate.shares += currentTransaction.shares;
-              assetToUpdate.totalMoneyIn += currentTransaction.total;
+              //alert("here we ahve " + ((assetToUpdate.totalMoneyIn*1) + 100) + " and also " + (parseFloat("0.00")+1000));
+              assetToUpdate.totalMoneyIn =   assetToUpdate.totalMoneyIn * 1 +  currentTransaction.total;
             }
             else {
               assetToUpdate.shares -= currentTransaction.shares;
-              assetToUpdate.totalMoneyOut += currentTransaction.total;
+                assetToUpdate.totalMoneyOut = assetToUpdate.totalMoneyOut * 1 + currentTransaction.total;
             }
             return ;
       }).then(res=> { 
@@ -185,6 +179,16 @@ private createAsset(symbol : string): void{
               assetToUpdate.avgprice = 0;
             }
             return ;
+      }).then(res=> {
+           // Calculate the Realized and Unrealized profit
+            assetToUpdate.realProfit = assetToUpdate.totalMoneyOut - assetToUpdate.totalMoneyIn;
+            assetToUpdate.unRealProfit = (assetToUpdate.totalMoneyOut + assetToUpdate.currentTotal * 1) - assetToUpdate.totalMoneyIn;
+            return;
+      }).then(res=> {
+           // Calculate the Realized and Unrealized Margins
+            assetToUpdate.realMargin = (assetToUpdate.realProfit / assetToUpdate.totalMoneyIn) * 100;
+            assetToUpdate.unRealMargin = (assetToUpdate.unRealProfit / assetToUpdate.totalMoneyIn) * 100;
+            return;
       }).then(res=>{
             // Call the function to update our existing asset with the new one in the database, or return an error
             currentAssetService.updateAsset(assetToUpdate)
