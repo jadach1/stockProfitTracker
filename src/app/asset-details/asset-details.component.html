@@ -1,17 +1,101 @@
 <h6>Asset - {{myAsset.symbol}}  - OVERVIEW</h6>
 <div id="container">
   <div id="leftThing">
-      CURRENT PRICE 
+    <div id="heading">CURRENT PRICE   {{myAsset.price}}</div>  
+                  <label for="newPrice">New Price </label>
+                  <input type="number" class="form-control" id="newPrice" placeholder="price per share" 
+                  required [(ngModel)]="newPrice" #symbol="ngModel" name="newPrice" >
+                <button type="button" (click)="updatePrice(newPrice)" >UPDATE PRICE</button>
+      <table id="Margin1">
+            <thead>
+                <tr>
+                        <th></th>
+                        <th>SHARES</th>
+                        <th>AVG PRICE</th>
+                        <th>TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                        <td>CURRENT</td>
+                        <td>{{myAsset.shares}}</td>
+                        <td>{{myAsset.avgprice}}</td>
+                        <td>{{myAsset.currentTotal}}</td>
+                </tr>
+                <tr>
+                        <td>SOLD</td>
+                        <td>{{myAsset.shares}}</td>
+                        <td>{{myAsset.avgprice}}</td>
+                        <td>{{myAsset.totalMoneyOut}}</td>
+                </tr>
+            </tbody>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>REALIZED</th>
+                    <th>MARGIN</th>
+                    <th>UNREALIZED</th>
+                    <th>MARGIN</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr></tr>
+                <tr>
+                    <td>PROFIT</td>
+                    <td>{{myAsset.realProfit}}</td>
+                    <td>{{myAsset.realMargin}}</td>
+                    <td>{{myAsset.unRealProfit}}</td>
+                    <td>{{myAsset.unRealMargin}}</td>
+                </tr>
+            </tbody>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>TOTAL $ INVESTED</th>
+                    <th>TOTAL $ WITHDRAWN</th>
+                    <th>ORIGINAL $ LEFT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr></tr>
+                <tr>
+                  <td>MORE INFROMATION</td>
+                  <td>{{myAsset.totalMoneyIn}}</td>
+                  <td>{{myAsset.totalMoneyOut}}</td>
+                  <td>{{myAsset.originalMoney}}</td>
+                </tr>
+            </tbody>
+        </table>       
   </div>
-    
   <div id="content">
-      {{myAsset.price}}
-  </div>
-
-  <div id="rightThing">
-      <input type="number" class="form-control" id="price" placeholder="new price" 
-        [(ngModel)]="test" #symbol="ngModel" name="price" >
-      <button type="button" (click)="check(test)" >UPDATE PRICE</button>
+      <p id="heading">MY TRANSACTIONS</p>
+        <table >
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Symbol</th>
+                    <th>Shares</th>
+                    <th>Price</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    
+                  <tr *ngFor="let transaction of transactions" id="talberow" 
+                  [style.background-color]="transaction.transaction == false ? 'red' : 'green'" 
+                  style="color:white">
+                    <td>{{ transaction.id }}</td>
+                    <td>{{ transaction.symbol }}</td>
+                    <td>{{ transaction.shares }}</td>
+                    <td>${{ transaction.price }}</td>
+                    <td>{{ transaction.buydate }}</td>   
+                    <td>${{ transaction.total }}</td>
+                    <br>
+                  </tr>
+                
+                </tbody>
+              </table>
   </div>
   
 </div>

@@ -45,14 +45,14 @@
         <td>${{ asset.price }}</td>
         <td>{{ asset.shares }}</td>
         <td>${{ asset.currentTotal }}</td>
-        <td>${{asset.realProfit}}</td>
-        <td>%{{asset.realMargin}}</td>
+        <td>${{asset.unRealProfit}}</td>
+        <td>%{{asset.unRealMargin}}</td>
         <td>${{ asset.avgprice }}</td>  
         <td>${{ asset.originalMoney }}</td>
         <td>${{ asset.totalMoneyIn }}</td>
         <td>${{ asset.totalMoneyOut }}</td>
-        <td>${{asset.unRealProfit}}</td>
-        <td>%{{asset.unRealMargin}}</td>
+        <td>${{asset.realProfit}}</td>
+        <td>%{{asset.realMargin}}</td>
         <button [routerLink]="['/Transactions/add', asset.symbol, asset.shares]" routerLinkActive="active" type="button" >Trade</button>
       <br>
     </tr>

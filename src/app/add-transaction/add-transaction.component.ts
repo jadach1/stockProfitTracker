@@ -182,7 +182,7 @@ private createAsset(symbol : string): void{
       }).then(res=> {
            // Calculate the Realized and Unrealized profit
             assetToUpdate.realProfit = assetToUpdate.totalMoneyOut - assetToUpdate.totalMoneyIn;
-            assetToUpdate.unRealProfit = (assetToUpdate.totalMoneyOut + assetToUpdate.currentTotal * 1) - assetToUpdate.totalMoneyIn;
+            assetToUpdate.unRealProfit = assetToUpdate.totalMoneyOut * 1 + assetToUpdate.currentTotal * 1 - assetToUpdate.totalMoneyIn;
             return;
       }).then(res=> {
            // Calculate the Realized and Unrealized Margins

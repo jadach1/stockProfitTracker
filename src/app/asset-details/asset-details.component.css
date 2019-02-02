@@ -1,18 +1,35 @@
 #container {
     height: 100%;
-    width: 100%;
+    width: 200%;
     display: flex;
   }
 
   #leftThing {
-    width: 25%;
+    width: 100%;
     background-color: blue;
   }
   #content {
-    width: 50%;
+    width: 100%;
     background-color: green;
   }
-  #rightThing {
-    width: 25%;
+  #form1 {
+    width: 20%;
     background-color: yellow;
+    
+  }
+
+  table, tr, td, th {
+    color: antiquewhite;
+    border: 1px solid white;
+    padding:0 15px 0 15px; 
+  }
+
+  #Margin1 {
+    margin: 35px 0px 35px 0px
+  }
+
+  #heading {
+    text-align: center;
+    font-size: 16pt;
+    color: yellowgreen;
   }
