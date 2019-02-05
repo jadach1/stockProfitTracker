@@ -9,10 +9,10 @@
   </thead>
   <tbody>
     <tr>
-      <th>${{currTotal}}</th>
-      <th>${{orgMoney}}</th>
-      <th>${{totIn}}</th>
-      <th>${{totOut}}</th>
+      <th>${{portfolio.currentTotal}}</th>
+      <th>${{portfolio.originalMoney}}</th>
+      <th>${{portfolio.totalMoneyIn}}</th>
+      <th>${{portfolio.totalMoneyOut}}</th>
     </tr>
   </tbody>
 </table>
@@ -27,15 +27,6 @@
       <th>Current Price</th>
       <th>Total Shares</th>
       <th>Current Total</th>
-      <th>Profit (unrealized)</th>
-      <th>Margin</th>
-      <th>Average Price</th>
-      <th>Original Money Remaining</th>
-      <th>Total Money In</th>
-      <th>Total Money Out</th>
-      <th>Profit (realized)</th>
-      <th>Margin</th>
-      
     </tr>
   </thead>
   <tbody >
@@ -45,14 +36,6 @@
         <td>${{ asset.price }}</td>
         <td>{{ asset.shares }}</td>
         <td>${{ asset.currentTotal }}</td>
-        <td>${{asset.unRealProfit}}</td>
-        <td>%{{asset.unRealMargin}}</td>
-        <td>${{ asset.avgprice }}</td>  
-        <td>${{ asset.originalMoney }}</td>
-        <td>${{ asset.totalMoneyIn }}</td>
-        <td>${{ asset.totalMoneyOut }}</td>
-        <td>${{asset.realProfit}}</td>
-        <td>%{{asset.realMargin}}</td>
         <button [routerLink]="['/Transactions/add', asset.symbol, asset.shares]" routerLinkActive="active" type="button" >Trade</button>
       <br>
     </tr>

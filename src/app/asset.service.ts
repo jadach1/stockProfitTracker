@@ -38,6 +38,15 @@ export class AssetService {
     return this.http.put(this.Url+'currentassets', asset, httpOptions);
   }
 
+  // This will take a number like 111111.00 and convert it into 111,111.00
+  formatNumber (asset: asset) {
+    alert("converting");
+   // asset.avgprice = asset.avgprice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+
+    return asset;
+    
+  }
+
   // this function is not working right now, trying to play around with parsing json from server
   checkIfExist(name: string) {
     let checker;

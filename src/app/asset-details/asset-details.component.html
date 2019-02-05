@@ -1,12 +1,12 @@
-<h6>Asset - {{myAsset.symbol}}  - OVERVIEW</h6>
+<h6 id="heading2">Asset - {{myAsset.symbol}}  - OVERVIEW <button [routerLink]="['/Transactions/add', myAsset.symbol, myAsset.shares]" routerLinkActive="active" type="button" >Trade</button></h6>
 <div id="container">
   <div id="leftThing">
-    <div id="heading">CURRENT PRICE   {{myAsset.price}}</div>  
+    <div id="heading">CURRENT PRICE   ${{myAsset.price}} PER SHARE   </div>  
                   <label for="newPrice">New Price </label>
                   <input type="number" class="form-control" id="newPrice" placeholder="price per share" 
                   required [(ngModel)]="newPrice" #symbol="ngModel" name="newPrice" >
                 <button type="button" (click)="updatePrice(newPrice)" >UPDATE PRICE</button>
-      <table id="Margin1">
+      <table id="Margin1 tableClean">
             <thead>
                 <tr>
                         <th></th>
@@ -17,16 +17,16 @@
             </thead>
             <tbody>
                 <tr>
-                        <td>CURRENT</td>
+                        <td id="gold">CURRENT</td>
                         <td>{{myAsset.shares}}</td>
-                        <td>{{myAsset.avgprice}}</td>
-                        <td>{{myAsset.currentTotal}}</td>
+                        <td>${{displayedAsset.avgprice}}</td>
+                        <td>${{displayedAsset.currentTotal}}</td>
                 </tr>
                 <tr>
-                        <td>SOLD</td>
-                        <td>{{myAsset.shares}}</td>
-                        <td>{{myAsset.avgprice}}</td>
-                        <td>{{myAsset.totalMoneyOut}}</td>
+                        <td id="gold">SOLD</td>
+                        <td>{{myAsset.sharesSold}}</td>
+                        <td>${{displayedAsset.avgpriceSold}}</td>
+                        <td>${{displayedAsset.totalMoneyOut}}</td>
                 </tr>
             </tbody>
             <thead>
@@ -41,11 +41,11 @@
             <tbody>
                 <tr></tr>
                 <tr>
-                    <td>PROFIT</td>
-                    <td>{{myAsset.realProfit}}</td>
-                    <td>{{myAsset.realMargin}}</td>
-                    <td>{{myAsset.unRealProfit}}</td>
-                    <td>{{myAsset.unRealMargin}}</td>
+                    <td id="gold">PROFIT</td>
+                    <td>${{displayedAsset.realProfit}}</td>
+                    <td>%{{displayedAsset.realMargin}}</td>
+                    <td>${{displayedAsset.unRealProfit}}</td>
+                    <td>%{{displayedAsset.unRealMargin}}</td>
                 </tr>
             </tbody>
             <thead>
@@ -59,17 +59,46 @@
             <tbody>
                 <tr></tr>
                 <tr>
-                  <td>MORE INFROMATION</td>
-                  <td>{{myAsset.totalMoneyIn}}</td>
-                  <td>{{myAsset.totalMoneyOut}}</td>
-                  <td>{{myAsset.originalMoney}}</td>
+                  <td id="gold">MORE INFROMATION</td>
+                  <td>${{displayedAsset.totalMoneyIn}}</td>
+                  <td>${{displayedAsset.totalMoneyOut}}</td>
+                  <td>${{displayedAsset.originalMoney}}</td>
                 </tr>
             </tbody>
         </table>       
+        <table id="Margin1">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th id="heading">WHAT IF SCENARIO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                        <td>What if I sold at this price right now?</td>
+                        <td><input type="number" class="form-control" placeholder="price" 
+                            required [(ngModel)]="whatIfPrice" #symbol="ngModel" name="whatIfPrice" >
+                        </td>
+                        <td><button type="button" (click)="updatePrice(whatIfPrice)">WHAT IF?</button></td>
+                </tr>
+                <tr>
+                    <td>Gain</td>
+                    <td>$</td>
+                </tr>
+                <tr>
+                    <td>Margin</td>
+                    <td>%</td>
+                </tr>
+                <tr>
+                    <td>HOW MANY SHARES DO I NEED TO SELL TO GET MY ORIGINAL MONEY BACK?</td>
+                    <td>0</td>
+                </tr>
+            </tbody>
+        </table>
   </div>
   <div id="content">
       <p id="heading">MY TRANSACTIONS</p>
-        <table >
+        <table id="tableClean">
                 <thead>
                   <tr>
                     <th>ID</th>

@@ -149,7 +149,8 @@ private createAsset(symbol : string): void{
             }
             else {
               assetToUpdate.shares -= currentTransaction.shares;
-                assetToUpdate.totalMoneyOut = assetToUpdate.totalMoneyOut * 1 + currentTransaction.total;
+              assetToUpdate.sharesSold += currentTransaction.shares;
+              assetToUpdate.totalMoneyOut = assetToUpdate.totalMoneyOut * 1 + currentTransaction.total;
             }
             return ;
       }).then(res=> { 
@@ -174,7 +175,9 @@ private createAsset(symbol : string): void{
             // Only calculate avgprice if shares and originalMoney are over 0.
             if (assetToUpdate.shares > 0 && assetToUpdate.originalMoney > 0)
             {
-              assetToUpdate.avgprice = assetToUpdate.originalMoney / assetToUpdate.shares;
+            // calculate avgPrices
+                assetToUpdate.avgpriceSold = assetToUpdate.totalMoneyOut / assetToUpdate.sharesSold;
+                assetToUpdate.avgprice = assetToUpdate.originalMoney / assetToUpdate.shares;
             } else {
               assetToUpdate.avgprice = 0;
             }
@@ -190,7 +193,10 @@ private createAsset(symbol : string): void{
             assetToUpdate.unRealMargin = (assetToUpdate.unRealProfit / assetToUpdate.totalMoneyIn) * 100;
             return;
       }).then(res=>{
-            // Call the function to update our existing asset with the new one in the database, or return an error
+          // Calculate current Total 
+            assetToUpdate.currentTotal = assetToUpdate.shares * assetToUpdate.price;
+      }).then(res=>{
+          // Call the function to update our existing asset with the new one in the database, or return an error
             currentAssetService.updateAsset(assetToUpdate)
             .subscribe(
                 success => {alert("updated asset successfully"), this.submitted = true},
