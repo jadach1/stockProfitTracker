@@ -12,7 +12,8 @@
                         <th></th>
                         <th>SHARES</th>
                         <th>AVG PRICE</th>
-                        <th>TOTAL</th>
+                        <th>CURRENT PRICE</th>
+                        <th>CURRENT TOTAL</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,8 +21,19 @@
                         <td id="gold">CURRENT</td>
                         <td>{{myAsset.shares}}</td>
                         <td>${{displayedAsset.avgprice}}</td>
+                        <td>${{displayedAsset.price}}</td>
                         <td>${{displayedAsset.currentTotal}}</td>
                 </tr>
+            </tbody>
+            <thead>
+                <tr>
+                        <th></th>
+                        <th>SOLD SHARES</th>
+                        <th>AVG PRICE SOLD</th>
+                        <th>TOTAL $ SOLD</th>
+                </tr>
+            </thead>
+            <tbody>
                 <tr>
                         <td id="gold">SOLD</td>
                         <td>{{myAsset.sharesSold}}</td>

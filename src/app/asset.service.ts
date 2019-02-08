@@ -19,6 +19,7 @@ export class AssetService {
   // Return a single asset from the database table assets
   getAsset(symbol: string): Observable<asset> {
     const url = `${this.Url + 'currentassets'}/${symbol}`;
+    let existingAsset = new asset();
     //return this.http.get<asset>(this.Url+'currentassets'+'/'+symbol);
     return this.http.get<asset>(url);
   }

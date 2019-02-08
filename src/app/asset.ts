@@ -1,6 +1,6 @@
 export class asset {
     symbol: string;
-    shares: number;
+    shares: number ;
     avgprice: number;
     sharesSold: number;
     avgpriceSold: number;
