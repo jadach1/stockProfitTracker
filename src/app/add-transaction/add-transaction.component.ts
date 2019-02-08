@@ -91,7 +91,6 @@ export class AddTransactionComponent  implements OnInit{
    // This function will grab the asset with the symbolName from the database and call the updateAsset functio, 
   // or return an error
   private grabAsset(symbolName: string): void{
-    alert("grab asset")
     this.assetService.getAsset(symbolName)
       .subscribe(value => this.existingAsset = value ,
                  error =>  alert("Error connecting to database to grab an asset") , 
@@ -114,7 +113,6 @@ export class AddTransactionComponent  implements OnInit{
         // check to see if we successfully pulled the asset from the database
         if (this.existingAsset == null)
         {
-          alert("Creating new Asset");
           // If we reached here it means the asset DOES NOT EXIST 
           if(this.Transaction.transaction === false)
           {
@@ -124,7 +122,6 @@ export class AddTransactionComponent  implements OnInit{
         }
         else{
           this.assetIsNew = false;
-          alert("Updating existing asset");
           return res();
         }
      }).then(res=>{
@@ -165,7 +162,6 @@ export class AddTransactionComponent  implements OnInit{
       new Promise( function(resolve, reject) { 
             // Check to make sure use is not trying to buy over the limit
             var regexp2 = /^\d{10}$/;
-            alert("shares sold " + assetToUpdate.avgpriceSold + " " + assetToUpdate.sharesSold)
             if ( regexp2.test(currentTransaction.shares.toString()) )
             {
               throw("The number of shares you are trying to purchase is too high")
@@ -198,7 +194,6 @@ export class AddTransactionComponent  implements OnInit{
             assetToUpdate.originalMoney = assetToUpdate.totalMoneyIn - assetToUpdate.totalMoneyOut;
             return ;
       }).then(res=> {
-        alert("avbeg " + assetToUpdate.avgpriceSold)
            // Calculate the Realized and Unrealized profit
             assetToUpdate.realProfit = assetToUpdate.totalMoneyOut - assetToUpdate.totalMoneyIn;
             assetToUpdate.unRealProfit = assetToUpdate.totalMoneyOut * 1 + assetToUpdate.currentTotal * 1 - assetToUpdate.totalMoneyIn;
@@ -245,7 +240,6 @@ export class AddTransactionComponent  implements OnInit{
                 error   => {throw "Failed to update asset" }
             )
           } else {
-            alert("create asset with " + assetToUpdate.avgpriceSold + " " + assetToUpdate.totalMoneyIn + " " + assetToUpdate.unRealProfit + " s " + assetToUpdate.unRealMargin)
             this.assetService.createAsset(assetToUpdate)
             .subscribe( 
                         value =>  {alert("success, asset created"), this.submitted = true },
