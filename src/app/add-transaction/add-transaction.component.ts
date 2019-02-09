@@ -132,19 +132,6 @@ export class AddTransactionComponent  implements OnInit{
         } else {
           // If this is a new asset, set the symbol and all params to 0 and pass it
           this.newAsset.symbol = this.Transaction.symbol;
-          // this.newAsset.shares = 0;
-          // this.newAsset.price = 0;
-          // this.newAsset.currentTotal = 0;
-          // this.newAsset.avgprice = 0;
-          // this.newAsset.sharesSold = 0;
-          // this.newAsset.avgpriceSold = 0;
-          // this.newAsset.originalMoney = 0;
-          // this.newAsset.totalMoneyIn = 0;
-          // this.newAsset.totalMoneyOut = 0;
-          // this.newAsset.realProfit = 0;
-          // this.newAsset.realMargin = 0;
-          // this.newAsset.unRealProfit = 0;
-          // this.newAsset.unRealMargin = 0;
           this.updateExistingAsset(this.newAsset, this.Transaction, this.assetService,this.transactionService) 
         }
      }).catch(err=>{
@@ -236,14 +223,14 @@ export class AddTransactionComponent  implements OnInit{
           {
             currentAssetService.updateAsset(assetToUpdate)
             .subscribe(
-                success => {alert("updated asset successfully"), this.submitted = true},
-                error   => {throw "Failed to update asset" }
+                success => this.submitted = true,
+                error   => {throw"Failed to update asset"}
             )
           } else {
             this.assetService.createAsset(assetToUpdate)
             .subscribe( 
-                        value =>  {alert("success, asset created"), this.submitted = true },
-                        error =>  alert("asset already exsists")
+                        value =>   this.submitted = true ,
+                        error =>  alert("Could not add this asset !")
                       );
           }
             return ;  

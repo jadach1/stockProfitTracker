@@ -65,10 +65,20 @@ export class AssetDetailsComponent implements OnInit {
      this.myAsset.currentTotal = this.myAsset.price * this.myAsset.shares;
    }).then(res=> {
     this.myAsset.realProfit = this.myAsset.totalMoneyOut - this.myAsset.totalMoneyIn;
-    this.myAsset.unRealProfit = this.myAsset.totalMoneyOut * 1 + this.myAsset.currentTotal - this.myAsset.totalMoneyIn;
+    if (this.myAsset.shares > 0 && this.myAsset.originalMoney > 0)
+    {
+      this.myAsset.unRealProfit = this.myAsset.totalMoneyOut * 1 + this.myAsset.currentTotal - this.myAsset.totalMoneyIn;
+    } else {
+      this.myAsset.unRealProfit = 0;
+    }
    }).then(res=> {
      this.myAsset.realMargin =   this.myAsset.realProfit / this.myAsset.totalMoneyIn  * 100;
-     this.myAsset.unRealMargin = this.myAsset.unRealProfit / this.myAsset.totalMoneyIn * 100;
+     if (this.myAsset.shares > 0 && this.myAsset.originalMoney > 0)
+     {
+        this.myAsset.unRealMargin = this.myAsset.unRealProfit / this.myAsset.totalMoneyIn * 100;
+     } else {
+        this.myAsset.unRealMargin = 0;
+     }
    }).then(res => {
      this.assetService.updateAsset(this.myAsset)
      .subscribe(res=> this.grabAndConvert(), 
