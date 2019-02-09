@@ -32,9 +32,9 @@
       </div>
       
 	    <div class="form-group">
-        <label for="shares">Amount of shares: maximum is 999,999,999 <p>{{shareCount}}</p></label>
+        <label for="shares">Amount of shares: maximum is 999,999 <p>{{shareCount}}</p></label>
         <input type="number" class="form-control" id="shares" placeholder="Number of shares" 
-        required  pattern="([0-9]{1,9})"
+        required  pattern="([0-9]{1,6})"
         [(ngModel)]="Transaction.shares" name="shares" #shares="ngModel">
         <div [hidden]="shares.valid || price.pristinesss"
              class="alert alert-danger">

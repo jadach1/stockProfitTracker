@@ -26,15 +26,19 @@ export class AssetDetailsComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    // Fetch our asset from DB
-      this.assetService.getAsset( this.route.snapshot.paramMap.get('symbol'))
-        .subscribe(
-            value => { // upon success, set value and call function to convert 
-                      alert("successfully pulled asset"), 
-                      this.myAsset = value, 
-                      this.convert()}, 
-            error =>  { alert("This symbol does not exist") }
-              );      
+   this.grabAndConvert();
+  }
+
+  private grabAndConvert(): void {
+     // Fetch our asset from DB and convert the numbers into strings
+     this.assetService.getAsset( this.route.snapshot.paramMap.get('symbol'))
+     .subscribe(
+         value => { // upon success, set value and call function to convert  
+                   this.myAsset = value, 
+                   this.convert()
+                 }, 
+         error => alert("This symbol does not exist") 
+           );      
   }
 
   // convert number and decimals like 1111.42 into 1,111.00
@@ -60,18 +64,17 @@ export class AssetDetailsComponent implements OnInit {
    }).then(res=>{
      this.myAsset.currentTotal = this.myAsset.price * this.myAsset.shares;
    }).then(res=> {
-    this.myAsset.realProfit = this.myAsset.totalMoneyOut * 1 - this.myAsset.totalMoneyIn * 1;
-    this.myAsset.unRealProfit = (this.myAsset.totalMoneyOut * 1 + this.myAsset.currentTotal) - this.myAsset.totalMoneyIn * 1;
+    this.myAsset.realProfit = this.myAsset.totalMoneyOut - this.myAsset.totalMoneyIn;
+    this.myAsset.unRealProfit = this.myAsset.totalMoneyOut * 1 + this.myAsset.currentTotal - this.myAsset.totalMoneyIn;
    }).then(res=> {
-     this.myAsset.realMargin =   (this.myAsset.realProfit / (this.myAsset.totalMoneyIn * 1)) * 100;
-     this.myAsset.unRealMargin = (this.myAsset.unRealProfit / (this.myAsset.totalMoneyIn * 1)) * 100;
+     this.myAsset.realMargin =   this.myAsset.realProfit / this.myAsset.totalMoneyIn  * 100;
+     this.myAsset.unRealMargin = this.myAsset.unRealProfit / this.myAsset.totalMoneyIn * 100;
    }).then(res => {
-     this.assetService.updateAsset(this.myAsset).subscribe(res=> alert("updated asset successfully"), err => alert("failed to update asset") )
-   }).then(res=>{
-     // we need to convert the totals we just calculated again
-     this.convert();
+     this.assetService.updateAsset(this.myAsset)
+     .subscribe(res=> this.grabAndConvert(), 
+                err => alert("failed to update asset"));
    }).catch(err =>{
-      alert("error inside function check " + err)
+      alert("error when trying to update Price " + err)
    })
   
   
