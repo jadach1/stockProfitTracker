@@ -32,6 +32,18 @@ exports.findAll = (req, res) => {
 		});
 };
 
+// FETCH All Transactions by transaction type and symbol
+exports.findAllTransactionsByAsset = (req, res) => {
+	TransactionObject.findAll(	req.params.symbol, { where: {symbol : symbol} } )
+		.then(TransactionObjects => {
+			// Send All TransactionObjects to Client
+			res.json(TransactionObjects.sort(function(c1, c2){return c1.id - c2.id}));
+		}).catch(err => {
+			console.log(err);
+			res.status(500).json({msg: "error", details: err});
+		});
+};
+
 // FETCH All TransactionObjects
 exports.findDistinct = (req, res) => {
 	db.sequelize

@@ -113,6 +113,17 @@
         </table>
   </div>
   <div id="content">
+        <ul class="nav justify-content-center">
+                <li class="nav-item">
+                        <button style="color:green">ONLY BOUGHT TRANSACTIONS</button>
+                </li>
+                <li class="nav-item">
+                        <button>ONLY SOLD TRANSACTIONS</button>
+                </li>
+                <li class="nav-item">
+                        <button (click)="displayTransactions('all')">ALL TRANSACTIONS</button>
+                </li>
+            </ul>
       <p id="heading">MY TRANSACTIONS</p>
         <table id="tableClean">
                 <thead>

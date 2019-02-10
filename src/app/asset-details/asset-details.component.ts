@@ -26,19 +26,20 @@ export class AssetDetailsComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-   this.grabAndConvert();
+   this.grabAssetAndConvert();
   }
 
-  private grabAndConvert(): void {
+  private grabAssetAndConvert(): void {
      // Fetch our asset from DB and convert the numbers into strings
      this.assetService.getAsset( this.route.snapshot.paramMap.get('symbol'))
      .subscribe(
-         value => { // upon success, set value and call function to convert  
-                   this.myAsset = value, 
-                   this.convert()
-                 }, 
-         error => alert("This symbol does not exist") 
-           );      
+                value => { // upon success, set value and call function to convert  
+                        this.myAsset = value, 
+                        this.convert()
+                      }, 
+                error => alert("This symbol does not exist"),
+                () => this.displayTransactions("all") 
+              );      
   }
 
   // convert number and decimals like 1111.42 into 1,111.00
@@ -57,37 +58,50 @@ export class AssetDetailsComponent implements OnInit {
   }
 
   private updatePrice(newPrice:number): void {
-   // This will uodate the current price as well as calculate the currentTotal and other totals.
-   new Promise(res=>{
-    this.myAsset.price = newPrice;
-    return res();
-   }).then(res=>{
-     this.myAsset.currentTotal = this.myAsset.price * this.myAsset.shares;
-   }).then(res=> {
-    this.myAsset.realProfit = this.myAsset.totalMoneyOut - this.myAsset.totalMoneyIn;
-    if (this.myAsset.shares > 0 && this.myAsset.originalMoney > 0)
-    {
-      this.myAsset.unRealProfit = this.myAsset.totalMoneyOut * 1 + this.myAsset.currentTotal - this.myAsset.totalMoneyIn;
-    } else {
-      this.myAsset.unRealProfit = 0;
-    }
-   }).then(res=> {
-     this.myAsset.realMargin =   this.myAsset.realProfit / this.myAsset.totalMoneyIn  * 100;
-     if (this.myAsset.shares > 0 && this.myAsset.originalMoney > 0)
-     {
-        this.myAsset.unRealMargin = this.myAsset.unRealProfit / this.myAsset.totalMoneyIn * 100;
-     } else {
-        this.myAsset.unRealMargin = 0;
-     }
-   }).then(res => {
-     this.assetService.updateAsset(this.myAsset)
-     .subscribe(res=> this.grabAndConvert(), 
-                err => alert("failed to update asset"));
-   }).catch(err =>{
-      alert("error when trying to update Price " + err)
-   })
-  
-  
+      // This will uodate the current price as well as calculate the currentTotal and other totals.
+      new Promise(res=>{
+        this.myAsset.price = newPrice;
+        return res();
+      }).then(res=>{
+        this.myAsset.currentTotal = this.myAsset.price * this.myAsset.shares;
+      }).then(res=> {
+        this.myAsset.realProfit = this.myAsset.totalMoneyOut - this.myAsset.totalMoneyIn;
+        // Check to make sure we still have shares left and have not realized a profit
+        if (this.myAsset.shares > 0 && this.myAsset.originalMoney > 0)
+        {
+          this.myAsset.unRealProfit = this.myAsset.totalMoneyOut * 1 + this.myAsset.currentTotal - this.myAsset.totalMoneyIn;
+        } 
+        // if we have 0 shares and we made a profit than there is no unrealized gain to be made
+        else 
+        {
+          this.myAsset.unRealProfit = 0;
+        }
+      }).then(res=> {
+        this.myAsset.realMargin =   this.myAsset.realProfit / this.myAsset.totalMoneyIn  * 100;
+        if (this.myAsset.shares > 0 && this.myAsset.originalMoney > 0)
+        {
+            this.myAsset.unRealMargin = this.myAsset.unRealProfit / this.myAsset.totalMoneyIn * 100;
+        } else {
+            this.myAsset.unRealMargin = 0;
+        }
+      }).then(res => {
+        this.assetService.updateAsset(this.myAsset)
+        .subscribe(res=> this.grabAssetAndConvert(), err=> alert("failed to update asset"))
+      }).catch(err =>{
+          alert("error when trying to update Price " + err)
+      });
   }
 
+  private displayTransactions(displayType: string): void {
+    alert("display is " + displayType)
+    //Parse the string displayType for displaying all, only bought or only sold transactions
+    if(displayType==="all")
+    {
+      this.transactionService.getTransactionsByAsset("all",this.myAsset.symbol)
+      .subscribe(
+                  res=> alert("pulled all symbols"),
+                  err=> alert("failed to connect to database"),
+                  ()=> alert("complete"));
+    }
+  }
 }
