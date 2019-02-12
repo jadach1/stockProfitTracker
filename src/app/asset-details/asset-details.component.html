@@ -91,23 +91,23 @@
                         <td><input type="number" class="form-control" placeholder="price" 
                             required [(ngModel)]="whatIfPrice" #symbol="ngModel" name="whatIfPrice" >
                         </td>
-                        <td><button type="button" (click)="updatePrice(whatIfPrice)">WHAT IF?</button></td>
+                        <td><button type="button" (click)="whatIfScenario(whatIfPrice)">WHAT IF?</button></td>
                 </tr>
                 <tr>
                     <td>Total Money I would Get</td>
-                    <td>$</td>
+                    <td>${{totalMoneyOut}}</td>
                 </tr>
                 <tr>
                     <td>Pure Profit</td>
-                    <td>$</td>
+                    <td>${{pureProfit}}</td>
                 </tr>
                 <tr>
                     <td>Margin</td>
-                    <td>%</td>
+                    <td>%{{pureProfitMargin}}</td>
                 </tr>
                 <tr>
                     <td>HOW MANY SHARES DO I NEED TO SELL TO GET MY ORIGINAL MONEY BACK?</td>
-                    <td>0</td>
+                    <td>{{sharesToSell}}</td>
                 </tr>
             </tbody>
         </table>
@@ -138,7 +138,7 @@
                 </thead>
                 <tbody>
                     
-                  <tr *ngFor="let transaction of transactions" id="talberow" 
+                  <tr *ngFor="let transaction of transactions" 
                   [style.background-color]="transaction.transaction == false ? 'red' : 'green'" 
                   style="color:white">
                     <td>{{ transaction.id }}</td>

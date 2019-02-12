@@ -13,10 +13,16 @@ import { Location }                 from '@angular/common';
   styleUrls: ['./asset-details.component.css']
 })
 export class AssetDetailsComponent implements OnInit {
-  myAsset = new asset();
+  myAsset        = new asset();
   displayedAsset = new assetDisplay();
-  transactions: transaction[];
-  newPrice: number = 0;
+  transactions:     transaction[];
+  newPrice:         number = 0;
+  // what if scenario below
+  whatIfPrice:      number;
+  totalMoneyOut:    number;
+  pureProfit:       number;
+  pureProfitMargin: number;
+  sharesToSell:     number;
 
   constructor( 
     private assetService: AssetService,
@@ -93,15 +99,35 @@ export class AssetDetailsComponent implements OnInit {
   }
 
   private displayTransactions(displayType: string): void {
-    alert("display is " + displayType)
+    // alert("calling + " + displayType)
     //Parse the string displayType for displaying all, only bought or only sold transactions
     if(displayType==="all")
     {
       this.transactionService.getTransactionsByAsset("all",this.myAsset.symbol)
       .subscribe(
-                  res=> alert("pulled all symbols"),
+                  res=> {this.transactions = res,alert("ransaction " + this.transactions[0].symbol)},
                   err=> alert("failed to connect to database"),
-                  ()=> alert("complete"));
+                  () => alert("ransaction " + this.transactions[0].symbol)
+                );
     }
+  }
+
+  private whatIfScenario(): void {
+      // We will calculate the prices for the what if scenario
+      new Promise(res => {
+        // how much money we will get out at the what if price
+        this.totalMoneyOut = this.whatIfPrice * this.myAsset.shares;
+        return res();
+      }).then(res =>{
+        // how much profit will we make 
+        this.pureProfit = this.totalMoneyOut - this.myAsset.originalMoney;
+        return;
+      }).then(res =>{
+        // calculate profit margin
+        this.pureProfitMargin = ( this.pureProfit  / this.myAsset.originalMoney ) * 100
+      }).then(res =>{
+        // how many shares do we need to sell to get our ORIGINAL MONEY back
+        this.sharesToSell = this.myAsset.originalMoney / this.whatIfPrice ;
+      })
   }
 }
