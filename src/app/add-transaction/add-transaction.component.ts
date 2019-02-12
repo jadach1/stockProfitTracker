@@ -213,6 +213,8 @@ export class AddTransactionComponent  implements OnInit{
                 assetToUpdate.unRealProfit = 0;
                 assetToUpdate.unRealMargin = 0;
             }
+            // set the price to be the user entered transaction price
+            assetToUpdate.price = currentTransaction.price;
             return ;         
       }).then(res=>{
           // Calculate current Total 

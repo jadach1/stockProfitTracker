@@ -89,25 +89,25 @@
                 <tr>
                         <td>What if I sold at this price right now?</td>
                         <td><input type="number" class="form-control" placeholder="price" 
-                            required [(ngModel)]="whatIfPrice" #symbol="ngModel" name="whatIfPrice" >
+                            required [(ngModel)]="whatIf.whatIfPrice" #symbol="ngModel" name="whatIfPrice" >
                         </td>
                         <td><button type="button" (click)="whatIfScenario(whatIfPrice)">WHAT IF?</button></td>
                 </tr>
                 <tr>
                     <td>Total Money I would Get</td>
-                    <td>${{totalMoneyOut}}</td>
+                    <td>${{whatIf.totalMoneyOut}}</td>
                 </tr>
                 <tr>
                     <td>Pure Profit</td>
-                    <td>${{pureProfit}}</td>
+                    <td>${{whatIf.pureProfit}}</td>
                 </tr>
                 <tr>
                     <td>Margin</td>
-                    <td>%{{pureProfitMargin}}</td>
+                    <td>%{{whatIf.pureProfitMargin}}</td>
                 </tr>
                 <tr>
                     <td>HOW MANY SHARES DO I NEED TO SELL TO GET MY ORIGINAL MONEY BACK?</td>
-                    <td>{{sharesToSell}}</td>
+                    <td>{{whatIf.sharesToSell}}</td>
                 </tr>
             </tbody>
         </table>

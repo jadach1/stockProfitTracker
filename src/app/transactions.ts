@@ -8,5 +8,3 @@ export class transaction {
     total: number;
 }
 
-
-// add total

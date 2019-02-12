@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { transaction }              from '../transactions';
 import { asset }                    from '../asset';
+import { whatIfAsset }              from '../whatIfAsset';
 import { assetDisplay }             from '../assetDisplay'
 import { AssetService }             from '../asset.service';
 import { TransactionsService }      from '../transactions.service';
@@ -18,11 +19,8 @@ export class AssetDetailsComponent implements OnInit {
   transactions:     transaction[];
   newPrice:         number = 0;
   // what if scenario below
-  whatIfPrice:      number;
-  totalMoneyOut:    number;
-  pureProfit:       number;
-  pureProfitMargin: number;
-  sharesToSell:     number;
+  whatIf         = new whatIfAsset();
+  whatIfDisplay  = new whatIfAsset();
 
   constructor( 
     private assetService: AssetService,
@@ -116,18 +114,24 @@ export class AssetDetailsComponent implements OnInit {
       // We will calculate the prices for the what if scenario
       new Promise(res => {
         // how much money we will get out at the what if price
-        this.totalMoneyOut = this.whatIfPrice * this.myAsset.shares;
+        this.whatIf.totalMoneyOut = this.whatIf.whatIfPrice * this.myAsset.shares;
         return res();
       }).then(res =>{
         // how much profit will we make 
-        this.pureProfit = this.totalMoneyOut - this.myAsset.originalMoney;
+        this.whatIf.pureProfit = this.whatIf.totalMoneyOut - this.myAsset.originalMoney;
         return;
       }).then(res =>{
         // calculate profit margin
-        this.pureProfitMargin = ( this.pureProfit  / this.myAsset.originalMoney ) * 100
+        this.whatIf.pureProfitMargin = ( this.whatIf.pureProfit  / this.myAsset.originalMoney ) * 100
       }).then(res =>{
         // how many shares do we need to sell to get our ORIGINAL MONEY back
-        this.sharesToSell = this.myAsset.originalMoney / this.whatIfPrice ;
+        this.whatIf.sharesToSell = this.myAsset.originalMoney / this.whatIf.whatIfPrice ;
+      }).then(res =>{
+        // round all the values
+        this.whatIf.totalMoneyOut =  this.whatIf.totalMoneyOut.toFixed(2);
+        this.whatIf.pureProfit = this.whatIf.pureProfit.toFixed(2);
+        this.whatIf.pureProfitMargin = this.whatIf.pureProfitMargin.toFixed(2);
+        this.whatIf.sharesToSell = Math.round(this.whatIf.sharesToSell);
       })
   }
 }
