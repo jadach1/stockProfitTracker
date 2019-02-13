@@ -21,7 +21,7 @@
     <form #transactionForm="ngForm" >
 
       <div class="form-group">
-        <label for="symbol">Compnay Symbol</label>
+        <label for="symbol">Company Symbol</label>
         <input type="text" class="form-control" id="symbol" placeholder="Give Companies symbol" 
         required maxlength="6" autofocus
         [(ngModel)]="Transaction.symbol" name="symbol" #symbol="ngModel">
@@ -36,7 +36,7 @@
         <input type="number" class="form-control" id="shares" placeholder="Number of shares" 
         required  pattern="([0-9]{1,6})"
         [(ngModel)]="Transaction.shares" name="shares" #shares="ngModel">
-        <div [hidden]="shares.valid || price.pristinesss"
+        <div [hidden]="shares.valid || shares.pristine"
              class="alert alert-danger">
             Invlid number of shares
         </div>

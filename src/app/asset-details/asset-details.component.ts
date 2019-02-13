@@ -48,6 +48,8 @@ export class AssetDetailsComponent implements OnInit {
 
   // convert number and decimals like 1111.42 into 1,111.00
   private convert(): void {
+    this.displayedAsset.shares = this.myAsset.shares.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    this.displayedAsset.sharesSold = this.myAsset.sharesSold.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     this.displayedAsset.avgprice = this.myAsset.avgprice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     this.displayedAsset.avgpriceSold = this.myAsset.avgpriceSold.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     this.displayedAsset.originalMoney = this.myAsset.originalMoney.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
@@ -62,6 +64,7 @@ export class AssetDetailsComponent implements OnInit {
   }
 
   private updatePrice(newPrice:number): void {
+    alert("calling")
       // This will uodate the current price as well as calculate the currentTotal and other totals.
       new Promise(res=>{
         this.myAsset.price = newPrice;
@@ -97,17 +100,13 @@ export class AssetDetailsComponent implements OnInit {
   }
 
   private displayTransactions(displayType: string): void {
-    // alert("calling + " + displayType)
-    //Parse the string displayType for displaying all, only bought or only sold transactions
-    if(displayType==="all")
-    {
-      this.transactionService.getTransactionsByAsset("all",this.myAsset.symbol)
+    // return transactions based on transactions being true, false or all
+      this.transactionService.getTransactionsByAsset(displayType,this.myAsset.symbol)
       .subscribe(
-                  res=> {this.transactions = res,alert("ransaction " + this.transactions[0].symbol)},
+                  res=> this.transactions = res,
                   err=> alert("failed to connect to database"),
-                  () => alert("ransaction " + this.transactions[0].symbol)
+                  () => this.convertTransactions()
                 );
-    }
   }
 
   private whatIfScenario(): void {
@@ -133,5 +132,14 @@ export class AssetDetailsComponent implements OnInit {
         this.whatIf.pureProfitMargin = this.whatIf.pureProfitMargin.toFixed(2);
         this.whatIf.sharesToSell = Math.round(this.whatIf.sharesToSell);
       })
+  }
+
+  // convert the format of the transactions from 100000 to 1,000,000.00
+  private convertTransactions(): void{
+    this.transactions.forEach(element => {
+      element.price = element.price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+      element.total = element.total.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+      element.shares = element.shares.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    });
   }
 }

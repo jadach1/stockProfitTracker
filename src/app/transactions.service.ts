@@ -34,17 +34,16 @@ return this.http.get<transaction[]>(this.Url+'allTransactions')
 
    // get all transactions of an Asset depending on transaction type
    getTransactionsByAsset (transactionType: string, assetSymbol: string): Observable<transaction[]> {
-    if(transactionType==="buy")
+    if(transactionType==="true")
     {
-      return this.http.get<transaction[]>(this.Url+'allAssetTypeTransactions/:true/:' + assetSymbol)
-    }  else if(transactionType==="sell") {
-      return this.http.get<transaction[]>(this.Url+'allAssetTypeTransactions/:false/:' + assetSymbol)
+      return this.http.get<transaction[]>(this.Url+'allAssetTypeTransactions/true/' + assetSymbol)
+    }  else if(transactionType==="false") {
+      return this.http.get<transaction[]>(this.Url+'allAssetTypeTransactions/false/' + assetSymbol)
     }
     // Return all transactions belonging to the asset Symbol 
     else 
     { 
-      alert("call")
-      return this.http.get<transaction[]>(this.Url+'allAssetTransactions/:' + assetSymbol)
+      return this.http.get<transaction[]>(this.Url+'allAssetTransactions/' + assetSymbol)
     }
   }
 

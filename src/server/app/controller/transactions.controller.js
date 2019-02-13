@@ -32,10 +32,24 @@ exports.findAll = (req, res) => {
 		});
 };
 
-// FETCH All Transactions by transaction type and symbol
+// FETCH All Transactions by symbol
 exports.findAllTransactionsByAsset = (req, res) => {
 	const symbol = 	req.params.symbol;
 	TransactionObject.findAll({ where: {symbol : symbol} })
+		.then(TransactionObjects => {
+			// Send All TransactionObjects to Client
+			res.json(TransactionObjects.sort(function(c1, c2){return c1.id - c2.id}));
+		}).catch(err => {
+			console.log(err);
+			res.status(500).json({msg: "error", details: err});
+		});
+};
+
+// FETCH All Transactions by transaction type and symbol
+exports.findAllTransactionsByAssetAndType = (req, res) => {
+	const symbol = 	req.params.symbol;
+	const typeOfTransaction = req.params.transaction;
+	TransactionObject.findAll({ where: {symbol : symbol, transaction: typeOfTransaction} })
 		.then(TransactionObjects => {
 			// Send All TransactionObjects to Client
 			res.json(TransactionObjects.sort(function(c1, c2){return c1.id - c2.id}));

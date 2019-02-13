@@ -1,6 +1,6 @@
 <h6 id="heading2">Asset - {{myAsset.symbol}}  - OVERVIEW <button [routerLink]="['/Transactions/add', myAsset.symbol, myAsset.shares]" routerLinkActive="active" type="button" >Trade</button></h6>
 <div id="container">
-  <div id="leftThing">
+  <div id="leftForm">
     <div id="heading">CURRENT PRICE   ${{myAsset.price}} PER SHARE   </div>  
                   <label for="newPrice">New Price </label>
                   <input type="number" class="form-control" id="newPrice" placeholder="price per share" 
@@ -19,7 +19,7 @@
             <tbody>
                 <tr>
                         <td id="gold">CURRENT</td>
-                        <td>{{myAsset.shares}}</td>
+                        <td>{{displayedAsset.shares}}</td>
                         <td>${{displayedAsset.avgprice}}</td>
                         <td>${{displayedAsset.price}}</td>
                         <td>${{displayedAsset.currentTotal}}</td>
@@ -36,7 +36,7 @@
             <tbody>
                 <tr>
                         <td id="gold">SOLD</td>
-                        <td>{{myAsset.sharesSold}}</td>
+                        <td>{{displayedAsset.sharesSold}}</td>
                         <td>${{displayedAsset.avgpriceSold}}</td>
                         <td>${{displayedAsset.totalMoneyOut}}</td>
                 </tr>
@@ -88,8 +88,21 @@
             <tbody>
                 <tr>
                         <td>What if I sold at this price right now?</td>
-                        <td><input type="number" class="form-control" placeholder="price" 
-                            required [(ngModel)]="whatIf.whatIfPrice" #symbol="ngModel" name="whatIfPrice" >
+                        
+                        
+                        <td>
+                        <form #form="ngForm">
+                            <div class="form-group">
+                                <label for="whatIfPrice">Price</label>
+                                <input type="number" class="form-control" placeholder="price" id="whatIfPrice"
+                                    required pattern="^\d{0,4}(\.\d{0,2})?$"
+                                    [(ngModel)]="whatIf.whatIfPrice" #symbol="ngModel" name="whatIfPrice" >
+                                <div [hidden]="whatIfPrice.valid || whatIfPrice.pristine"
+                                    class="alert alert-danger">
+                                    Invalid price
+                                </div>
+                            </div>
+                        </form>
                         </td>
                         <td><button type="button" (click)="whatIfScenario(whatIfPrice)">WHAT IF?</button></td>
                 </tr>
@@ -112,24 +125,22 @@
             </tbody>
         </table>
   </div>
-  <div id="content">
+  <div id="rightForm">
         <ul class="nav justify-content-center">
                 <li class="nav-item">
-                        <button style="color:green">ONLY BOUGHT TRANSACTIONS</button>
+                        <button (click)="displayTransactions('true')" style="color:whitesmoke; background-color:green">ONLY BOUGHT TRANSACTIONS</button>
                 </li>
                 <li class="nav-item">
-                        <button>ONLY SOLD TRANSACTIONS</button>
+                        <button (click)="displayTransactions('false')" style="color:whitesmoke; background-color:red">ONLY SOLD TRANSACTIONS</button>
                 </li>
                 <li class="nav-item">
-                        <button (click)="displayTransactions('all')">ALL TRANSACTIONS</button>
+                        <button (click)="displayTransactions('all')" style="color:black; background-color:whitesmoke" >ALL TRANSACTIONS</button>
                 </li>
             </ul>
       <p id="heading">MY TRANSACTIONS</p>
         <table id="tableClean">
                 <thead>
                   <tr>
-                    <th>ID</th>
-                    <th>Symbol</th>
                     <th>Shares</th>
                     <th>Price</th>
                     <th>Date</th>
@@ -141,8 +152,6 @@
                   <tr *ngFor="let transaction of transactions" 
                   [style.background-color]="transaction.transaction == false ? 'red' : 'green'" 
                   style="color:white">
-                    <td>{{ transaction.id }}</td>
-                    <td>{{ transaction.symbol }}</td>
                     <td>{{ transaction.shares }}</td>
                     <td>${{ transaction.price }}</td>
                     <td>{{ transaction.buydate }}</td>   

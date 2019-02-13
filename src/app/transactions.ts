@@ -1,10 +1,10 @@
 export class transaction {
     id: number;
     symbol: string;
-    shares: number;
-    price: number;
+    shares: any;
+    price: any;
     buydate: Date;
     transaction: Boolean;
-    total: number;
+    total: any;
 }
 
