@@ -5,18 +5,20 @@ const CurrentAsset = db.assets;
 exports.create = (req, res) => {	
 	// Save to PostgreSQL database
 	CurrentAsset.create({
-				"symbol": req.body.symbol,
-				"shares":req.body.shares,
-				"avgprice":req.body.avgprice,
-				"sharesSold":req.body.sharesSold,
-				"avgpriceSold":req.body.avgpriceSold,
-				"originalMoney":req.body.originalMoney,
-				"totalMoneyIn":req.body.totalMoneyIn,
-				"totalMoneyOut":req.body.totalMoneyOut,
-				"realProfit":req.body.realProfit,
-				"realMargin":req.body.realMargin,
-				"unRealProfit":req.body.unRealProfit,
-				"unRealMargin":req.body.unRealMargin
+				"symbol"		:req.body.symbol,
+				"shares"		:req.body.shares,
+				"avgprice"		:req.body.avgprice,
+				"sharesSold"	:req.body.sharesSold,
+				"avgpriceSold"	:req.body.avgpriceSold,
+				"originalMoney"	:req.body.originalMoney,
+				"totalMoneyIn"	:req.body.totalMoneyIn,
+				"totalMoneyOut"	:req.body.totalMoneyOut,
+				"realProfit"	:req.body.realProfit,
+				"realMargin"	:req.body.realMargin,
+				"unRealProfit"	:req.body.unRealProfit,
+				"unRealMargin"	:req.body.unRealMargin,
+				"price"			:req.body.price,
+				"currentTotal"	:req.body.currentTotal
 			}).then(CurrentAsset => {		
 			console.log("Creating Asset");	
 			// Send created CurrentAsset to client

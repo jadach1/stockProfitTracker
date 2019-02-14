@@ -42,33 +42,39 @@ export class AddTransactionComponent  implements OnInit{
         this.assetIsNew = false;
       }
       // Set default value to true/buy, and set color scheme for form
-      this.Transaction.transaction = true;
-      document.getElementById("symbol").style.background="rgb(76, 243, 76)";
-      document.getElementById("shares").style.background="rgb(76, 243, 76)";
-      document.getElementById("price").style.background="rgb(76, 243, 76)";
-      document.getElementById("buydate").style.background="rgb(76, 243, 76)";
-      document.getElementById("symbol").style.color="white";
-      document.getElementById("shares").style.color="white";
-      document.getElementById("price").style.color="white";
-      document.getElementById("buydate").style.color="white";
+      // this.Transaction.transaction = true;
+      // document.getElementById("symbol").style.background="white";
+      // document.getElementById("shares").style.background="white";
+      // document.getElementById("price").style.background="white";
+      // document.getElementById("buydate").style.background="white";
+      // document.getElementById("symbol").style.color="white";
+      // document.getElementById("shares").style.color="white";
+      // document.getElementById("price").style.color="white";
+      // document.getElementById("buydate").style.color="white";
   }
 
   // Change the trasnaction from buy to sell or vice versa, change colors of input fields
-  setTransaction(value: boolean): void {
-    this.Transaction.transaction = value;
-    if ( value === true )
+  private setTransaction(): void {
+    if ( this.Transaction.transaction === true )
     {
       document.getElementById("symbol").style.background="rgb(76, 243, 76)";
       document.getElementById("shares").style.background="rgb(76, 243, 76)";
       document.getElementById("price").style.background="rgb(76, 243, 76)";
       document.getElementById("buydate").style.background="rgb(76, 243, 76)";
     }
-    else
+    else if ( this.Transaction.transaction === false )
     {
       document.getElementById("symbol").style.background="rgb(253, 65, 65)";
       document.getElementById("shares").style.background="rgb(253, 65, 65)";
       document.getElementById("price").style.background="rgb(253, 65, 65)";
       document.getElementById("buydate").style.background="rgb(253, 65, 65)";
+    }
+    else
+    {
+      document.getElementById("symbol").style.background="rgb(0, 0, 0)";
+      document.getElementById("shares").style.background="rgb(0, 0, 0)";
+      document.getElementById("price").style.background="rgb(0, 0, 0)";
+      document.getElementById("buydate").style.background="rgb(0, 0, 0)";
     }
   }
 
@@ -78,12 +84,12 @@ export class AddTransactionComponent  implements OnInit{
     this.Transaction = new transaction();
     this.newAsset = new asset();
     this.existingAsset = new asset();
-    if ( saveTransaction === true ) {
-      this.setTransaction(true);
-      }
-    else  {
-      this.setTransaction(false);
-      } 
+    // if ( saveTransaction === true ) {
+    //   this.setTransaction(true);
+    //   }
+    // else  {
+    //   this.setTransaction(false);
+    //   } 
     this.submitted = false;
     this.assetIsNew = true;
   }
@@ -100,7 +106,6 @@ export class AddTransactionComponent  implements OnInit{
 
 // Establish if an asset exists or not
  verifyIfAssetExists() {
-   
    // validate symbol name
    if (this.Transaction.symbol.length > 6 )
    {
@@ -120,10 +125,11 @@ export class AddTransactionComponent  implements OnInit{
           }
           return res();
         }
-        else{
+          else
+          {
           this.assetIsNew = false;
           return res();
-        }
+          }
      }).then(res=>{
         if (this.assetIsNew === false)
         {
@@ -171,6 +177,7 @@ export class AddTransactionComponent  implements OnInit{
             // check and throw an error if this order will push shares below 0
             if ( assetToUpdate.shares < 0 )
             {
+              alert("shares " + assetToUpdate.shares)
               throw ("Sorry, you do not have enough shares to fill this order");
             }
             // check to make sure the shares we are trying to buy are a whole number

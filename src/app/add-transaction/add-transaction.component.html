@@ -1,29 +1,17 @@
 <h3 style="color:royalblue">Add New Transaction</h3>
 <hr>
 <div [hidden]="submitted" class="container">
-  <div class="row">
-    <div class="col-sm-6">  
-      <p>Transaction Type</p>
-      <ul class="nav justify-content-center">
-          <li class="nav-item">
-               <a  class="btn btn-light btn-sm" style="color:white ; background-color: green" role="button" (click)="setTransaction(true)" >BUY</a> 
-            </li>
-          <li class="nav-item">
-              <a  class="btn btn-light btn-sm" style="color:white; background-color: red" role="button" (click)="setTransaction(false)" >SELL</a>
-          </li>
-      </ul>      
-    </div>
-  </div>
+  
 </div>
 <hr>
 
 <div [hidden]="submitted">
-    <form #transactionForm="ngForm" >
+    <form #transactionForm="ngForm" [ngStyle]="{'color':setTransaction()}">
 
       <div class="form-group">
         <label for="symbol">Company Symbol</label>
         <input type="text" class="form-control" id="symbol" placeholder="Give Companies symbol" 
-        required maxlength="6" autofocus
+        required maxlength="6" pattern="([0-9A-Za-z.]{1,6})" autofocus 
         [(ngModel)]="Transaction.symbol" name="symbol" #symbol="ngModel">
         <div [hidden]="symbol.valid || symbol.pristine"
              class="alert alert-danger">
@@ -63,10 +51,41 @@
             date is required
         </div>
       </div>
-	  
+    
+      <div class="form-group">
+        <div class="row">
+          <div>  
+            <p>Transaction Type</p>
+            <ul class="nav justify-content-center">
+                <li class="nav-item"  style="color:white ; background-color: green">
+                    <label class="radioButton">BUY
+                    <input  type="radio" class="form-control" name="Buy" id="Buy"
+                    required [value]="true"
+                    [(ngModel)]="Transaction.transaction" #Buy="ngModel" >
+                    <span class="checkmark"></span>
+                    </label> 
+                </li>
+                <li class="nav-item"  style="color:white ; background-color: red">
+                        <label class="radioButton">SELL
+                        <input  type="radio" class="form-control" name="transaction" id="transaction"
+                        required [value]="false" 
+                        [(ngModel)]="Transaction.transaction" #transaction="ngModel" >
+                        <span class="checkmark"></span>
+                        </label> 
+                </li>
+            </ul>  
+           
+            <div [hidden]="transaction.valid || transaction.pristine"
+             class="alert alert-danger">
+             transaction type is required
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="btn-group btn-group-md">
         <button type="button" class="btn btn-dark" (click)="goBack()">Back</button>
-      	<button type="button" class="btn btn-dark" (click)="grabAsset(Transaction.symbol)" [disabled]="!transactionForm.form.valid">Submit</button>      
+      	<button type="button" class="btn btn-dark" (click)="grabAsset(Transaction.symbol)" [disabled]="!transactionForm.form.valid" >Submit</button>      
         <button type="button" class="btn btn-dark" (click)="newTransaction()" >Clear</button>
       </div>
     </form>

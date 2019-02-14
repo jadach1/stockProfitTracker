@@ -96,7 +96,7 @@
                                 <label for="whatIfPrice">Price</label>
                                 <input type="number" class="form-control" placeholder="price" id="whatIfPrice"
                                     required pattern="^\d{0,4}(\.\d{0,2})?$"
-                                    [(ngModel)]="whatIf.whatIfPrice" #symbol="ngModel" name="whatIfPrice" >
+                                    [(ngModel)]="whatIf.whatIfPrice" #whatIfPrice="ngModel" name="whatIfPrice" >
                                 <div [hidden]="whatIfPrice.valid || whatIfPrice.pristine"
                                     class="alert alert-danger">
                                     Invalid price

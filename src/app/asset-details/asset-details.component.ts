@@ -64,7 +64,6 @@ export class AssetDetailsComponent implements OnInit {
   }
 
   private updatePrice(newPrice:number): void {
-    alert("calling")
       // This will uodate the current price as well as calculate the currentTotal and other totals.
       new Promise(res=>{
         this.myAsset.price = newPrice;
@@ -74,23 +73,18 @@ export class AssetDetailsComponent implements OnInit {
       }).then(res=> {
         this.myAsset.realProfit = this.myAsset.totalMoneyOut - this.myAsset.totalMoneyIn;
         // Check to make sure we still have shares left and have not realized a profit
-        if (this.myAsset.shares > 0 && this.myAsset.originalMoney > 0)
+        if (this.myAsset.originalMoney > 0)
         {
           this.myAsset.unRealProfit = this.myAsset.totalMoneyOut * 1 + this.myAsset.currentTotal - this.myAsset.totalMoneyIn;
         } 
-        // if we have 0 shares and we made a profit than there is no unrealized gain to be made
+        // if we have 0 shares and made all of our original money back than we need to reCalculate 
         else 
         {
-          this.myAsset.unRealProfit = 0;
+          this.myAsset.unRealProfit = this.myAsset.currentTotal;
         }
       }).then(res=> {
         this.myAsset.realMargin =   this.myAsset.realProfit / this.myAsset.totalMoneyIn  * 100;
-        if (this.myAsset.shares > 0 && this.myAsset.originalMoney > 0)
-        {
-            this.myAsset.unRealMargin = this.myAsset.unRealProfit / this.myAsset.totalMoneyIn * 100;
-        } else {
-            this.myAsset.unRealMargin = 0;
-        }
+        this.myAsset.unRealMargin = this.myAsset.unRealProfit / this.myAsset.totalMoneyIn * 100;
       }).then(res => {
         this.assetService.updateAsset(this.myAsset)
         .subscribe(res=> this.grabAssetAndConvert(), err=> alert("failed to update asset"))
