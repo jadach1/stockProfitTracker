@@ -18,7 +18,7 @@ export class AddTransactionComponent  implements OnInit{
   assetIsNew = true;
   newAsset = new asset();
   existingAsset = new asset();
-  passedInShares: number;
+  passedInShares: any;
   shareCount: string;
 
   constructor(
