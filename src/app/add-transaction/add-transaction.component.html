@@ -10,7 +10,7 @@
 
       <div class="form-group">
         <label for="symbol">Company Symbol</label>
-        <input type="text" class="form-control" id="symbol" placeholder="Give Companies symbol" 
+        <input style="color:yellow" type="text" class="form-control" id="symbol" placeholder="Give Companies symbol" 
         required maxlength="6" pattern="([0-9A-Za-z.]{1,6})" autofocus 
         [(ngModel)]="Transaction.symbol" name="symbol" #symbol="ngModel">
         <div [hidden]="symbol.valid || symbol.pristine"
@@ -21,7 +21,7 @@
       
 	    <div class="form-group">
         <label for="shares">Amount of shares: maximum is 999,999 <p>{{shareCount}}</p></label>
-        <input type="number" class="form-control" id="shares" placeholder="Number of shares" 
+        <input style="color:yellow" type="number" class="form-control" id="shares" placeholder="Number of shares" 
         required  pattern="([0-9]{1,6})"
         [(ngModel)]="Transaction.shares" name="shares" #shares="ngModel">
         <div [hidden]="shares.valid || shares.pristine"
@@ -32,7 +32,7 @@
      
 	    <div class="form-group">
         <label for="price">Price: maximum is $9999.99</label>
-        <input type="number" class="form-control" id="price" placeholder="price per share" 
+        <input style="color:yellow" type="number" class="form-control" id="price" placeholder="price per share" 
         required pattern="^\d{0,4}(\.\d{0,2})?$"  
         [(ngModel)]="Transaction.price" name="price" #price="ngModel">
         <div [hidden]="price.valid || price.pristine"
@@ -43,7 +43,7 @@
       
 	      <div class="form-group">
         <label for="buydate">Transaction Date </label>
-        <input type="date" class="form-control" id="buydate" placeholder="date purchased" 
+        <input  type="date" class="form-control" id="buydate" placeholder="date purchased" 
         required
         [(ngModel)]="Transaction.buydate" name="buydate" #buydate="ngModel">
         <div [hidden]="buydate.valid || buydate.pristine"
@@ -92,7 +92,7 @@
 </div>
 
 <div [hidden]="!submitted">
-  <p>Submitted Successfully! -> <span class="badge badge-light">{{Transaction.symbol}} {{Transaction.shares}} {{Transaction.price}} {{Transaction.buydate}} {{Transaction.transaction}} {{Transaction.total}} </span></p>
+  <p>Submitted Successfully!<span class="badge badge-light"></span></p>
  
   <div class="btn-group btn-group-sm">
     	<button type="button" class="btn btn-dark" (click)="goBack()">Back</button>
