@@ -20,7 +20,6 @@ export class AssetDetailsComponent implements OnInit {
   newPrice:         number = 0;
   // what if scenario below
   whatIf         = new whatIfAsset();
-  whatIfDisplay  = new whatIfAsset();
 
   constructor( 
     private assetService: AssetService,
@@ -116,6 +115,12 @@ export class AssetDetailsComponent implements OnInit {
         this.whatIf.pureProfit = this.whatIf.pureProfit.toFixed(2);
         this.whatIf.pureProfitMargin = this.whatIf.pureProfitMargin.toFixed(2);
         this.whatIf.sharesToSell = Math.round(this.whatIf.sharesToSell);
+      }).then(res=>{
+        // convert to strings for user appeal ex 1000 to 1,000
+        this.whatIf.totalMoneyOut =  this.whatIf.totalMoneyOut.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        this.whatIf.pureProfit = this.whatIf.pureProfit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        this.whatIf.pureProfitMargin = this.whatIf.pureProfitMargin.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        this.whatIf.sharesToSell = this.whatIf.sharesToSell.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
       })
   }
 
