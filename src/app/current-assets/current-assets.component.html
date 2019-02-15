@@ -37,6 +37,8 @@
         <td>{{ asset.shares }}</td>
         <td>${{ asset.currentTotal }}</td>
         <button [routerLink]="['/Transactions/add', asset.symbol, asset.shares]" routerLinkActive="active" type="button" >Trade</button>
+        <button type="button"  [routerLink]="['/currentAssets/', asset.symbol]" routerLinkActive="active" >DETAILS</button>
+        <p></p>
       <br>
     </tr>
   

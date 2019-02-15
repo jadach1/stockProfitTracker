@@ -15,9 +15,36 @@ export class TransactionsService {
 
   constructor(private http: HttpClient) { }
  
+  // get all transactions regardless of bought or sold
   getAllTransactions (): Observable<transaction[]> {
-//return this.http.get<transaction[]>(this.Url+'allTransactions')
 return this.http.get<transaction[]>(this.Url+'allTransactions')
+  }
+
+  // get all transactions depending on transaction type
+  getTransactions (transactionType: string): Observable<transaction[]> {
+    if(transactionType==="buy")
+    {
+      return this.http.get<transaction[]>(this.Url+'allTransactions/:true')
+    }  else if(transactionType==="sell") {
+      return this.http.get<transaction[]>(this.Url+'allTransactions/:false')
+    } else {
+      return this.http.get<transaction[]>(this.Url+'allTransactions')
+    }
+  }
+
+   // get all transactions of an Asset depending on transaction type
+   getTransactionsByAsset (transactionType: string, assetSymbol: string): Observable<transaction[]> {
+    if(transactionType==="true")
+    {
+      return this.http.get<transaction[]>(this.Url+'allAssetTypeTransactions/true/' + assetSymbol)
+    }  else if(transactionType==="false") {
+      return this.http.get<transaction[]>(this.Url+'allAssetTypeTransactions/false/' + assetSymbol)
+    }
+    // Return all transactions belonging to the asset Symbol 
+    else 
+    { 
+      return this.http.get<transaction[]>(this.Url+'allAssetTransactions/' + assetSymbol)
+    }
   }
 
   addTransaction (asset: transaction): Observable<transaction> {

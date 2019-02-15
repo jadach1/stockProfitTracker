@@ -1,60 +1,48 @@
 <h3 style="color:royalblue">Add New Transaction</h3>
 <hr>
 <div [hidden]="submitted" class="container">
-  <div class="row">
-    <div class="col-sm-6">  
-      <p>Transaction Type</p>
-      <ul class="nav justify-content-center">
-          <li class="nav-item">
-               <a  class="btn btn-light btn-sm" style="color:white ; background-color: green" role="button" (click)="setTransaction(true)" >BUY</a> 
-            </li>
-          <li class="nav-item">
-              <a  class="btn btn-light btn-sm" style="color:white; background-color: red" role="button" (click)="setTransaction(false)" >SELL</a>
-          </li>
-      </ul>      
-    </div>
-  </div>
+  
 </div>
 <hr>
 
 <div [hidden]="submitted">
-    <form #transactionForm="ngForm" >
+    <form #transactionForm="ngForm" [ngStyle]="{'color':setTransaction()}">
 
       <div class="form-group">
-        <label for="symbol">Compnay Symbol</label>
+        <label for="symbol">Company Symbol</label>
         <input type="text" class="form-control" id="symbol" placeholder="Give Companies symbol" 
-        required
+        required maxlength="6" pattern="([0-9A-Za-z.]{1,6})" autofocus 
         [(ngModel)]="Transaction.symbol" name="symbol" #symbol="ngModel">
         <div [hidden]="symbol.valid || symbol.pristine"
              class="alert alert-danger">
-            symbol is required
+            The symbol is not valid
         </div>
       </div>
       
 	    <div class="form-group">
-        <label for="shares">Shares Purchased/Sold <p>{{shareCount}}</p></label>
+        <label for="shares">Amount of shares: maximum is 999,999 <p>{{shareCount}}</p></label>
         <input type="number" class="form-control" id="shares" placeholder="Number of shares" 
-        required
+        required  pattern="([0-9]{1,6})"
         [(ngModel)]="Transaction.shares" name="shares" #shares="ngModel">
         <div [hidden]="shares.valid || shares.pristine"
              class="alert alert-danger">
-            shares is required
+            Invlid number of shares
         </div>
       </div>
      
 	    <div class="form-group">
-        <label for="price">Price </label>
+        <label for="price">Price: maximum is $9999.99</label>
         <input type="number" class="form-control" id="price" placeholder="price per share" 
-        required
+        required pattern="^\d{0,4}(\.\d{0,2})?$"  
         [(ngModel)]="Transaction.price" name="price" #price="ngModel">
         <div [hidden]="price.valid || price.pristine"
              class="alert alert-danger">
-            price is required
+            Invalid price
         </div>
       </div>
       
 	      <div class="form-group">
-        <label for="buydate">Purchase (buy/sell)date </label>
+        <label for="buydate">Transaction Date </label>
         <input type="date" class="form-control" id="buydate" placeholder="date purchased" 
         required
         [(ngModel)]="Transaction.buydate" name="buydate" #buydate="ngModel">
@@ -63,10 +51,41 @@
             date is required
         </div>
       </div>
-	  
+    
+      <div class="form-group">
+        <div class="row">
+          <div>  
+            <p>Transaction Type</p>
+            <ul class="nav justify-content-center">
+                <li class="nav-item"  style="color:white ; background-color: green">
+                    <label class="radioButton">BUY
+                    <input  type="radio" class="form-control" name="Buy" id="Buy"
+                    required [value]="true"
+                    [(ngModel)]="Transaction.transaction" #Buy="ngModel" >
+                    <span class="checkmark"></span>
+                    </label> 
+                </li>
+                <li class="nav-item"  style="color:white ; background-color: red">
+                        <label class="radioButton">SELL
+                        <input  type="radio" class="form-control" name="transaction" id="transaction"
+                        required [value]="false" 
+                        [(ngModel)]="Transaction.transaction" #transaction="ngModel" >
+                        <span class="checkmark"></span>
+                        </label> 
+                </li>
+            </ul>  
+           
+            <div [hidden]="transaction.valid || transaction.pristine"
+             class="alert alert-danger">
+             transaction type is required
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="btn-group btn-group-md">
         <button type="button" class="btn btn-dark" (click)="goBack()">Back</button>
-      	<button type="button" class="btn btn-dark" (click)="addTransaction()" [disabled]="!transactionForm.form.valid">Submit</button>      
+      	<button type="button" class="btn btn-dark" (click)="grabAsset(Transaction.symbol)" [disabled]="!transactionForm.form.valid" >Submit</button>      
         <button type="button" class="btn btn-dark" (click)="newTransaction()" >Clear</button>
       </div>
     </form>

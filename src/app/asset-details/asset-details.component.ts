@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { transaction }              from '../transactions';
 import { asset }                    from '../asset';
+import { whatIfAsset }              from '../whatIfAsset';
 import { assetDisplay }             from '../assetDisplay'
 import { AssetService }             from '../asset.service';
 import { TransactionsService }      from '../transactions.service';
@@ -13,10 +14,12 @@ import { Location }                 from '@angular/common';
   styleUrls: ['./asset-details.component.css']
 })
 export class AssetDetailsComponent implements OnInit {
-  myAsset = new asset();
+  myAsset        = new asset();
   displayedAsset = new assetDisplay();
-  transactions: transaction[];
-  newPrice: number = 0;
+  transactions:     transaction[];
+  newPrice:         number = 0;
+  // what if scenario below
+  whatIf         = new whatIfAsset();
 
   constructor( 
     private assetService: AssetService,
@@ -26,19 +29,26 @@ export class AssetDetailsComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    // Fetch our asset from DB
-      this.assetService.getAsset( this.route.snapshot.paramMap.get('symbol'))
-        .subscribe(
-            value => { // upon success, set value and call function to convert 
-                      alert("successfully pulled asset"), 
-                      this.myAsset = value, 
-                      this.convert()}, 
-            error =>  { alert("This symbol does not exist") }
+   this.grabAssetAndConvert();
+  }
+
+  private grabAssetAndConvert(): void {
+     // Fetch our asset from DB and convert the numbers into strings
+     this.assetService.getAsset( this.route.snapshot.paramMap.get('symbol'))
+     .subscribe(
+                value => { // upon success, set value and call function to convert  
+                        this.myAsset = value, 
+                        this.convert()
+                      }, 
+                error => alert("This symbol does not exist"),
+                () => this.displayTransactions("all") 
               );      
   }
 
   // convert number and decimals like 1111.42 into 1,111.00
   private convert(): void {
+    this.displayedAsset.shares = this.myAsset.shares.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    this.displayedAsset.sharesSold = this.myAsset.sharesSold.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     this.displayedAsset.avgprice = this.myAsset.avgprice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     this.displayedAsset.avgpriceSold = this.myAsset.avgpriceSold.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     this.displayedAsset.originalMoney = this.myAsset.originalMoney.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
@@ -53,28 +63,73 @@ export class AssetDetailsComponent implements OnInit {
   }
 
   private updatePrice(newPrice:number): void {
-   // This will uodate the current price as well as calculate the currentTotal and other totals.
-   new Promise(res=>{
-    this.myAsset.price = newPrice;
-    return res();
-   }).then(res=>{
-     this.myAsset.currentTotal = this.myAsset.price * this.myAsset.shares;
-   }).then(res=> {
-    this.myAsset.realProfit = this.myAsset.totalMoneyOut * 1 - this.myAsset.totalMoneyIn * 1;
-    this.myAsset.unRealProfit = (this.myAsset.totalMoneyOut * 1 + this.myAsset.currentTotal) - this.myAsset.totalMoneyIn * 1;
-   }).then(res=> {
-     this.myAsset.realMargin =   (this.myAsset.realProfit / (this.myAsset.totalMoneyIn * 1)) * 100;
-     this.myAsset.unRealMargin = (this.myAsset.unRealProfit / (this.myAsset.totalMoneyIn * 1)) * 100;
-   }).then(res => {
-     this.assetService.updateAsset(this.myAsset).subscribe(res=> alert("updated asset successfully"), err => alert("failed to update asset") )
-   }).then(res=>{
-     // we need to convert the totals we just calculated again
-     this.convert();
-   }).catch(err =>{
-      alert("error inside function check " + err)
-   })
-  
-  
+      // This will uodate the current price as well as calculate the currentTotal and other totals.
+      new Promise(res=>{
+        this.myAsset.price = newPrice;
+        return res();
+      }).then(res=>{
+        this.myAsset.currentTotal = this.myAsset.price * this.myAsset.shares;
+      }).then(res=> {
+        this.myAsset.realProfit = this.myAsset.totalMoneyOut - this.myAsset.totalMoneyIn;
+        this.myAsset.unRealProfit = this.myAsset.totalMoneyOut * 1 + this.myAsset.currentTotal - this.myAsset.totalMoneyIn;
+      }).then(res=> {
+        this.myAsset.realMargin =   this.myAsset.realProfit / this.myAsset.totalMoneyIn  * 100;
+        this.myAsset.unRealMargin = this.myAsset.unRealProfit / this.myAsset.totalMoneyIn * 100;
+      }).then(res => {
+        this.assetService.updateAsset(this.myAsset)
+        .subscribe(res=> this.grabAssetAndConvert(), err=> alert("failed to update asset"))
+      }).catch(err =>{
+          alert("error when trying to update Price " + err)
+      });
   }
 
+  private displayTransactions(displayType: string): void {
+    // return transactions based on transactions being true, false or all
+      this.transactionService.getTransactionsByAsset(displayType,this.myAsset.symbol)
+      .subscribe(
+                  res=> this.transactions = res,
+                  err=> alert("failed to connect to database"),
+                  () => this.convertTransactions()
+                );
+  }
+
+  private whatIfScenario(): void {
+      // We will calculate the prices for the what if scenario
+      new Promise(res => {
+        // how much money we will get out at the what if price
+        this.whatIf.totalMoneyOut = this.whatIf.whatIfPrice * this.myAsset.shares;
+        return res();
+      }).then(res =>{
+        // how much profit will we make 
+        this.whatIf.pureProfit = this.whatIf.totalMoneyOut - this.myAsset.originalMoney;
+        return;
+      }).then(res =>{
+        // calculate profit margin
+        this.whatIf.pureProfitMargin = ( this.whatIf.pureProfit  / this.myAsset.originalMoney ) * 100
+      }).then(res =>{
+        // how many shares do we need to sell to get our ORIGINAL MONEY back
+        this.whatIf.sharesToSell = this.myAsset.originalMoney / this.whatIf.whatIfPrice ;
+      }).then(res =>{
+        // round all the values
+        this.whatIf.totalMoneyOut =  this.whatIf.totalMoneyOut.toFixed(2);
+        this.whatIf.pureProfit = this.whatIf.pureProfit.toFixed(2);
+        this.whatIf.pureProfitMargin = this.whatIf.pureProfitMargin.toFixed(2);
+        this.whatIf.sharesToSell = Math.round(this.whatIf.sharesToSell);
+      }).then(res=>{
+        // convert to strings for user appeal ex 1000 to 1,000
+        this.whatIf.totalMoneyOut =  this.whatIf.totalMoneyOut.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        this.whatIf.pureProfit = this.whatIf.pureProfit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        this.whatIf.pureProfitMargin = this.whatIf.pureProfitMargin.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        this.whatIf.sharesToSell = this.whatIf.sharesToSell.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+      })
+  }
+
+  // convert the format of the transactions from 100000 to 1,000,000.00
+  private convertTransactions(): void{
+    this.transactions.forEach(element => {
+      element.price = element.price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+      element.total = element.total.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+      element.shares = element.shares.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    });
+  }
 }

@@ -4,17 +4,17 @@
     display: flex;
   }
 
-  #leftThing {
+  #leftForm {
     width: 100%;
     background-color: blue;
   }
-  #content {
+  #rightForm {
     width: 100%;
     background-color: green;
   }
-  #form1 {
-    width: 20%;
-    background-color: yellow;
+  #middleForm {
+    width: 10%;
+    background-color: white;
     
   }
 
@@ -45,7 +45,6 @@
   }
 
   #tableClean {
-    color: antiquewhite;
     border: 0px transparent white;
     padding:0 15px 0 15px; 
   }

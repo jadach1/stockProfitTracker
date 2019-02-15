@@ -46,14 +46,14 @@ module.exports = (sequelize, Sequelize) => {
 			}
 		},
 		totalMoneyIn : { // total amount of money invested into this asset
-			type: Sequelize.DECIMAL(12,2),
+			type: Sequelize.DECIMAL(13,2),
 			defaultValue: 0,
 			validate: {
 				isDecimal: true,
 			}
 		},
 		totalMoneyOut : { // total amount of money pulled out of this investment
-			type: Sequelize.DECIMAL(12,2),
+			type: Sequelize.DECIMAL(13,2),
 			defaultValue: 0,
 			validate: {
 				isDecimal: true,
@@ -67,14 +67,14 @@ module.exports = (sequelize, Sequelize) => {
 			}
 		},
 		currentTotal : { // price * shares
-			type: Sequelize.DECIMAL(12,2),
+			type: Sequelize.DECIMAL(13,2),
 			defaultValue: 0,
 			validate: {
 				isDecimal: true,
 			}
 		},
 		realProfit : { // totMoneyOut - TotalMoneyIn
-			type: Sequelize.DECIMAL(12,2),
+			type: Sequelize.DECIMAL(13,2),
 			defaultValue: 0,
 			validate: {
 				isDecimal: true,
@@ -88,7 +88,7 @@ module.exports = (sequelize, Sequelize) => {
 			}
 		},
 		unRealProfit : { // currentTotal + totMoneyOut - TotalMoneyIn
-			type: Sequelize.DECIMAL(12,2),
+			type: Sequelize.DECIMAL(13,2),
 			defaultValue: 0,
 			validate: {
 				isDecimal: true,

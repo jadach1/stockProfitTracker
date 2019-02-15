@@ -7,6 +7,12 @@ module.exports = function(capp) {
     // Retrieve all CurrentAsset
     capp.get('/api/Transaction', Transaction.findDistinct);
 
+    // Retrieve all Transactions based on symbol of Asset
+    capp.get('/api/allAssetTransactions/:symbol', Transaction.findAllTransactionsByAsset);
+
+    // Retrieve all Transactions based on symbol of Asset
+     capp.get('/api/allAssetTypeTransactions/:transaction/:symbol', Transaction.findAllTransactionsByAssetAndType);
+
     // Update a CurrentAsset with Id
     capp.put('/api/Transaction', Transaction.update);
  

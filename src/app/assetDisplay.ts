@@ -1,5 +1,6 @@
 export class assetDisplay {
     avgprice: string;
+    shares: string;
     sharesSold: string;
     avgpriceSold: string;
     originalMoney: string;
