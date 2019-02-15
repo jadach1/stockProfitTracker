@@ -72,16 +72,7 @@ export class AssetDetailsComponent implements OnInit {
         this.myAsset.currentTotal = this.myAsset.price * this.myAsset.shares;
       }).then(res=> {
         this.myAsset.realProfit = this.myAsset.totalMoneyOut - this.myAsset.totalMoneyIn;
-        // Check to make sure we still have shares left and have not realized a profit
-        if (this.myAsset.originalMoney > 0)
-        {
-          this.myAsset.unRealProfit = this.myAsset.totalMoneyOut * 1 + this.myAsset.currentTotal - this.myAsset.totalMoneyIn;
-        } 
-        // if we have 0 shares and made all of our original money back than we need to reCalculate 
-        else 
-        {
-          this.myAsset.unRealProfit = this.myAsset.currentTotal;
-        }
+        this.myAsset.unRealProfit = this.myAsset.totalMoneyOut * 1 + this.myAsset.currentTotal - this.myAsset.totalMoneyIn;
       }).then(res=> {
         this.myAsset.realMargin =   this.myAsset.realProfit / this.myAsset.totalMoneyIn  * 100;
         this.myAsset.unRealMargin = this.myAsset.unRealProfit / this.myAsset.totalMoneyIn * 100;
