@@ -34,23 +34,13 @@ export class AddTransactionComponent  implements OnInit{
       // Get any parmaeter passed in from url
       const passedInSymbol =  this.route.snapshot.paramMap.get('symbol');
       this.Transaction.symbol = passedInSymbol;
-      this.passedInShares = +this.route.snapshot.paramMap.get('shares');
-      if ( this.passedInShares > 0 )
-      { this.shareCount = "number of current shares is : "+this.passedInShares;}
+      this.passedInShares = this.route.snapshot.paramMap.get('shares');
+      if ( this.passedInShares )
+      { this.shareCount = "You currently have this many shares : "+this.passedInShares;}
       if (passedInSymbol != null)
       {
         this.assetIsNew = false;
       }
-      // Set default value to true/buy, and set color scheme for form
-      // this.Transaction.transaction = true;
-      // document.getElementById("symbol").style.background="white";
-      // document.getElementById("shares").style.background="white";
-      // document.getElementById("price").style.background="white";
-      // document.getElementById("buydate").style.background="white";
-      // document.getElementById("symbol").style.color="white";
-      // document.getElementById("shares").style.color="white";
-      // document.getElementById("price").style.color="white";
-      // document.getElementById("buydate").style.color="white";
   }
 
   // Change the trasnaction from buy to sell or vice versa, change colors of input fields
@@ -186,11 +176,21 @@ export class AddTransactionComponent  implements OnInit{
               throw ("The number of shares entered is NOT a whole number");
             }
             assetToUpdate.originalMoney = assetToUpdate.totalMoneyIn - assetToUpdate.totalMoneyOut;
+            // set the price to be the user entered transaction price
+            assetToUpdate.price = currentTransaction.price;
             return ;
+      }).then(res=>{
+            // If originalMoney is less than 0, change the value to 0, means "we are in the money"
+            if (assetToUpdate.originalMoney < 0 )
+            {
+              assetToUpdate.originalMoney = 0;
+            }
+            // Calculate current Total 
+            assetToUpdate.currentTotal = assetToUpdate.shares * assetToUpdate.price;
       }).then(res=> {
            // Calculate the Realized and Unrealized profit
             assetToUpdate.realProfit = assetToUpdate.totalMoneyOut - assetToUpdate.totalMoneyIn;
-            assetToUpdate.unRealProfit = assetToUpdate.totalMoneyOut * 1 + assetToUpdate.currentTotal * 1 - assetToUpdate.totalMoneyIn;
+            assetToUpdate.unRealProfit = (assetToUpdate.totalMoneyOut - assetToUpdate.totalMoneyIn) + assetToUpdate.currentTotal;
             return;
       }).then(res=> {
            // Calculate the Realized and Unrealized Margins
@@ -198,35 +198,20 @@ export class AddTransactionComponent  implements OnInit{
             assetToUpdate.unRealMargin = (assetToUpdate.unRealProfit / assetToUpdate.totalMoneyIn) * 100;
             return;
        }).then(res=> { 
-            // If originalMoney is less than 0, change the value to 0, means "we are in the money"
-            if (assetToUpdate.originalMoney < 0 )
+            // calculate avgPrices only if shares are greate than 0
+            if ( assetToUpdate.shares > 0  && assetToUpdate.originalMoney > 0)
             {
-              assetToUpdate.originalMoney = 0;
+              assetToUpdate.avgprice = assetToUpdate.originalMoney / assetToUpdate.shares;
             }
-            // Only calculate avgprice if shares and originalMoney are over 0.
-            if (assetToUpdate.shares > 0 && assetToUpdate.originalMoney > 0)
+            // Calculate avgPrirce of assets sold if transaction is a sell order
+            if (currentTransaction.transaction === false )
             {
-              // calculate avgPrices
-              if (currentTransaction.transaction === true )
-              {
-                assetToUpdate.avgprice = assetToUpdate.originalMoney / assetToUpdate.shares;
-              } else {
-                assetToUpdate.avgpriceSold = 1 * assetToUpdate.totalMoneyOut  / assetToUpdate.sharesSold ;
-              } 
-            } else {
-              // original money is at 0 or less than 0
-                assetToUpdate.avgprice = 0;
-                assetToUpdate.avgpriceSold = 1 * assetToUpdate.totalMoneyOut  / assetToUpdate.sharesSold ;
-                assetToUpdate.unRealProfit = 0;
-                assetToUpdate.unRealMargin = 0;
+              assetToUpdate.avgpriceSold = assetToUpdate.totalMoneyOut  / assetToUpdate.sharesSold ;
             }
-            // set the price to be the user entered transaction price
-            assetToUpdate.price = currentTransaction.price;
             return ;         
       }).then(res=>{
-          // Calculate current Total 
-            assetToUpdate.currentTotal = assetToUpdate.shares * assetToUpdate.price;
-      }).then(res=>{
+          // Calculate gain on the transaction
+           currentTransaction.gain = (currentTransaction.price - assetToUpdate.avgprice) / assetToUpdate.avgprice * 100;
           // if this is NOT a new asset we will call updateAsset, otherwise we will create the new asset
           if (this.assetIsNew === false)
           {

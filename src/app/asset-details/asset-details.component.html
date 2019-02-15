@@ -1,7 +1,7 @@
-<h6 id="heading2">Asset - {{myAsset.symbol}}  - OVERVIEW <button [routerLink]="['/Transactions/add', myAsset.symbol, myAsset.shares]" routerLinkActive="active" type="button" >Trade</button></h6>
+<h6 id="heading2">Asset - {{myAsset.symbol}}  - OVERVIEW <button [routerLink]="['/Transactions/add', myAsset.symbol, displayAsset.shares]" routerLinkActive="active" type="button" >Trade</button></h6>
 <div id="container">
   <div id="leftForm">
-    <div id="heading">CURRENT PRICE   ${{myAsset.price}} PER SHARE   </div>  
+    <div id="heading">CURRENT PRICE   ${{displayAsset.price}} PER SHARE   </div>  
                   <label for="newPrice">New Price </label>
                   <input type="number" class="form-control" id="newPrice" placeholder="price per share" 
                   required [(ngModel)]="newPrice" #symbol="ngModel" name="newPrice" >
@@ -19,10 +19,10 @@
             <tbody>
                 <tr>
                         <td id="gold">CURRENT</td>
-                        <td>{{myAsset.shares}}</td>
-                        <td>${{myAsset.avgprice}}</td>
-                        <td>${{myAsset.price}}</td>
-                        <td>${{myAsset.currentTotal}}</td>
+                        <td>{{displayAsset.shares}}</td>
+                        <td>${{displayAsset.avgprice}}</td>
+                        <td>${{displayAsset.price}}</td>
+                        <td>${{displayAsset.currentTotal}}</td>
                 </tr>
             </tbody>
             <thead>
@@ -36,9 +36,9 @@
             <tbody>
                 <tr>
                         <td id="gold">SOLD</td>
-                        <td>{{myAsset.sharesSold}}</td>
-                        <td>${{myAsset.avgpriceSold}}</td>
-                        <td>${{myAsset.totalMoneyOut}}</td>
+                        <td>{{displayAsset.sharesSold}}</td>
+                        <td>${{displayAsset.avgpriceSold}}</td>
+                        <td>${{displayAsset.totalMoneyOut}}</td>
                 </tr>
             </tbody>
             <thead>
@@ -54,10 +54,10 @@
                 <tr></tr>
                 <tr>
                     <td id="gold">PROFIT</td>
-                    <td>${{myAsset.realProfit}}</td>
-                    <td>%{{myAsset.realMargin}}</td>
-                    <td>${{myAsset.unRealProfit}}</td>
-                    <td>%{{myAsset.unRealMargin}}</td>
+                    <td>${{displayAsset.realProfit}}</td>
+                    <td>%{{displayAsset.realMargin}}</td>
+                    <td>${{displayAsset.unRealProfit}}</td>
+                    <td>%{{displayAsset.unRealMargin}}</td>
                 </tr>
             </tbody>
             <thead>
@@ -72,9 +72,9 @@
                 <tr></tr>
                 <tr>
                   <td id="gold">MORE INFROMATION</td>
-                  <td>${{myAsset.totalMoneyIn}}</td>
-                  <td>${{myAsset.totalMoneyOut}}</td>
-                  <td>${{myAsset.originalMoney}}</td>
+                  <td>${{displayAsset.totalMoneyIn}}</td>
+                  <td>${{displayAsset.totalMoneyOut}}</td>
+                  <td>${{displayAsset.originalMoney}}</td>
                 </tr>
             </tbody>
         </table>       
@@ -145,6 +145,7 @@
                     <th>Price</th>
                     <th>Date</th>
                     <th>Total</th>
+                    <th>Gain</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -156,6 +157,7 @@
                     <td>${{ transaction.price }}</td>
                     <td>{{ transaction.buydate }}</td>   
                     <td>${{ transaction.total }}</td>
+                    <td>{{transaction.total}}%</td>
                     <br>
                   </tr>
                 

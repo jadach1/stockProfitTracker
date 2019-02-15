@@ -5,12 +5,13 @@ const TransactionObject = db.transactions;
 exports.create = (req, res) => {	
 	// Save to PostgreSQL database
 	TransactionObject.create({
-				"symbol": req.body.symbol, 
-				"shares": req.body.shares,
-				"price": req.body.price,
-                "buydate": req.body.buydate,
-				"transaction": req.body.transaction,
-				"total": req.body.total
+				"symbol": 			req.body.symbol, 
+				"shares": 			req.body.shares,
+				"price": 				req.body.price,
+        "buydate": 			req.body.buydate,
+				"transaction": 	req.body.transaction,
+				"gain": 				req.body.gain,
+				"total": 				req.body.total
 			}).then(TransactionObject => {		
 			console.log("Creating Transaction");	
 			// Send created TransactionObject to client
