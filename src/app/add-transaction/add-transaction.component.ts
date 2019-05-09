@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { transaction } from '../transactions';
-import { asset } from '../asset';
-import { AssetService } from '../asset.service';
-import { TransactionsService } from '../transactions.service';
+import { transaction } from '../models/transactions';
+import { asset } from '../models/asset';
+import { AssetService } from '../services/asset.service';
+import { TransactionsService } from '../services/transactions.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { transaction } from '../transactions';
-import { TransactionsService } from '../transactions.service';
+import { transaction } from '../models/transactions';
+import { TransactionsService } from '../services/transactions.service';
 
 @Component({
   selector: 'app-all-transaction',
