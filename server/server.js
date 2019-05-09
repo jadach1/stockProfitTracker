@@ -8,8 +8,6 @@ app.use(cors())
  
 const db = require('./app/config/db.config.js');
   
-
-
 // create table if it DOES NOT exist
 db.sequelize.sync().then(() => {
   console.log('Sync with table');

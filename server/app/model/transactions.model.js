@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-	const thiscanbeanything = sequelize.define('transactions', {
+	const transaction = sequelize.define('transactions', {
 	  symbol: {
 		    type: Sequelize.STRING(6)
 	  },
@@ -24,5 +24,5 @@ module.exports = (sequelize, Sequelize) => {
   	}
     });
 	
-	return thiscanbeanything;
+	return transaction;
 }

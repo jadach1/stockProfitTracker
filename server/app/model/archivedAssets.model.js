@@ -1,9 +1,7 @@
 module.exports = (sequelize, Sequelize) => {
-	const asset = sequelize.define('asset', {
+	const asset = sequelize.define('archivedasset', {
 	  symbol: {
-				type: Sequelize.STRING(6),
-				unique: true,
-				primaryKey: true
+				type: Sequelize.STRING(6)
 	  },
 	  shares: { // total shares bought 
 				type: Sequelize.INTEGER,

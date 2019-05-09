@@ -42,16 +42,27 @@ export class CurrentAssetsComponent implements OnInit {
     .subscribe(
                 res => this.assets = res,
                 err => console.log("could not fetch assets from database"),
-                () => this.calculate(this.assets)        
+                () => this.loadPage()     
     );
   }
 
-  async calculate(myAssets: asset[]){
+  async loadPage(){
+    await this.searchForArchives(); 
     await this.calculateValue();
     await this.twoDecimalPlaces();
     await this.formatToString();
   }
 
+  searchForArchives(){
+    console.log("seroth")
+    this.assets.forEach(element => 
+      {
+        if ( parseFloat(element.shares) == 0 )
+        {
+          console.log("found one " + element.symbol);
+        }
+      })
+  }
   /*
     Iterate through each of the assets and append the value
   */
