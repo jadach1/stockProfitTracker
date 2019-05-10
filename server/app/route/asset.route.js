@@ -20,5 +20,5 @@ module.exports = function(capp) {
     capp.get('/api/currentassets', CurrentAssets.findAll);
 
     /*********************** ARCHVIED ASSETS  ***************************/
-    capp.post('/api/transferAsset', CurrentAssets.createArchviedAsset);
+    capp.put('/api/transferAsset/:id/:status', CurrentAssets.transferAsset);
 }

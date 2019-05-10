@@ -1,6 +1,5 @@
 const db = require('../config/db.config.js');
 const CurrentAsset = db.assets;
-const ArchivedAsset = db.archivedassets;
 
 // Post a CurrentAsset
 exports.create = (req, res) => {	
@@ -30,35 +29,6 @@ exports.create = (req, res) => {
 		});
 };
 
-// Create a Archived Asset
-
-exports.createArchviedAsset = (req, res) => {	
-	console.log("here is")
-	// Save to PostgreSQL database
-	ArchivedAsset.create({
-			"symbol"		:req.body.symbol,
-			"shares"		:req.body.shares,
-			"avgprice"		:req.body.avgprice,
-			"sharesSold"	:req.body.sharesSold,
-			"avgpriceSold"	:req.body.avgpriceSold,
-			"originalMoney"	:req.body.originalMoney,
-			"totalMoneyIn"	:req.body.totalMoneyIn,
-			"totalMoneyOut"	:req.body.totalMoneyOut,
-			"realProfit"	:req.body.realProfit,
-			"realMargin"	:req.body.realMargin,
-			"unRealProfit"	:req.body.unRealProfit,
-			"unRealMargin"	:req.body.unRealMargin,
-			"price"			:req.body.price,
-			"currentTotal"	:req.body.currentTotal
-		}).then(result => {		
-			console.log("Creating Archived Asset with ID " + result.id);	
-			// Send created CurrentAsset to client
-			res.json(result.id);
-		}).catch(err => {
-			console.log(err);
-			res.status(500).json({msg: "error", details: err});
-		});
-};
 // FETCH All Transactions
 exports.findAll = (req, res) => {
 	CurrentAsset.findAll().then(Asset => {
@@ -95,7 +65,7 @@ exports.update = (req, res) => {
 };
 
 // Delete a CurrentAsset by symbol
-exports.delete2 = (req, res) => {
+exports.delete = (req, res) => {
 	const symbol = req.params.symbol;
 	CurrentAsset.destroy({
 			where: { symbol: symbol }
@@ -107,18 +77,6 @@ exports.delete2 = (req, res) => {
 		});
 };
 
-// Delete a CurrentAsset by symbol
-exports.delete = (req, res) => {
-	const symbol = req.params.symbol;
-	db.sequelize
-		.query('delete from assets where symbol=\''+symbol+'\';')
-		.then(() => {
-			res.status(200).json( { msg: 'Deleted Successfully -> Asset symbol = ' + symbol } );
-		}).catch(err => {
-			console.log(err);
-			res.status(500).json({msg: "error", details: err});
-		});
-};
 
 // Return a true or false value to see if an Asset already exists
 exports.check = (req, res) => {
@@ -134,4 +92,20 @@ exports.check = (req, res) => {
 				console.log(err);
 				res.status(500).json({msg: "error", details: err});
 			});
+};
+
+/*************** ARCHIVE ASSETS *******************************/
+
+// transfer a CurrentAsset by ID to archived status saved in type
+exports.transferAsset = (req, res) => {
+	const id = req.params.id;
+	const status = req.params.status;
+	db.sequelize
+		.query('update assets set assettype=\''+status+'\' where id='+id+';')
+		.then(() => {
+			res.status(200).json( { msg: 'Transferred Successfully -> Asset id  ' + id + ' to ' + status } );
+		}).catch(err => {
+			console.log(err);
+			res.status(500).json({msg: "error", details: err});
+		});
 };

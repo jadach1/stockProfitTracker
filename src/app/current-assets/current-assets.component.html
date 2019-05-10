@@ -27,6 +27,7 @@
       <th>Current Price</th>
       <th>Total Shares</th>
       <th>Current Total</th>
+      <th>status</th>
     </tr>
   </thead>
   <tbody >
@@ -36,6 +37,7 @@
         <td>${{ asset.price }}</td>
         <td>{{ asset.shares }}</td>
         <td>${{ asset.currentTotal }}</td>
+        <td> {{asset.assettype}} </td>
         <button [routerLink]="['/Transactions/add', asset.symbol, asset.shares]" routerLinkActive="active" type="button" >Trade</button>
         <button type="button"  [routerLink]="['/currentAssets/', asset.symbol]" routerLinkActive="active" >DETAILS</button>
         <p></p>

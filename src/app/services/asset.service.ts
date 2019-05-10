@@ -47,8 +47,8 @@ export class AssetService {
 
   /*******************ARCHIVED ASSETS  *****************************/
   // Create an archived Asset
-  transferToArchive(asset: asset): Observable<asset> {
-    return this.http.post<asset>(this.Url+'transferAsset', asset, httpOptions);
+  transferToArchive(id: any, status: any) {
+    return this.http.put(this.Url+'transferAsset/'+id+"/"+status, httpOptions);
   }
 
   

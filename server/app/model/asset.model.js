@@ -1,11 +1,9 @@
 module.exports = (sequelize, Sequelize) => {
 	const asset = sequelize.define('asset', {
-	  symbol: {
-				type: Sequelize.STRING(6),
-				unique: true,
-				primaryKey: true
-	  },
-	  shares: { // total shares bought 
+		symbol: {
+			type: Sequelize.STRING(6)
+ 		 },
+	  	shares: { // total shares bought 
 				type: Sequelize.INTEGER,
 				defaultValue: 0,
 				validate: {
@@ -100,6 +98,10 @@ module.exports = (sequelize, Sequelize) => {
 			validate: {
 				isDecimal: true,
 			}
+		},
+		assettype : {
+			type: Sequelize.STRING(10),
+			defaultValue: 'existing',
 		}
 	});
 	

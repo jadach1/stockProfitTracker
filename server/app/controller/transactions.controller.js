@@ -135,6 +135,7 @@ exports.findFreeTransactions = (req, res) => {
 		});
 }
 
+// save transactions to archived transactions
 exports.newArchivedTransaction = (req,res) => {
 	// Save to PostgreSQL database
 	archivedTrans.create({

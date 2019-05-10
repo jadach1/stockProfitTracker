@@ -13,13 +13,13 @@ import { Location } from '@angular/common';
 })
 export class AddTransactionComponent  implements OnInit{
 
-  Transaction = new transaction();
-  submitted = false;
-  assetIsNew = true;
-  newAsset = new asset();
+  Transaction   = new transaction();
+  submitted     = false;
+  assetIsNew    = true;
+  newAsset      = new asset();
   existingAsset = new asset();
   passedInShares: any;
-  shareCount: string;
+  shareCount:     string;
 
   constructor(
     private assetService: AssetService,
@@ -36,7 +36,9 @@ export class AddTransactionComponent  implements OnInit{
       this.Transaction.symbol = passedInSymbol;
       this.passedInShares = this.route.snapshot.paramMap.get('shares');
       if ( this.passedInShares )
-      { this.shareCount = "You currently have this many shares : "+this.passedInShares;}
+      { 
+        this.shareCount = "You currently have this many shares : "+this.passedInShares;
+      }
       if (passedInSymbol != null)
       {
         this.assetIsNew = false;
@@ -71,15 +73,10 @@ export class AddTransactionComponent  implements OnInit{
   // new form, reset the state excep for the transaction state we will keep that the same
   newTransaction(): void {
     const saveTransaction = this.Transaction.transaction;
-    this.Transaction = new transaction();
-    this.newAsset = new asset();
-    this.existingAsset = new asset();
-    // if ( saveTransaction === true ) {
-    //   this.setTransaction(true);
-    //   }
-    // else  {
-    //   this.setTransaction(false);
-    //   } 
+    this.Transaction      = new transaction();
+    this.newAsset         = new asset();
+    this.existingAsset    = new asset();
+  
     this.submitted = false;
     this.assetIsNew = true;
   }
@@ -115,11 +112,11 @@ export class AddTransactionComponent  implements OnInit{
           }
           return res();
         }
-          else
-          {
+        else
+        {
           this.assetIsNew = false;
           return res();
-          }
+        }
      }).then(res=>{
         if (this.assetIsNew === false)
         {

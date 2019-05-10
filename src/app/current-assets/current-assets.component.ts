@@ -75,12 +75,14 @@ export class CurrentAssetsComponent implements OnInit {
     this.assets.forEach(element => 
       {
         // If we find an asset with 0 shares
-        if ( parseFloat(element.shares) == 0 )
+        if ( parseFloat(element.shares) == 0 && element.assettype == "existing" )
         {
-          this.assetTransfter = element;
-          this.assetService.transferToArchive(this.assetTransfter)
+          console.log(element.shares + " " + element.assettype)
+          // this.assetTransfter = element;
+          this.idNumber = element.id;
+          this.assetService.transferToArchive(element.id,"archived")
               .subscribe(
-                res => this.idNumber = res,
+                res => console.log("success transferring asset frome existing to archived"),
                 err => console.log("there is an error trying to archive an asset"),
                 () =>  this.archiveAsset(element.symbol)
               );
@@ -96,6 +98,7 @@ export class CurrentAssetsComponent implements OnInit {
   */
   archiveAsset(symbol: string){
     // grab the ID of the archived asset we just saved
+    console.log("here 234")
     var transID;
     this.transService.getTransactionsFromArchivedAsset(symbol)
                       .subscribe(
@@ -124,17 +127,16 @@ export class CurrentAssetsComponent implements OnInit {
         )
     });
 
-    // delete the asset
-    this.archiveAsset3(symbol)
+    window.location.reload();
   }
 
   archiveAsset3(symbol: string){
-    this.assetService.deleteAsset(symbol)
-      .subscribe(
-        res => console.log("successfully deleted " + symbol),
-        err => console.log("error trying to delete asset"),
-        ()  => this.getAssets() // reload the page
-      )
+    // this.assetService.deleteAsset(symbol)
+    //   .subscribe(
+    //     res => console.log("successfully deleted " + symbol),
+    //     err => console.log("error trying to delete asset"),
+    //     ()  => this.getAssets() // reload the page
+    //   )
   }
   /*
     Iterate through each of the assets and append the value
