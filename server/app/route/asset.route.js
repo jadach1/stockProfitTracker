@@ -13,9 +13,12 @@ module.exports = function(capp) {
     // Update a CurrentAsset with Id
     capp.put('/api/currentassets', CurrentAssets.update);
  
-    // Delete a CurrentAsset with Id
-    capp.delete('/api/currentassets/:id', CurrentAssets.delete);
+    // Delete a CurrentAsset with Symbol
+    capp.delete('/api/currentassets/:symbol', CurrentAssets.delete);
 
     // Retrieve all Transactions
     capp.get('/api/currentassets', CurrentAssets.findAll);
+
+    /*********************** ARCHVIED ASSETS  ***************************/
+    capp.post('/api/transferAsset', CurrentAssets.createArchviedAsset);
 }

@@ -38,4 +38,18 @@ export class AssetService {
   updateAsset (asset: asset): Observable<any> {
     return this.http.put(this.Url+'currentassets', asset, httpOptions);
   }
+
+  // delete an asset
+  deleteAsset (symbol: string) {
+    console.log(this.Url+'currentassets/'+symbol)
+    return this.http.delete(this.Url+'currentassets/'+symbol, httpOptions);
+  }
+
+  /*******************ARCHIVED ASSETS  *****************************/
+  // Create an archived Asset
+  transferToArchive(asset: asset): Observable<asset> {
+    return this.http.post<asset>(this.Url+'transferAsset', asset, httpOptions);
+  }
+
+  
 }

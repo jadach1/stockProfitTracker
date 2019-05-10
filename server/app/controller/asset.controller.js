@@ -1,5 +1,6 @@
 const db = require('../config/db.config.js');
 const CurrentAsset = db.assets;
+const ArchivedAsset = db.archivedassets;
 
 // Post a CurrentAsset
 exports.create = (req, res) => {	
@@ -28,7 +29,36 @@ exports.create = (req, res) => {
 			res.status(500).json({msg: "error", details: err});
 		});
 };
- 
+
+// Create a Archived Asset
+
+exports.createArchviedAsset = (req, res) => {	
+	console.log("here is")
+	// Save to PostgreSQL database
+	ArchivedAsset.create({
+			"symbol"		:req.body.symbol,
+			"shares"		:req.body.shares,
+			"avgprice"		:req.body.avgprice,
+			"sharesSold"	:req.body.sharesSold,
+			"avgpriceSold"	:req.body.avgpriceSold,
+			"originalMoney"	:req.body.originalMoney,
+			"totalMoneyIn"	:req.body.totalMoneyIn,
+			"totalMoneyOut"	:req.body.totalMoneyOut,
+			"realProfit"	:req.body.realProfit,
+			"realMargin"	:req.body.realMargin,
+			"unRealProfit"	:req.body.unRealProfit,
+			"unRealMargin"	:req.body.unRealMargin,
+			"price"			:req.body.price,
+			"currentTotal"	:req.body.currentTotal
+		}).then(result => {		
+			console.log("Creating Archived Asset with ID " + result.id);	
+			// Send created CurrentAsset to client
+			res.json(result.id);
+		}).catch(err => {
+			console.log(err);
+			res.status(500).json({msg: "error", details: err});
+		});
+};
 // FETCH All Transactions
 exports.findAll = (req, res) => {
 	CurrentAsset.findAll().then(Asset => {
@@ -64,13 +94,26 @@ exports.update = (req, res) => {
 			});
 };
 
-// Delete a CurrentAsset by Id
-exports.delete = (req, res) => {
-	const id = req.params.id;
+// Delete a CurrentAsset by symbol
+exports.delete2 = (req, res) => {
+	const symbol = req.params.symbol;
 	CurrentAsset.destroy({
-			where: { id: id }
+			where: { symbol: symbol }
 		}).then(() => {
-			res.status(200).json( { msg: 'Deleted Successfully -> CurrentAsset Id = ' + id } );
+			res.status(200).json( { msg: 'Deleted Successfully -> Asset symbol = ' + symbol } );
+		}).catch(err => {
+			console.log(err);
+			res.status(500).json({msg: "error", details: err});
+		});
+};
+
+// Delete a CurrentAsset by symbol
+exports.delete = (req, res) => {
+	const symbol = req.params.symbol;
+	db.sequelize
+		.query('delete from assets where symbol=\''+symbol+'\';')
+		.then(() => {
+			res.status(200).json( { msg: 'Deleted Successfully -> Asset symbol = ' + symbol } );
 		}).catch(err => {
 			console.log(err);
 			res.status(500).json({msg: "error", details: err});
