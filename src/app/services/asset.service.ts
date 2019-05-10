@@ -25,8 +25,10 @@ export class AssetService {
   }
 
   // return all assets from the database table assets
-  getAllAssets (): Observable<asset[]> {
-    return this.http.get<asset[]>(this.Url+'currentassets')
+  getAllAssetsByType (type: string): Observable<asset[]> {
+    // type referse to the assettype: existing, archived, pure
+    const route = type == "all" ? "currentassets" : "allassets/"+type;
+    return this.http.get<asset[]>(this.Url+route)
   }
 
   // create an asset
@@ -51,5 +53,11 @@ export class AssetService {
     return this.http.put(this.Url+'transferAsset/'+id+"/"+status, httpOptions);
   }
 
+  // Return a single asset from the database table assets
+  getAssetIfNotExisting(symbol: string): Observable<asset> {
+    const url = `${this.Url + 'currentExistingAssets'}/${symbol}`;
+    let existingAsset = new asset();
+    return this.http.get<asset>(url);
+  }
   
 }

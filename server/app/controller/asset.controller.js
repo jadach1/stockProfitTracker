@@ -40,6 +40,20 @@ exports.findAll = (req, res) => {
 		});
 };
 
+// FETCH All Transactions
+exports.findAllByType = (req, res) => {
+	const type=req.params.type;
+	db.sequelize
+		.query('select * from assets where assettype=\''+type+'\';')
+		.then(Asset => {
+			// Send All CurrentAssets to Client
+			res.json(Asset[0].sort(function(c1, c2){return c1.id - c2.id}));
+		}).catch(err => {
+			console.log(err);
+			res.status(500).json({msg: "error", details: err});
+		});
+};
+
 // FETCH All TransactionObjects
 exports.findAsset = (req, res) => {	
 	const mySymbol = req.params.symbol;
@@ -54,10 +68,10 @@ exports.findAsset = (req, res) => {
  
 // Update an Asset
 exports.update = (req, res) => {
-	const symbol = req.body.symbol;
+	const id = req.body.id;
 	CurrentAsset.update( req.body, 
-			{ where: {symbol: symbol} }).then(() => {
-				res.status(200).json( { mgs: "Updated Successfully -> CurrentAsset Symbol = " + symbol } );
+			{ where: {id: id} }).then(() => {
+				res.status(200).json( { mgs: "Updated Successfully -> CurrentAsset id = " + id } );
 			}).catch(err => {
 				console.log(err);
 				res.status(500).json({msg: "error", details: err});
@@ -109,3 +123,14 @@ exports.transferAsset = (req, res) => {
 			res.status(500).json({msg: "error", details: err});
 		});
 };
+
+exports.checkIfExists = (req, res) => {	
+	const mySymbol = req.params.symbol;
+	CurrentAsset.findOne({where: { symbol: mySymbol, assettype: "existing"}   }).then(Asset => {
+		// Send All CurrentAssets to Client
+		res.json(Asset);
+	}).catch(err => {
+		console.log(err);
+		res.status(500).json({msg: "error could not find asset", details: err});
+	});
+	};

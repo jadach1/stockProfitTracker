@@ -27,29 +27,33 @@ export class CurrentAssetsComponent implements OnInit {
   reportDisp: report; // for string display
   idNumber:   any; //for an archived asset
   
-  constructor(private assetService: AssetService, private transService: TransactionsService) {
-      this.reportPrep = {
-        overallOut: 0,
-        overallIn: 0,
-        overallCurrent: 0,
-        overallOrgMoney: 0
-      }
-
-      this.reportDisp = {
-        overallOut: "",
-        overallIn: "",
-        overallCurrent: "",
-        overallOrgMoney: ""
-      }
-   }
+  constructor(private assetService: AssetService, private transService: TransactionsService) {}
  
 
   ngOnInit(): void {
-   this.getAssets(); 
+   this.getAssets("existing"); 
   }
 
-  getAssets(){
-    return this.assetService.getAllAssets()
+  resetOverallBar(){
+    this.reportPrep = {
+      overallOut: 0,
+      overallIn: 0,
+      overallCurrent: 0,
+      overallOrgMoney: 0
+    }
+
+    this.reportDisp = {
+      overallOut: "",
+      overallIn: "",
+      overallCurrent: "",
+      overallOrgMoney: ""
+    }
+  }
+
+  getAssets(type: string){
+
+    this.resetOverallBar();
+    return this.assetService.getAllAssetsByType(type)
     .subscribe(
                 res => this.assets = res,
                 err => console.log("could not fetch assets from database"),

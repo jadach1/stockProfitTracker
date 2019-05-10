@@ -84,7 +84,7 @@ export class AddTransactionComponent  implements OnInit{
    // This function will grab the asset with the symbolName from the database and call the updateAsset functio, 
   // or return an error
   private grabAsset(symbolName: string): void{
-    this.assetService.getAsset(symbolName)
+    this.assetService.getAssetIfNotExisting(symbolName)
       .subscribe(value => this.existingAsset = value ,
                  error =>  alert("Error connecting to database to grab an asset") , 
                  ()  => this.verifyIfAssetExists()
