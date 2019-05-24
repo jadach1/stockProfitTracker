@@ -118,7 +118,7 @@ export class CurrentAssetsComponent implements OnInit {
     we can now save into the bridge archivedTransactions table,
     which will show us every transaction associated with that particular archived asset
   */
-  archiveAsset2(listOfIDs: [], symbol: string){
+  archiveAsset2(listOfIDs, symbol: string){
     let archT = new archivedTransaction();
     archT.archiveSymbolD = this.idNumber; 
 
