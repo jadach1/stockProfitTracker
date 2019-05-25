@@ -22,8 +22,9 @@ db.sequelize = sequelize;
 //Models/tables
 db.assets                 = require('../model/asset.model.js')(sequelize, Sequelize);
 db.transactions           = require('../model/transactions.model.js')(sequelize, Sequelize);
-db.archivedassets         = require('../model/archivedAssets.model.js')(sequelize, Sequelize);
+//db.archivedassets         = require('../model/archivedAssets.model.js')(sequelize, Sequelize);
 db.archivedtransactions   = require('../model/archivedTransactions.model.js')(sequelize, Sequelize);
+db.contributions          = require('../model/contributions.model.js')(sequelize, Sequelize);
 
 module.exports = db;
 

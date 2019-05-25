@@ -18,9 +18,8 @@ module.exports = (sequelize, Sequelize) => {
 	  total: {
 		type: Sequelize.DECIMAL(15,2)
 	},
-	  gain: {
-		type: Sequelize.DECIMAL(15,2),
-		defaultValue: 0
+	  ownerid: {
+		type: Sequelize.INTEGER
   	}
     });
 	

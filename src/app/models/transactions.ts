@@ -6,6 +6,6 @@ export class transaction {
     buydate: Date;
     transaction: Boolean;
     total: any;
-    gain: any;
+    ownerid: any;
 }
 

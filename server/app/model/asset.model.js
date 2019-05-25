@@ -102,7 +102,10 @@ module.exports = (sequelize, Sequelize) => {
 		assettype : {
 			type: Sequelize.STRING(10),
 			defaultValue: 'existing',
-		}
+		},
+		ownerid: {
+			type: Sequelize.INTEGER
+ 		 },
 	});
 	
 	return asset;

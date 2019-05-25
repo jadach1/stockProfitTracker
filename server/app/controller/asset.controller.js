@@ -18,7 +18,8 @@ exports.create = (req, res) => {
 				"unRealProfit"	:req.body.unRealProfit,
 				"unRealMargin"	:req.body.unRealMargin,
 				"price"			:req.body.price,
-				"currentTotal"	:req.body.currentTotal
+				"currentTotal"	:req.body.currentTotal,
+				"ownerid"		:req.body.ownerid
 			}).then(CurrentAsset => {		
 			console.log("Creating Asset");	
 			// Send created CurrentAsset to client

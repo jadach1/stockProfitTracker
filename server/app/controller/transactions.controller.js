@@ -11,14 +11,15 @@ exports.create = (req, res) => {
 				"price": 			req.body.price,
         		"buydate": 			req.body.buydate,
 				"transaction": 	    req.body.transaction,
-				"total": 			req.body.total
+				"total": 			req.body.total,
+				"ownerid":			req.body.ownerid
 			}).then(TransactionObject => {		
 			console.log("Creating Transaction");	
 			// Send created TransactionObject to client
 			res.json(TransactionObject);
 		}).catch(err => {
 			console.log(err);
-			res.status(500).json({msg: "error", details: err});
+			res.status(500).json({msg: "error creating transaction", details: err});
 		});
 };
  

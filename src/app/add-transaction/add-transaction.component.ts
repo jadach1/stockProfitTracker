@@ -207,8 +207,6 @@ export class AddTransactionComponent  implements OnInit{
             }
             return ;         
       }).then(res=>{
-          // Calculate gain on the transaction
-           currentTransaction.gain = (currentTransaction.price - assetToUpdate.avgprice) / assetToUpdate.avgprice * 100;
           // if this is NOT a new asset we will call updateAsset, otherwise we will create the new asset
           if (this.assetIsNew === false)
           {

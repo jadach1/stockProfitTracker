@@ -12,6 +12,12 @@
           <li class="nav-item">
             <a routerLink="Transactions/add" class="btn btn-light btn-sm" role="button" routerLinkActive="active">Enter New Transaction (Asset)</a>
           </li>
+          <li class="nav-item">
+            <a routerLink="Contributions/add" class="btn btn-light btn-sm" role="button" routerLinkActive="active">Enter New Transaction (Contribution)</a>
+          </li>
+          <li>
+            <button mat-button (click)="openDialog()">Open dialog</button>
+          </li>
       </ul>
       <hr>
       <router-outlet></router-outlet>
