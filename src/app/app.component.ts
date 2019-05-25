@@ -11,18 +11,22 @@ export class AppComponent {
 
 constructor(public dialog: MatDialog){}
 
-openDialog() {
-  const dialogRef = this.dialog.open(DialogContentExampleDialog);
+openContributionForm() {
+  const dialogRef = this.dialog.open(ContributionForm);
 
   dialogRef.afterClosed().subscribe(result => {
-    console.log(`Dialog result: ${result}`);
+    console.log(`Dialog results after open: ${result}`);
   });
 }
 }
 
+
 @Component({
-  selector: 'dialog-content-example-dialog',
-  templateUrl: 'dialog-content-example-dialog.html',
+  selector: 'contribution-form',
+  templateUrl: './Forms/contribution-form.html',
 })
-export class DialogContentExampleDialog {}
+export class ContributionForm {
+
+
+}
 
