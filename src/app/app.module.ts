@@ -4,16 +4,17 @@ import { FormsModule }              from '@angular/forms';
 import { HttpClientModule }         from '@angular/common/http';
 import { AppRoutingModule }         from './app-routing/app-routing.module';
 import { ToastrModule }             from 'ngx-toastr';
-//import { DemoMaterialModule }       from '../material-module';
-import {MatDialogModule}            from '@angular/material';
+import { DemoMaterialModule }       from '../material-module';
+//import {MatDialogModule}            from '@angular/material';
 import {BrowserAnimationsModule}    from '@angular/platform-browser/animations';
-import { AppComponent, 
-        ContributionForm }          from './app.component';
+import { AppComponent }             from './app.component';
 import { CurrentAssetsComponent }   from './current-assets/current-assets.component';
 import { AddTransactionComponent }  from './add-transaction/add-transaction.component';
 import { AllTransactionComponent }  from './all-transaction/all-transaction.component';
 import { AssetDetailsComponent }    from './asset-details/asset-details.component';
-import { SidebarComponentComponent } from './components/sidebar-component/sidebar-component.component';
+import { SidebarComponentComponent} from './components/sidebar-component/sidebar-component.component';
+import { ContributionsComponent,
+         ContributionForm }         from './contributions/contributions.component';
 
 
 @NgModule({
@@ -25,14 +26,15 @@ import { SidebarComponentComponent } from './components/sidebar-component/sideba
     AssetDetailsComponent,
     ContributionForm,
     SidebarComponentComponent,
+    ContributionsComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
     HttpClientModule,
-  //  DemoMaterialModule,
-    MatDialogModule,
+    DemoMaterialModule,
+  //  MatDialogModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot()
   ],
