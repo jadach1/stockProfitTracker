@@ -9,7 +9,7 @@ module.exports = (sequelize, Sequelize) => {
       transaction: {
           type: Sequelize.BOOLEAN
 	  },
-      buydate: {
+      date: {
         type: Sequelize.DATEONLY
       }
     });

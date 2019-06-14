@@ -14,7 +14,8 @@ import { AllTransactionComponent }  from './all-transaction/all-transaction.comp
 import { AssetDetailsComponent }    from './asset-details/asset-details.component';
 import { SidebarComponentComponent} from './components/sidebar-component/sidebar-component.component';
 import { ContributionsComponent,
-         ContributionForm }         from './contributions/contributions.component';
+         ContributionForm,
+         OwnerForm }                from './contributions/contributions.component';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { ContributionsComponent,
     AllTransactionComponent,
     AssetDetailsComponent,
     ContributionForm,
+    OwnerForm,
     SidebarComponentComponent,
     ContributionsComponent,
   ],
@@ -39,7 +41,8 @@ import { ContributionsComponent,
     ToastrModule.forRoot()
   ],
   entryComponents: [
-    ContributionForm
+    ContributionForm,
+    OwnerForm
   ],
   providers: [],
   bootstrap: [AppComponent]
