@@ -58,3 +58,16 @@ exports.findAllContributions = (req, res) => {
 			res.status(500).json({msg: "error", details: err});
 		});
 };
+
+// FETCH All contributions per Owner Name
+exports.findAllContributionsPerOwner = (req, res) => {
+	const id = req.params.ownerid;
+	contrObject.findAll({where: {ownerid : id}})
+		.then(contrObject => {
+			// Send All contributions to Client
+			res.json(contrObject.sort(function(c1, c2){return c1.id - c2.id}));
+		}).catch(err => {
+			console.log(err);
+			res.status(500).json({msg: "error", details: err});
+		});
+};

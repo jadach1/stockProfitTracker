@@ -2,6 +2,7 @@ import { Injectable }              from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable }              from 'rxjs';
 import { owners }                  from '../models/owner';
+import { contributions }           from '../models/contributions'
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -17,15 +18,21 @@ export class OwnerContributionService {
 
   constructor(private http: HttpClient) { }
 
-  // Return all owners
-  getOwners(symbol: string): Observable<owners> {
+  // Get all owners
+  getOwners(): Observable<owners[]> {
     const url = this.Url + 'owners';
-    return this.http.get<owners>(url);
+    return this.http.get<owners[]>(url);
   }
 
    // create an owner
    createOwner(owner: owners): Observable<owners> {
      console.log("in side " + this.Url+'owners')
     return this.http.post<owners>(this.Url+'owners', owner, httpOptions);
+  }
+
+   // Get all contributions by owner name
+   getContributions(ownerid: any): Observable<contributions[]> {
+    const url = this.Url + 'contributions/';
+    return this.http.get<contributions[]>(url + ownerid);
   }
 }

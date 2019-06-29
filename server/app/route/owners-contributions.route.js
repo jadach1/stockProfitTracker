@@ -16,4 +16,7 @@ module.exports = function(capp) {
     // Retrieve all Contribtions 
     capp.get('/api/contributions', owners.findAllContributions);
 
+    // Retrieve all Contribtions by name
+    capp.get('/api/contributions/:ownerid', owners.findAllContributionsPerOwner);
+
 }
