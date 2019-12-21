@@ -4,10 +4,12 @@ module.exports = (sequelize, Sequelize) => {
 		    type: Sequelize.STRING(128)
 	  },
 	  deposits: {
-		  type: Sequelize.DECIMAL(12,2)
+		  type: Sequelize.DECIMAL(12,2),
+		  defaultValue: 0
       },
       withdrawls: {
-        type: Sequelize.DECIMAL(12,2)
+		type: Sequelize.DECIMAL(12,2),
+		defaultValue: 0
       }
     });
 	

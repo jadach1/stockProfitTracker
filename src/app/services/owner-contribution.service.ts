@@ -26,7 +26,6 @@ export class OwnerContributionService {
 
    // create an owner
    createOwner(owner: owners): Observable<owners> {
-     console.log("in side " + this.Url+'owners')
     return this.http.post<owners>(this.Url+'owners', owner, httpOptions);
   }
 
@@ -34,5 +33,10 @@ export class OwnerContributionService {
    getContributions(ownerid: any): Observable<contributions[]> {
     const url = this.Url + 'contributions/';
     return this.http.get<contributions[]>(url + ownerid);
+  }
+
+  contribute(contribution: contributions) {
+      console.log("inside contributions ");
+      return this.http.post<contributions>(this.Url+'contributions',contribution, httpOptions);
   }
 }

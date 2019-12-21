@@ -5,6 +5,7 @@ import { contributions }            from '../models/contributions';
 import { owners }                   from '../models/owner';
 import { OwnerContributionService } from '../services/owner-contribution.service'
 import { MiscService }              from '../services/misc.service'
+import { isNumber } from 'util';
 
 @Component({
   selector: 'app-contributions',
@@ -15,7 +16,9 @@ export class ContributionsComponent implements OnInit {
 
   contribution: contributions[];
   owner:        owners[];
-  ownerID:      any
+  ownerID:      any;
+
+  
   constructor(public dialog: MatDialog, public service: OwnerContributionService){}
 
   ngOnInit() {
@@ -25,9 +28,7 @@ export class ContributionsComponent implements OnInit {
   getOwners(){
     this.service.getOwners()
     .subscribe(
-      res => {console.log("successfully retrieved owners"),
-              this.owner = res
-            },
+      res => this.owner = res,
       err => console.log("error fetching owners"),
       () => this.getContributions(1)
     )
@@ -51,7 +52,8 @@ export class ContributionsComponent implements OnInit {
     const dialogRef = this.dialog.open(ContributionForm, {
       data: {
         owner: this.ownerID,
-        type: transaction
+        type: transaction,
+        owners: this.owner
       } 
     });
 
@@ -76,26 +78,58 @@ export class ContributionsComponent implements OnInit {
   templateUrl: '../Forms/contribution-form.html',
 })
 
-export class ContributionForm {
+/*************************************************************
+ *************************************************************
+ *************************************************************
+ *************************************************************/
+
+ export class ContributionForm {
 
   contributor = new contributions();
   greeting: any;
+  owner: owners[];
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public service: OwnerContributionService) {}
 
   ngOnInit() {
+     // change the greeting
     if (this.data.type === 1 )
-    {
       this.greeting = 'Deposit'
-    }
     else if ( this.data.type === 0 )
-    {
       this.greeting = 'Withdrawl'
-    }
+
+     // set the transaction type
+    this.contributor.transaction = this.data.type;
+    
+    // get list of owners
+    this.service.getOwners().subscribe(
+      res=> this.owner = res,
+      err=> console.log("error fetching ownings in mat dialogue box"),
+      () => console.log("done fetching owners in mat dialgue")
+    )
   }
 
-  check(){
-    console.log("we ahve " + this.data.owner + " adn typoe " + this.data.type)
+  /*
+    Make sure the contribution deposit or withdraw amount is a number
+  */
+  checkIfNumber(){
+
+    if(!isNaN(this.contributor.amount)){
+       console.log("checking, " + this.contributor.id + 
+                    " : " + this.contributor.amount + 
+                    " : " + this.contributor.date + 
+                    " : ownerid -> " + this.contributor.ownerid + 
+                    " : transaction -> " + this.contributor.transaction)
+
+       this.service.contribute(this.contributor)
+       .subscribe(
+         res => console.log("successful contribution"),
+         err => console.log("unsuccessful contribution"),
+         ()  => console.log("finished with creating new contribution")
+       )
+    } else {
+      console.log("not a number");
+    }
   }
 
 }

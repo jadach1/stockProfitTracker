@@ -28,7 +28,11 @@
             </thead>
             <tbody>
               <tr *ngFor="let own of owner">
-                <td><a type="button" (click)="getContributions(own.id)">{{own.owner}}</a></td>
+                <td><a type="button" 
+                       (click)="getContributions(own.id)">
+                       {{own.owner}}
+                    </a>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -67,7 +71,7 @@
               <tbody>
                 <tr *ngFor="let value of contribution">
                   <td>
-                    {{value.ownerid}}
+                    {{value.id}}
                   </td>
                   <td>
                     {{value.amount}}

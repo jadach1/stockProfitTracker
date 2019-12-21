@@ -4,7 +4,6 @@ const contrObject  = db.contributions;
 
 //post an owner
 exports.create = (req, res) => {	
-	console.log("inside 22")
 	// Save to PostgreSQL database
 	ownersObject.create({
 				"owner": 			req.body.owner
@@ -22,14 +21,18 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
 	ownersObject.findAll().then(ownersObject => {
 			// Send All owners to Client
-			res.json(ownersObject.sort(function(c1, c2){return c1.id - c2.id}));
+			res.json(ownersObject);
+			//res.json(ownersObject.sort(function(c1, c2){return c1.id - c2.id}));
 		}).catch(err => {
 			console.log(err);
 			res.status(500).json({msg: "error", details: err});
 		});
 };
 
+/******************************************************************** */
 /********************* CONTRIBUTIONS *********************************/
+/******************************************************************** */
+
 // Post a contribution
 exports.createContribution = (req, res) => {	
 	// Save to PostgreSQL database

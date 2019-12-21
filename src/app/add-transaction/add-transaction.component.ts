@@ -1,10 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { transaction } from '../models/transactions';
-import { asset } from '../models/asset';
-import { AssetService } from '../services/asset.service';
-import { TransactionsService } from '../services/transactions.service';
-import { ActivatedRoute, Params } from '@angular/router';
-import { Location } from '@angular/common';
+import { transaction }              from '../models/transactions';
+import { asset }                    from '../models/asset';
+import { owners }                   from '../models/owner'
+import { AssetService }             from '../services/asset.service';
+import { TransactionsService }      from '../services/transactions.service';
+import { OwnerContributionService } from '../services/owner-contribution.service';
+import { ActivatedRoute, Params }   from '@angular/router';
+import { Location }                 from '@angular/common';
+
 
 @Component({
   selector: 'app-add-transaction',
@@ -19,11 +22,13 @@ export class AddTransactionComponent  implements OnInit{
   newAsset      = new asset();
   existingAsset = new asset();
   passedInShares: any;
-  shareCount:     string;
+  shareCount    : string;
+  owners        : owners[];
 
   constructor(
     private assetService: AssetService,
     private transactionService: TransactionsService,
+    private ownerServie: OwnerContributionService,
     private location: Location,
     private route: ActivatedRoute,
   ) { }
@@ -31,18 +36,22 @@ export class AddTransactionComponent  implements OnInit{
   // upon initialization set the transaction to true/buy and the colors to green
   ngOnInit()
   {
+      // Get Owners
+      this.ownerServie.getOwners().subscribe(
+        res => this.owners = res,
+        err => console.log("error fetching owners"),
+        ()  => console.log("done fetching owners")
+      );
+
       // Get any parmaeter passed in from url
       const passedInSymbol =  this.route.snapshot.paramMap.get('symbol');
       this.Transaction.symbol = passedInSymbol;
       this.passedInShares = this.route.snapshot.paramMap.get('shares');
+      
       if ( this.passedInShares )
-      { 
         this.shareCount = "You currently have this many shares : "+this.passedInShares;
-      }
       if (passedInSymbol != null)
-      {
         this.assetIsNew = false;
-      }
   }
 
   // Change the trasnaction from buy to sell or vice versa, change colors of input fields

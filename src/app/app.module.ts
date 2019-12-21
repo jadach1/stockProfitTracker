@@ -5,6 +5,7 @@ import { HttpClientModule }         from '@angular/common/http';
 import { AppRoutingModule }         from './app-routing/app-routing.module';
 import { ToastrModule }             from 'ngx-toastr';
 import { DemoMaterialModule }       from '../material-module';
+import { MAT_DATE_LOCALE }          from '@angular/material';
 //import {MatDialogModule}            from '@angular/material';
 import {BrowserAnimationsModule}    from '@angular/platform-browser/animations';
 import { AppComponent }             from './app.component';
@@ -16,6 +17,8 @@ import { SidebarComponentComponent} from './components/sidebar-component/sidebar
 import { ContributionsComponent,
          ContributionForm,
          OwnerForm }                from './contributions/contributions.component';
+
+
 
 
 @NgModule({
@@ -44,7 +47,7 @@ import { ContributionsComponent,
     ContributionForm,
     OwnerForm
   ],
-  providers: [],
+  providers: [{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
