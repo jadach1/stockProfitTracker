@@ -1,5 +1,5 @@
 <div>
-<h4 style=" color: purple;" >OVERALL   </h4>
+<h4 style=" color: purple;" >OVERALL2   </h4>
 <table>
   <thead>
     <th>CURRENT TOTAL :</th>
@@ -19,6 +19,11 @@
 </div>
 <hr>
 <h5 style=" color: purple;" >All Assets I Am Currently Holding</h5>
+<div>
+  <button type="button" (click)="getAssets('existing')">Existing Assets</button>
+  <button type="button"  (click)="getAssets('archived')">Archived Assets</button>
+  <button type="button"  (click)="getAssets('all')">All Assets</button>
+</div>
 <div class="btn-group btn-group-sm">
 <table >
   <thead>
@@ -27,6 +32,7 @@
       <th>Current Price</th>
       <th>Total Shares</th>
       <th>Current Total</th>
+      <th>status</th>
     </tr>
   </thead>
   <tbody >
@@ -36,6 +42,7 @@
         <td>${{ asset.price }}</td>
         <td>{{ asset.shares }}</td>
         <td>${{ asset.currentTotal }}</td>
+        <td> {{asset.assettype}} </td>
         <button [routerLink]="['/Transactions/add', asset.symbol, asset.shares]" routerLinkActive="active" type="button" >Trade</button>
         <button type="button"  [routerLink]="['/currentAssets/', asset.symbol]" routerLinkActive="active" >DETAILS</button>
         <p></p>

@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-	const thiscanbeanything = sequelize.define('transactions', {
+	const transaction = sequelize.define('transactions', {
 	  symbol: {
 		    type: Sequelize.STRING(6)
 	  },
@@ -18,11 +18,10 @@ module.exports = (sequelize, Sequelize) => {
 	  total: {
 		type: Sequelize.DECIMAL(15,2)
 	},
-	  gain: {
-		type: Sequelize.DECIMAL(15,2),
-		defaultValue: 0
+	  ownerid: {
+		type: Sequelize.INTEGER
   	}
     });
 	
-	return thiscanbeanything;
+	return transaction;
 }

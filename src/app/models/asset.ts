@@ -1,5 +1,6 @@
 export class asset {
-    symbol: string;
+    id:            any;
+    symbol:        string;
     shares:        any = 0;
     avgprice:      any = 0;
     sharesSold:    any= 0;
@@ -13,5 +14,7 @@ export class asset {
     realMargin:    any= 0;
     unRealProfit:  any= 0;
     unRealMargin:  any= 0;
+    assettype:    any;
+    ownerid:    any;
 }
 

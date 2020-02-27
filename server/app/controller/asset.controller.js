@@ -18,7 +18,8 @@ exports.create = (req, res) => {
 				"unRealProfit"	:req.body.unRealProfit,
 				"unRealMargin"	:req.body.unRealMargin,
 				"price"			:req.body.price,
-				"currentTotal"	:req.body.currentTotal
+				"currentTotal"	:req.body.currentTotal,
+				"ownerid"		:req.body.ownerid
 			}).then(CurrentAsset => {		
 			console.log("Creating Asset");	
 			// Send created CurrentAsset to client
@@ -28,12 +29,26 @@ exports.create = (req, res) => {
 			res.status(500).json({msg: "error", details: err});
 		});
 };
- 
+
 // FETCH All Transactions
 exports.findAll = (req, res) => {
 	CurrentAsset.findAll().then(Asset => {
 			// Send All CurrentAssets to Client
 			res.json(Asset.sort(function(c1, c2){return c1.id - c2.id}));
+		}).catch(err => {
+			console.log(err);
+			res.status(500).json({msg: "error", details: err});
+		});
+};
+
+// FETCH All Transactions
+exports.findAllByType = (req, res) => {
+	const type=req.params.type;
+	db.sequelize
+		.query('select * from assets where assettype=\''+type+'\';')
+		.then(Asset => {
+			// Send All CurrentAssets to Client
+			res.json(Asset[0].sort(function(c1, c2){return c1.id - c2.id}));
 		}).catch(err => {
 			console.log(err);
 			res.status(500).json({msg: "error", details: err});
@@ -54,28 +69,29 @@ exports.findAsset = (req, res) => {
  
 // Update an Asset
 exports.update = (req, res) => {
-	const symbol = req.body.symbol;
+	const id = req.body.id;
 	CurrentAsset.update( req.body, 
-			{ where: {symbol: symbol} }).then(() => {
-				res.status(200).json( { mgs: "Updated Successfully -> CurrentAsset Symbol = " + symbol } );
+			{ where: {id: id} }).then(() => {
+				res.status(200).json( { mgs: "Updated Successfully -> CurrentAsset id = " + id } );
 			}).catch(err => {
 				console.log(err);
 				res.status(500).json({msg: "error", details: err});
 			});
 };
 
-// Delete a CurrentAsset by Id
+// Delete a CurrentAsset by symbol
 exports.delete = (req, res) => {
-	const id = req.params.id;
+	const symbol = req.params.symbol;
 	CurrentAsset.destroy({
-			where: { id: id }
+			where: { symbol: symbol }
 		}).then(() => {
-			res.status(200).json( { msg: 'Deleted Successfully -> CurrentAsset Id = ' + id } );
+			res.status(200).json( { msg: 'Deleted Successfully -> Asset symbol = ' + symbol } );
 		}).catch(err => {
 			console.log(err);
 			res.status(500).json({msg: "error", details: err});
 		});
 };
+
 
 // Return a true or false value to see if an Asset already exists
 exports.check = (req, res) => {
@@ -92,3 +108,30 @@ exports.check = (req, res) => {
 				res.status(500).json({msg: "error", details: err});
 			});
 };
+
+/*************** ARCHIVE ASSETS *******************************/
+
+// transfer a CurrentAsset by ID to archived status saved in type
+exports.transferAsset = (req, res) => {
+	const id = req.params.id;
+	const status = req.params.status;
+	db.sequelize
+		.query('update assets set assettype=\''+status+'\' where id='+id+';')
+		.then(() => {
+			res.status(200).json( { msg: 'Transferred Successfully -> Asset id  ' + id + ' to ' + status } );
+		}).catch(err => {
+			console.log(err);
+			res.status(500).json({msg: "error", details: err});
+		});
+};
+
+exports.checkIfExists = (req, res) => {	
+	const mySymbol = req.params.symbol;
+	CurrentAsset.findOne({where: { symbol: mySymbol, assettype: "existing"}   }).then(Asset => {
+		// Send All CurrentAssets to Client
+		res.json(Asset);
+	}).catch(err => {
+		console.log(err);
+		res.status(500).json({msg: "error could not find asset", details: err});
+	});
+	};

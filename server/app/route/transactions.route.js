@@ -22,4 +22,11 @@ module.exports = function(capp) {
     // Retrieve all Transactions
     capp.get('/api/allTransactions', Transaction.findAll);
 
+    /****************** ARCHIVED TRANSACTIONS  ********************************/
+
+     // Retrieve all Transactions which are in the transactions table BUT are NOT in the archivedTransactions table
+     capp.get('/api/freeTransactions/:symbol', Transaction.findFreeTransactions);
+
+     // Post a new bridge transaction for archived transactions
+     capp.post('/api/newArchivedTransaction', Transaction.newArchivedTransaction);
 }

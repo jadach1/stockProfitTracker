@@ -5,6 +5,7 @@ import { CurrentAssetsComponent  } from '../current-assets/current-assets.compon
 import { AddTransactionComponent } from '../add-transaction/add-transaction.component';
 import { AllTransactionComponent } from '../all-transaction/all-transaction.component';
 import { AssetDetailsComponent   } from '../asset-details/asset-details.component';
+import { ContributionsComponent  } from '../contributions/contributions.component';
 
 const routes: Routes = [
    { 
@@ -26,6 +27,10 @@ const routes: Routes = [
    { 
     path: 'Transactions/add', 
     component: AddTransactionComponent 
+   },
+   { 
+    path: 'contributions', 
+    component: ContributionsComponent 
    },
    { 
      path: '', 

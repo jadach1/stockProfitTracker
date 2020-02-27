@@ -1,5 +1,6 @@
 const db = require('../config/db.config.js');
 const TransactionObject = db.transactions;
+const archivedTrans = db.archivedtransactions;
 
 // Post a TransactionObject
 exports.create = (req, res) => {	
@@ -7,18 +8,18 @@ exports.create = (req, res) => {
 	TransactionObject.create({
 				"symbol": 			req.body.symbol, 
 				"shares": 			req.body.shares,
-				"price": 				req.body.price,
-        "buydate": 			req.body.buydate,
-				"transaction": 	req.body.transaction,
-				"gain": 				req.body.gain,
-				"total": 				req.body.total
+				"price": 			req.body.price,
+        		"buydate": 			req.body.buydate,
+				"transaction": 	    req.body.transaction,
+				"total": 			req.body.total,
+				"ownerid":			req.body.ownerid
 			}).then(TransactionObject => {		
 			console.log("Creating Transaction");	
 			// Send created TransactionObject to client
 			res.json(TransactionObject);
 		}).catch(err => {
 			console.log(err);
-			res.status(500).json({msg: "error", details: err});
+			res.status(500).json({msg: "error creating transaction", details: err});
 		});
 };
  
@@ -111,3 +112,44 @@ exports.delete = (req, res) => {
 			res.status(500).json({msg: "error", details: err});
 		});
 };
+
+/****************** ARCHIVED TRANSACTIONS  ***************************/
+
+// Find All transactions from the transactions table which are NOT in the archivedtransactions table BASED on transaction Symbol
+exports.findFreeTransactions = (req, res) => {
+	const symbol = req.params.symbol;
+	var arrayOfId = [];
+
+	db.sequelize
+		.query('select * from transactions where symbol=\''+symbol+'\' ' 
+				+ 'and id not in (select transactionid from archivedtransactions);',{ 
+		}).then(TransactionObjects => {
+			// parse through the data and only send the ID's from the transactions table
+				TransactionObjects[0].forEach(element => {
+					arrayOfId.push(element.id);
+				});
+				res.json(arrayOfId);
+				console.log("trasnaction is " + arrayOfId);
+		}).catch(err => {
+				console.log(err);
+				res.status(500).json({msg: "error", details: err});
+		});
+}
+
+// save transactions to archived transactions
+exports.newArchivedTransaction = (req,res) => {
+	// Save to PostgreSQL database
+	archivedTrans.create({
+		"archivedsymbolid": req.body.archiveSymbolD,
+		"transactionid": req.body.transactionID
+	}).then(result => {		
+	console.log("Creating Transaction");	
+	// Send created TransactionObject to client
+	res.json(result);
+}).catch(err => {
+	console.log(err);
+	res.status(500).json({msg: "error", details: err});
+});
+}
+
+

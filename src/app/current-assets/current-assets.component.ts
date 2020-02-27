@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { asset } from '../models/asset';
+import { archivedTransaction } from '../models/archivedTransactions';
 import { AssetService } from '../services/asset.service';
+import { TransactionsService } from          '../services/transactions.service';
 import { portfolio } from '../models/portfolioOverall';
 
 interface report{
@@ -19,39 +21,127 @@ interface report{
 export class CurrentAssetsComponent implements OnInit {
 
   assets:     asset[];
+  assetTransfter = new asset();
   portfolio = new portfolio();
   reportPrep: report; // for number calculations
   reportDisp: report; // for string display
+  idNumber:   any; //for an archived asset
   
-  constructor(private assetService: AssetService) {
+  constructor(private assetService: AssetService, private transService: TransactionsService) {}
+ 
+
+  ngOnInit(): void {
+   this.getAssets("existing"); 
+  }
+
+  resetOverallBar(){
     this.reportPrep = {
       overallOut: 0,
       overallIn: 0,
       overallCurrent: 0,
       overallOrgMoney: 0
     }
-   }
- 
 
-  ngOnInit(): void {
-   this.getAssets(); 
+    this.reportDisp = {
+      overallOut: "",
+      overallIn: "",
+      overallCurrent: "",
+      overallOrgMoney: ""
+    }
   }
 
-  getAssets(){
-    return this.assetService.getAllAssets()
+  getAssets(type: string){
+
+    this.resetOverallBar();
+    return this.assetService.getAllAssetsByType(type)
     .subscribe(
                 res => this.assets = res,
                 err => console.log("could not fetch assets from database"),
-                () => this.calculate(this.assets)        
+                () => this.loadPage()     
     );
   }
 
-  async calculate(myAssets: asset[]){
+  async loadPage(){
+    await this.searchForArchives(); 
     await this.calculateValue();
     await this.twoDecimalPlaces();
     await this.formatToString();
   }
 
+  /* 
+    This function will search for any assets which have 0 shares,
+    it will then move that asset to the archiveAsset table and
+    make additions to the archivedTransactions bridge table,
+    finally it will delete that asset for the Assets table
+  */
+  searchForArchives(){
+    console.log("zeroth")
+    this.assets.forEach(element => 
+      {
+        // If we find an asset with 0 shares
+        if ( parseFloat(element.shares) == 0 && element.assettype == "existing" )
+        {
+          console.log(element.shares + " " + element.assettype)
+          // this.assetTransfter = element;
+          this.idNumber = element.id;
+          this.assetService.transferToArchive(element.id,"archived")
+              .subscribe(
+                res => console.log("success transferring asset frome existing to archived"),
+                err => console.log("there is an error trying to archive an asset"),
+                () =>  this.archiveAsset(element.symbol)
+              );
+        }
+      })
+  }
+
+  /* 
+    Here we will find every transaction associated with the above asset which we are archiving,
+    we will then save the following data into the archiveTransactions table: 
+    symbolid from the newly create archived asset
+    transactionid: from each occuring transaction
+  */
+  archiveAsset(symbol: string){
+    // grab the ID of the archived asset we just saved
+    console.log("here 234")
+    var transID;
+    this.transService.getTransactionsFromArchivedAsset(symbol)
+                      .subscribe(
+                        res => transID = res,
+                         err => console.log("unable to get transaction from archives"),
+                        () => this.archiveAsset2(transID, symbol)
+                      )
+  }
+
+  /*
+    We now have the archived asset Id saved in idNumber,
+    and we have all the transactions associated with it saved in the transID above,
+    we can now save into the bridge archivedTransactions table,
+    which will show us every transaction associated with that particular archived asset
+  */
+  archiveAsset2(listOfIDs, symbol: string){
+    let archT = new archivedTransaction();
+    archT.archiveSymbolD = this.idNumber; 
+
+    listOfIDs.forEach(element => {
+      archT.transactionID = element;
+      this.transService.addArchivedTransaction(archT)
+        .subscribe(
+          res => console.log("created"),
+          err => console.log("error creating bridge table for archived data"),
+        )
+    });
+
+    window.location.reload();
+  }
+
+  archiveAsset3(symbol: string){
+    // this.assetService.deleteAsset(symbol)
+    //   .subscribe(
+    //     res => console.log("successfully deleted " + symbol),
+    //     err => console.log("error trying to delete asset"),
+    //     ()  => this.getAssets() // reload the page
+    //   )
+  }
   /*
     Iterate through each of the assets and append the value
   */

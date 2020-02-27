@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { transaction } from '../models/transactions';
+import { archivedTransaction } from '../models/archivedTransactions';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -49,5 +50,17 @@ return this.http.get<transaction[]>(this.Url+'allTransactions')
 
   addTransaction (asset: transaction): Observable<transaction> {
     return this.http.post<transaction>(this.Url+'Transaction', asset, httpOptions);
+  }
+
+  /*********** ARCHIVED TRANSACTIONS  ***************************/
+
+  // Calls the api to fetch all transaction ID's associated with the new archived asset
+  getTransactionsFromArchivedAsset(symbol: string) {
+    return this.http.get(this.Url+'freeTransactions/' + symbol)
+  }
+
+  // creates a new transaction in the bridge table archivedTransactions
+  addArchivedTransaction (asset: archivedTransaction): Observable<archivedTransaction> {
+    return this.http.post<archivedTransaction>(this.Url+'newArchivedTransaction', asset, httpOptions);
   }
 }

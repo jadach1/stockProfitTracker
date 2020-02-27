@@ -1,0 +1,93 @@
+<div class="panel-header">
+    <div class="header text-center">
+      <h2 class="title">Contributions</h2>
+      <p class="category">Please checkout the
+        <a href="https://scttcper.github.io/ngx-toastr/" target="_blank">full documentation.</a>
+      </p>
+    </div>
+    <button mat-button (click)="openContributionForm()">Open dialog 2</button>
+</div>
+
+<div class="main-content">
+<div class="row">
+  <div class="col-md-4">
+    <div class="card card-tasks">
+      <div class="card-header">
+        <h4 class="card-title"> Owners</h4>
+        <button mat-button (click)="openOwnerForm()" class="btn btn-round btn-default  btn-simple " >
+            <i class="now-ui-icons loader_gear">Create New Owner </i>
+          </button>
+      </div>
+      <div class="card-body">
+        <div class="table-full-width table-responsive">
+          <table class="table">
+            <thead class=" text-primary">
+              <th>
+                Name
+              </th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let own of owner">
+                <td><a type="button" 
+                       (click)="getContributions(own.id)">
+                       {{own.owner}}
+                    </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title"> Contributions</h4>
+          <button mat-button (click)="openContributionForm(1)" class="btn btn-round btn-default  btn-simple " >
+            <i class="now-ui-icons loader_gear">New Deposit</i>
+          </button>
+          <button mat-button (click)="openContributionForm(0)" class="btn btn-round btn-default  btn-simple " >
+            <i class="now-ui-icons loader_gear">New Withdrawl</i>
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>
+                  Transaction ID
+                </th>
+                <th>
+                  Amount
+                </th>
+                <th>
+                  Transaction Type
+                </th>
+                <th class="text-right">
+                  Date
+                </th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let value of contribution">
+                  <td>
+                    {{value.id}}
+                  </td>
+                  <td>
+                    {{value.amount}}
+                  </td>
+                  <td>
+                    {{value.transaction}}
+                  </td>
+                  <td class="text-right">
+                    {{value.date}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+ </div>
+</div>

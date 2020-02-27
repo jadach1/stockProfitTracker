@@ -1,0 +1,53 @@
+<h2  mat-dialog-title>Add New {{greeting}} Contribution</h2>
+<mat-dialog-content class="mat-typography">
+  </mat-dialog-content>
+  <div class="form-group">
+    <mat-form-field>
+      <mat-select [(ngModel)]="contributor.ownerid" 
+                  placeholder="Select Owner"
+                  required
+      >
+        <mat-option *ngFor="let element of owner" 
+                    [value]="element.id">  
+                    {{element.owner}}
+        </mat-option>
+      </mat-select>
+      <mat-hint align="end">Here's the dropdown arrow ^</mat-hint>
+    </mat-form-field>   
+  </div>
+
+  <div class="form-group">    
+    <mat-form-field hintLabel="">
+      <input [(ngModel)]="contributor.amount" 
+              matInput #input 
+              placeholder="Enter Amount"
+              required 
+              pattern="^([0-9]{1,7})(\.[0-9]{0,2})?$"
+      />
+      <mat-hint align="end">{{input.value?.length || 0}}</mat-hint>
+    </mat-form-field>
+  </div>
+
+  <div class="form-group">
+    <mat-form-field hintlabel="date">
+        <input [(ngModel)]="contributor.date" 
+               matInput 
+               [matDatepicker]="picker" 
+               placeholder="Choose a date"
+               required 
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker">toggle</mat-datepicker-toggle>
+        <mat-datepicker touchUi #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close cdkFocusInitial (click)="checkIfNumber()">Submit</button>
+  <button mat-button [mat-dialog-close]="true" >close</button>
+</mat-dialog-actions>
+
+
+
+
+
+    

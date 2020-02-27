@@ -1,10 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { transaction } from '../models/transactions';
-import { asset } from '../models/asset';
-import { AssetService } from '../services/asset.service';
-import { TransactionsService } from '../services/transactions.service';
-import { ActivatedRoute, Params } from '@angular/router';
-import { Location } from '@angular/common';
+import { transaction }              from '../models/transactions';
+import { asset }                    from '../models/asset';
+import { owners }                   from '../models/owner'
+import { AssetService }             from '../services/asset.service';
+import { TransactionsService }      from '../services/transactions.service';
+import { OwnerContributionService } from '../services/owner-contribution.service';
+import { ActivatedRoute, Params }   from '@angular/router';
+import { Location }                 from '@angular/common';
+
 
 @Component({
   selector: 'app-add-transaction',
@@ -13,17 +16,19 @@ import { Location } from '@angular/common';
 })
 export class AddTransactionComponent  implements OnInit{
 
-  Transaction = new transaction();
-  submitted = false;
-  assetIsNew = true;
-  newAsset = new asset();
+  Transaction   = new transaction();
+  submitted     = false;
+  assetIsNew    = true;
+  newAsset      = new asset();
   existingAsset = new asset();
   passedInShares: any;
-  shareCount: string;
+  shareCount    : string;
+  owners        : owners[];
 
   constructor(
     private assetService: AssetService,
     private transactionService: TransactionsService,
+    private ownerServie: OwnerContributionService,
     private location: Location,
     private route: ActivatedRoute,
   ) { }
@@ -31,16 +36,22 @@ export class AddTransactionComponent  implements OnInit{
   // upon initialization set the transaction to true/buy and the colors to green
   ngOnInit()
   {
+      // Get Owners
+      this.ownerServie.getOwners().subscribe(
+        res => this.owners = res,
+        err => console.log("error fetching owners"),
+        ()  => console.log("done fetching owners")
+      );
+
       // Get any parmaeter passed in from url
       const passedInSymbol =  this.route.snapshot.paramMap.get('symbol');
       this.Transaction.symbol = passedInSymbol;
       this.passedInShares = this.route.snapshot.paramMap.get('shares');
+      
       if ( this.passedInShares )
-      { this.shareCount = "You currently have this many shares : "+this.passedInShares;}
+        this.shareCount = "You currently have this many shares : "+this.passedInShares;
       if (passedInSymbol != null)
-      {
         this.assetIsNew = false;
-      }
   }
 
   // Change the trasnaction from buy to sell or vice versa, change colors of input fields
@@ -71,15 +82,10 @@ export class AddTransactionComponent  implements OnInit{
   // new form, reset the state excep for the transaction state we will keep that the same
   newTransaction(): void {
     const saveTransaction = this.Transaction.transaction;
-    this.Transaction = new transaction();
-    this.newAsset = new asset();
-    this.existingAsset = new asset();
-    // if ( saveTransaction === true ) {
-    //   this.setTransaction(true);
-    //   }
-    // else  {
-    //   this.setTransaction(false);
-    //   } 
+    this.Transaction      = new transaction();
+    this.newAsset         = new asset();
+    this.existingAsset    = new asset();
+  
     this.submitted = false;
     this.assetIsNew = true;
   }
@@ -87,7 +93,7 @@ export class AddTransactionComponent  implements OnInit{
    // This function will grab the asset with the symbolName from the database and call the updateAsset functio, 
   // or return an error
   private grabAsset(symbolName: string): void{
-    this.assetService.getAsset(symbolName)
+    this.assetService.getAssetIfNotExisting(symbolName)
       .subscribe(value => this.existingAsset = value ,
                  error =>  alert("Error connecting to database to grab an asset") , 
                  ()  => this.verifyIfAssetExists()
@@ -115,11 +121,11 @@ export class AddTransactionComponent  implements OnInit{
           }
           return res();
         }
-          else
-          {
+        else
+        {
           this.assetIsNew = false;
           return res();
-          }
+        }
      }).then(res=>{
         if (this.assetIsNew === false)
         {
@@ -210,8 +216,6 @@ export class AddTransactionComponent  implements OnInit{
             }
             return ;         
       }).then(res=>{
-          // Calculate gain on the transaction
-           currentTransaction.gain = (currentTransaction.price - assetToUpdate.avgprice) / assetToUpdate.avgprice * 100;
           // if this is NOT a new asset we will call updateAsset, otherwise we will create the new asset
           if (this.assetIsNew === false)
           {

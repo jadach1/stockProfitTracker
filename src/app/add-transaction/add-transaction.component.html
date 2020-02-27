@@ -9,10 +9,37 @@
     <form #transactionForm="ngForm" [ngStyle]="{'color':setTransaction()}">
 
       <div class="form-group">
+        <label for="owner">Select an Owner</label>
+        <select 
+                 name="owner"
+                 [(ngModel)]="Transaction.ownerid" 
+                 placeholder="Select Owner"
+                 required
+                 class="form-control"
+                 style="background-color: black; 
+                        color: yellow;"
+        >
+        <option *ngFor="let element of owners" 
+                    [value]="element.id">  
+                    {{element.owner}}
+        </option>
+        </select>
+      </div>
+
+      <div class="form-group">
         <label for="symbol">Company Symbol</label>
-        <input style="color:yellow" type="text" class="form-control" id="symbol" placeholder="Give Companies symbol" 
-        required maxlength="6" pattern="([0-9A-Za-z.]{1,6})" autofocus 
-        [(ngModel)]="Transaction.symbol" name="symbol" #symbol="ngModel">
+        <input style="color:yellow" 
+                type="text" 
+                class="form-control" 
+                id="symbol" 
+                placeholder="Give Companies symbol" 
+                required 
+                maxlength="6" 
+                pattern="([0-9A-Za-z.]{1,6})" 
+                autofocus 
+                [(ngModel)]="Transaction.symbol" 
+                name="symbol" 
+                #symbol="ngModel">
         <div [hidden]="symbol.valid || symbol.pristine"
              class="alert alert-danger">
             The symbol is not valid

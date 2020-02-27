@@ -20,8 +20,11 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
  
 //Models/tables
-db.assets    = require('../model/asset.model.js')(sequelize, Sequelize);
-db.transactions    = require('../model/transactions.model.js')(sequelize, Sequelize);
+db.assets                 = require('../model/asset.model.js')(sequelize, Sequelize);
+db.transactions           = require('../model/transactions.model.js')(sequelize, Sequelize);
+db.archivedtransactions   = require('../model/archivedTransactions.model.js')(sequelize, Sequelize);
+db.contributions          = require('../model/contributions.model.js')(sequelize, Sequelize);
+db.owners                 = require('../model/owners.model.js')(sequelize, Sequelize);
 
 module.exports = db;
 
