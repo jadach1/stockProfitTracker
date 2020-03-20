@@ -22,6 +22,9 @@ module.exports = function(capp) {
     // Retrieve all Assets by type
     capp.get('/api/allassets/:type', CurrentAssets.findAllByType);
 
+     // Retrieve all Assets by type and owner
+     capp.get('/api/allassets/:type/:owner', CurrentAssets.findAllByOwner);
+
     /*********************** ARCHVIED ASSETS  ***************************/
     capp.put('/api/transferAsset/:id/:status', CurrentAssets.transferAsset);
 }

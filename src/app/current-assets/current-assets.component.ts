@@ -1,9 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { asset } from '../models/asset';
-import { archivedTransaction } from '../models/archivedTransactions';
-import { AssetService } from '../services/asset.service';
-import { TransactionsService } from          '../services/transactions.service';
-import { portfolio } from '../models/portfolioOverall';
+import { Component, OnInit }          from '@angular/core';
+
+// models
+import { asset }                      from '../models/asset';
+import { archivedTransaction }        from '../models/archivedTransactions';
+import { portfolio }                  from '../models/portfolioOverall';
+import { owners }                     from '../models/owner';
+
+//services
+import { AssetService }               from '../services/asset.service';
+import { TransactionsService }        from '../services/transactions.service';
+import { OwnerContributionService }   from '../services/owner-contribution.service'
+
 
 interface report{
   overallOut:      any;
@@ -25,13 +32,17 @@ export class CurrentAssetsComponent implements OnInit {
   portfolio = new portfolio();
   reportPrep: report; // for number calculations
   reportDisp: report; // for string display
-  idNumber:   any; //for an archived asset
-  
-  constructor(private assetService: AssetService, private transService: TransactionsService) {}
+  idNumber:   any;    //for an archived asset
+  Owners:     owners[];
+  ownersID:   number;
+
+  constructor(private assetService: AssetService, 
+              private transService: TransactionsService,
+              private ownerService: OwnerContributionService ) {}
  
 
   ngOnInit(): void {
-   this.getAssets("existing"); 
+   this.getOwners(); 
   }
 
   resetOverallBar(){
@@ -50,10 +61,38 @@ export class CurrentAssetsComponent implements OnInit {
     }
   }
 
-  getAssets(type: string){
+  /*
+    Fetches all the owners, upon success will load the first owners assets
+    through the getAssets function
+  */
+  getOwners(){
+    this.ownerService.getOwners()
+    .subscribe(
+                res=> {this.Owners = res, this.getAssets("existing")}, 
+                err=>console.log("failure to fetch owners in dashboard"),
+                ()=>console.log(this.Owners)
+              );
+  }
 
+  /*
+    The purpose is to fetch all assets associated with a specific owners unique ID.
+    In addition, the type parameter passed into the function can specify existing or archived
+  */
+  getAssets(type: string){
+    if(this.ownersID == null){
+      try{
+          if(this.Owners == null)
+            throw "Owners array is empty, no owners found in database, nothing to fetch";
+          else {
+            this.ownersID = this.Owners[0].id;
+          }
+        } 
+        catch (error) {
+          console.log(error)
+        }
+    } 
     this.resetOverallBar();
-    return this.assetService.getAllAssetsByType(type)
+    this.assetService.getAllAssetsByOwner(type, this.ownersID)
     .subscribe(
                 res => this.assets = res,
                 err => console.log("could not fetch assets from database"),
@@ -75,13 +114,11 @@ export class CurrentAssetsComponent implements OnInit {
     finally it will delete that asset for the Assets table
   */
   searchForArchives(){
-    console.log("zeroth")
     this.assets.forEach(element => 
       {
         // If we find an asset with 0 shares
         if ( parseFloat(element.shares) == 0 && element.assettype == "existing" )
         {
-          console.log(element.shares + " " + element.assettype)
           // this.assetTransfter = element;
           this.idNumber = element.id;
           this.assetService.transferToArchive(element.id,"archived")
@@ -102,7 +139,6 @@ export class CurrentAssetsComponent implements OnInit {
   */
   archiveAsset(symbol: string){
     // grab the ID of the archived asset we just saved
-    console.log("here 234")
     var transID;
     this.transService.getTransactionsFromArchivedAsset(symbol)
                       .subscribe(
@@ -134,14 +170,6 @@ export class CurrentAssetsComponent implements OnInit {
     window.location.reload();
   }
 
-  archiveAsset3(symbol: string){
-    // this.assetService.deleteAsset(symbol)
-    //   .subscribe(
-    //     res => console.log("successfully deleted " + symbol),
-    //     err => console.log("error trying to delete asset"),
-    //     ()  => this.getAssets() // reload the page
-    //   )
-  }
   /*
     Iterate through each of the assets and append the value
   */

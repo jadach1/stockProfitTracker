@@ -31,6 +31,14 @@ export class AssetService {
     return this.http.get<asset[]>(this.Url+route)
   }
 
+  // return all assets from the database table assets
+  getAllAssetsByOwner (type: string, ownerid: number): Observable<asset[]> {
+    // type referse to the assettype: existing, archived, pure
+    const route =  "allassets/"+type+"/"+ownerid;
+    console.log("get all assets byu owner " + route);
+    return this.http.get<asset[]>(this.Url+route)
+  }
+
   // create an asset
   createAsset(asset: asset): Observable<asset> {
     return this.http.post<asset>(this.Url+'currentassets', asset, httpOptions);

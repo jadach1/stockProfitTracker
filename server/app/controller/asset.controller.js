@@ -41,11 +41,26 @@ exports.findAll = (req, res) => {
 		});
 };
 
-// FETCH All Transactions
+// FETCH All Transactions by a specific type ie "existing or archived"
 exports.findAllByType = (req, res) => {
 	const type=req.params.type;
 	db.sequelize
 		.query('select * from assets where assettype=\''+type+'\';')
+		.then(Asset => {
+			// Send All CurrentAssets to Client
+			res.json(Asset[0].sort(function(c1, c2){return c1.id - c2.id}));
+		}).catch(err => {
+			console.log(err);
+			res.status(500).json({msg: "error", details: err});
+		});
+};
+
+// FETCH All Transactions by a specific type and by owner id ie "existing or archived for owner 1"
+exports.findAllByOwner = (req, res) => {
+	const type=req.params.type;
+	const id=req.params.owner;
+	db.sequelize
+		.query('select * from assets where ownerid ='+id+' and assettype=\''+type+'\';')
 		.then(Asset => {
 			// Send All CurrentAssets to Client
 			res.json(Asset[0].sort(function(c1, c2){return c1.id - c2.id}));
