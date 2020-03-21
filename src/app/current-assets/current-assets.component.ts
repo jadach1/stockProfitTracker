@@ -27,14 +27,16 @@ interface report{
 
 export class CurrentAssetsComponent implements OnInit {
 
-  assets:     asset[];
+  assets:        asset[];
   assetTransfter = new asset();
-  portfolio = new portfolio();
-  reportPrep: report; // for number calculations
-  reportDisp: report; // for string display
-  idNumber:   any;    //for an archived asset
-  Owners:     owners[];
-  ownersID:   number;
+  portfolio      = new portfolio();
+  reportPrep:    report; // for number calculations
+  reportDisp:    report; // for string display
+  idNumber:      any;    //for an archived asset
+  Owners:        owners[];
+  ownersID:      number;
+  assetToDelete: number; // store asset symbol if we choose to delete it
+  symbolToDel:   string;
 
   constructor(private assetService: AssetService, 
               private transService: TransactionsService,
@@ -68,9 +70,9 @@ export class CurrentAssetsComponent implements OnInit {
   getOwners(){
     this.ownerService.getOwners()
     .subscribe(
-                res=> {this.Owners = res, this.getAssets("existing")}, 
+                res=> this.Owners = res,
                 err=>console.log("failure to fetch owners in dashboard"),
-                ()=>console.log(this.Owners)
+                ()  => this.getAssets('existing')
               );
   }
 
@@ -174,7 +176,6 @@ export class CurrentAssetsComponent implements OnInit {
     Iterate through each of the assets and append the value
   */
   calculateValue(){
-    console.log("1st")
     this.assets.forEach(element => 
       {
         this.reportPrep.overallOut      += parseFloat(element.totalMoneyOut);
@@ -188,7 +189,6 @@ export class CurrentAssetsComponent implements OnInit {
     Convert to 2 decimcal places
   */
   twoDecimalPlaces(){
-   console.log("2nd")
     this.reportDisp = {
       overallOut: this.reportPrep.overallOut.toFixed(2),
       overallIn: this.reportPrep.overallIn.toFixed(2),
@@ -201,10 +201,40 @@ export class CurrentAssetsComponent implements OnInit {
     Format so rather than 1111.11 we get $1,111.11
   */
   formatToString(){
-    console.log("3rd")
     this.reportDisp.overallCurrent  = this.reportDisp.overallCurrent.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     this.reportDisp.overallIn       = this.reportDisp.overallIn.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     this.reportDisp.overallOrgMoney = this.reportDisp.overallOrgMoney.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     this.reportDisp.overallOut      = this.reportDisp.overallOut.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+  }
+
+  verifyDelete(id: number, symbol: string) {
+    this.assetToDelete = id;
+    this.symbolToDel = symbol;
+    let modal = document.getElementById("deleteAsset");
+    modal.style.display = "block";
+  }
+
+  deleteAsset() {
+    try{
+      if(this.assetToDelete == null )
+        throw "Error, trying to delete asset but symbol is unkown";
+      else {
+        this.assetService.deleteAsset(this.assetToDelete)
+        .subscribe(
+                    res => console.log("successfully deleted asset"),
+                    rej => console.log("Was not able to successfully delete asset " + this.assetToDelete),
+                    ()  => this.getAssets('existing')
+        );
+      }
+    } catch(err){
+      console.log(err)
+    }
+  }
+
+  hideModal(){
+    this.assetToDelete = 0; // set to 0 in case we accidentally delete the wrong asset
+    this.symbolToDel = "";
+    let modal = document.getElementById("deleteAsset");
+    modal.style.display = "none";
   }
 }

@@ -130,8 +130,9 @@ export class AddTransactionComponent  implements OnInit{
            // If we successfully grabbed the asset from the database
           this.updateExistingAsset(this.existingAsset, this.Transaction, this.assetService,this.transactionService) 
         } else {
-             // If this is a new asset, set the symbol and all params to 0 and pass it
+             // If this is a new asset, set the symbol and ownerid as well as setting all params to 0 and pass it
           this.newAsset.symbol = this.Transaction.symbol;
+          this.newAsset.ownerid = this.Transaction.ownerid;
           this.updateExistingAsset(this.newAsset, this.Transaction, this.assetService,this.transactionService) 
         }
      }).catch(err=>{

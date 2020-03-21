@@ -14,7 +14,7 @@ export class asset {
     realMargin:    any= 0;
     unRealProfit:  any= 0;
     unRealMargin:  any= 0;
-    assettype:    any;
-    ownerid:    any;
+    assettype:     any;
+    ownerid:       any;
 }
 

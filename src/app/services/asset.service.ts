@@ -35,7 +35,6 @@ export class AssetService {
   getAllAssetsByOwner (type: string, ownerid: number): Observable<asset[]> {
     // type referse to the assettype: existing, archived, pure
     const route =  "allassets/"+type+"/"+ownerid;
-    console.log("get all assets byu owner " + route);
     return this.http.get<asset[]>(this.Url+route)
   }
 
@@ -50,9 +49,8 @@ export class AssetService {
   }
 
   // delete an asset
-  deleteAsset (symbol: string) {
-    console.log(this.Url+'currentassets/'+symbol)
-    return this.http.delete(this.Url+'currentassets/'+symbol, httpOptions);
+  deleteAsset (id: number) {
+    return this.http.delete(this.Url+'currentassets/'+id, httpOptions);
   }
 
   /*******************ARCHIVED ASSETS  *****************************/

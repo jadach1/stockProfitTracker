@@ -19,9 +19,9 @@ exports.create = (req, res) => {
 				"unRealMargin"	:req.body.unRealMargin,
 				"price"			:req.body.price,
 				"currentTotal"	:req.body.currentTotal,
-				"ownerid"		:req.body.ownerid
+				"ownerid"		:req.body.ownerid,
 			}).then(CurrentAsset => {		
-			console.log("Creating Asset");	
+			console.log("Creating Asset ");	
 			// Send created CurrentAsset to client
 			res.json(CurrentAsset);
 		}).catch(err => {
@@ -96,11 +96,11 @@ exports.update = (req, res) => {
 
 // Delete a CurrentAsset by symbol
 exports.delete = (req, res) => {
-	const symbol = req.params.symbol;
+	const id = req.params.id;
 	CurrentAsset.destroy({
-			where: { symbol: symbol }
+			where: { id: id }
 		}).then(() => {
-			res.status(200).json( { msg: 'Deleted Successfully -> Asset symbol = ' + symbol } );
+			res.status(200).json( { msg: 'Deleted Successfully -> Asset id = ' + id } );
 		}).catch(err => {
 			console.log(err);
 			res.status(500).json({msg: "error", details: err});

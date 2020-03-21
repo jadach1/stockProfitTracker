@@ -64,10 +64,18 @@
         <td> {{asset.assettype}} </td>
         <button [routerLink]="['/Transactions/add', asset.symbol, asset.shares]" routerLinkActive="active" type="button" >Trade</button>
         <button type="button"  [routerLink]="['/currentAssets/', asset.symbol]" routerLinkActive="active" >DETAILS</button>
+        <button type="button"  (click)="verifyDelete(asset.id, asset.symbol)" >DELETE</button>
         <p></p>
       <br>
     </tr>
   
   </tbody>
 </table>
+
+  <div id="deleteAsset" class="modal-delete">
+    <span (click)="hideModal()" class="close">&times;</span>
+    <h3>Are you sure you wish to delete {{symbolToDel}}</h3>
+    <button (click)="deleteAsset()">Yes </button>
+    <button (click)="hideModal()"  >No</button>
+  </div>
 </div>
