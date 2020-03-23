@@ -50,8 +50,6 @@ export class AddTransactionComponent  implements OnInit{
       
       if ( this.passedInShares )
         this.shareCount = "You currently have this many shares : "+this.passedInShares;
-      if (passedInSymbol != null)
-        this.assetIsNew = false;
   }
 
   // Change the trasnaction from buy to sell or vice versa, change colors of input fields
@@ -129,15 +127,16 @@ export class AddTransactionComponent  implements OnInit{
      }).then(res=>{
         if (this.assetIsNew === false)
         {
-          // If we successfully grabbed the asset from the database
+           // If we successfully grabbed the asset from the database
           this.updateExistingAsset(this.existingAsset, this.Transaction, this.assetService,this.transactionService) 
         } else {
-          // If this is a new asset, set the symbol and all params to 0 and pass it
+             // If this is a new asset, set the symbol and ownerid as well as setting all params to 0 and pass it
           this.newAsset.symbol = this.Transaction.symbol;
+          this.newAsset.ownerid = this.Transaction.ownerid;
           this.updateExistingAsset(this.newAsset, this.Transaction, this.assetService,this.transactionService) 
         }
      }).catch(err=>{
-          alert(err);
+          console.log("caught an error when verifying if asset exists: " + err);
      })
    }
  }
@@ -234,6 +233,7 @@ export class AddTransactionComponent  implements OnInit{
             return ;  
       }).then(res=>{
             // If we have made it up to this point then it is safe to save the transaction as well.
+            console.log("transaction " + currentTransaction.symbol + " " + currentTransaction.ownerid);
             currentTransactionService.addTransaction(currentTransaction)
             .subscribe();
             // And we can also set the submit variable to true, indicating a successful transaction

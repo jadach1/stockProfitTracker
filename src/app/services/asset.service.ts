@@ -31,6 +31,13 @@ export class AssetService {
     return this.http.get<asset[]>(this.Url+route)
   }
 
+  // return all assets from the database table assets
+  getAllAssetsByOwner (type: string, ownerid: number): Observable<asset[]> {
+    // type referse to the assettype: existing, archived, pure
+    const route =  "allassets/"+type+"/"+ownerid;
+    return this.http.get<asset[]>(this.Url+route)
+  }
+
   // create an asset
   createAsset(asset: asset): Observable<asset> {
     return this.http.post<asset>(this.Url+'currentassets', asset, httpOptions);
@@ -42,9 +49,8 @@ export class AssetService {
   }
 
   // delete an asset
-  deleteAsset (symbol: string) {
-    console.log(this.Url+'currentassets/'+symbol)
-    return this.http.delete(this.Url+'currentassets/'+symbol, httpOptions);
+  deleteAsset (id: number) {
+    return this.http.delete(this.Url+'currentassets/'+id, httpOptions);
   }
 
   /*******************ARCHIVED ASSETS  *****************************/

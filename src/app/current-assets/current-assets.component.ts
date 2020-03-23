@@ -1,9 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { asset } from '../models/asset';
-import { archivedTransaction } from '../models/archivedTransactions';
-import { AssetService } from '../services/asset.service';
-import { TransactionsService } from          '../services/transactions.service';
-import { portfolio } from '../models/portfolioOverall';
+import { Component, OnInit }          from '@angular/core';
+
+// models
+import { asset }                      from '../models/asset';
+import { archivedTransaction }        from '../models/archivedTransactions';
+import { portfolio }                  from '../models/portfolioOverall';
+import { owners }                     from '../models/owner';
+
+//services
+import { AssetService }               from '../services/asset.service';
+import { TransactionsService }        from '../services/transactions.service';
+import { OwnerContributionService }   from '../services/owner-contribution.service'
+
 
 interface report{
   overallOut:      any;
@@ -20,18 +27,24 @@ interface report{
 
 export class CurrentAssetsComponent implements OnInit {
 
-  assets:     asset[];
+  assets:        asset[];
   assetTransfter = new asset();
-  portfolio = new portfolio();
-  reportPrep: report; // for number calculations
-  reportDisp: report; // for string display
-  idNumber:   any; //for an archived asset
-  
-  constructor(private assetService: AssetService, private transService: TransactionsService) {}
+  portfolio      = new portfolio();
+  reportPrep:    report; // for number calculations
+  reportDisp:    report; // for string display
+  idNumber:      any;    //for an archived asset
+  Owners:        owners[];
+  ownersID:      number;
+  assetToDelete: number; // store asset symbol if we choose to delete it
+  symbolToDel:   string;
+
+  constructor(private assetService: AssetService, 
+              private transService: TransactionsService,
+              private ownerService: OwnerContributionService ) {}
  
 
   ngOnInit(): void {
-   this.getAssets("existing"); 
+   this.getOwners(); 
   }
 
   resetOverallBar(){
@@ -50,10 +63,38 @@ export class CurrentAssetsComponent implements OnInit {
     }
   }
 
-  getAssets(type: string){
+  /*
+    Fetches all the owners, upon success will load the first owners assets
+    through the getAssets function
+  */
+  getOwners(){
+    this.ownerService.getOwners()
+    .subscribe(
+                res=> this.Owners = res,
+                err=>console.log("failure to fetch owners in dashboard"),
+                ()  => this.getAssets('existing')
+              );
+  }
 
+  /*
+    The purpose is to fetch all assets associated with a specific owners unique ID.
+    In addition, the type parameter passed into the function can specify existing or archived
+  */
+  getAssets(type: string){
+    if(this.ownersID == null){
+      try{
+          if(this.Owners == null)
+            throw "Owners array is empty, no owners found in database, nothing to fetch";
+          else {
+            this.ownersID = this.Owners[0].id;
+          }
+        } 
+        catch (error) {
+          console.log(error)
+        }
+    } 
     this.resetOverallBar();
-    return this.assetService.getAllAssetsByType(type)
+    this.assetService.getAllAssetsByOwner(type, this.ownersID)
     .subscribe(
                 res => this.assets = res,
                 err => console.log("could not fetch assets from database"),
@@ -75,13 +116,11 @@ export class CurrentAssetsComponent implements OnInit {
     finally it will delete that asset for the Assets table
   */
   searchForArchives(){
-    console.log("zeroth")
     this.assets.forEach(element => 
       {
         // If we find an asset with 0 shares
         if ( parseFloat(element.shares) == 0 && element.assettype == "existing" )
         {
-          console.log(element.shares + " " + element.assettype)
           // this.assetTransfter = element;
           this.idNumber = element.id;
           this.assetService.transferToArchive(element.id,"archived")
@@ -102,7 +141,6 @@ export class CurrentAssetsComponent implements OnInit {
   */
   archiveAsset(symbol: string){
     // grab the ID of the archived asset we just saved
-    console.log("here 234")
     var transID;
     this.transService.getTransactionsFromArchivedAsset(symbol)
                       .subscribe(
@@ -134,19 +172,10 @@ export class CurrentAssetsComponent implements OnInit {
     window.location.reload();
   }
 
-  archiveAsset3(symbol: string){
-    // this.assetService.deleteAsset(symbol)
-    //   .subscribe(
-    //     res => console.log("successfully deleted " + symbol),
-    //     err => console.log("error trying to delete asset"),
-    //     ()  => this.getAssets() // reload the page
-    //   )
-  }
   /*
     Iterate through each of the assets and append the value
   */
   calculateValue(){
-    console.log("1st")
     this.assets.forEach(element => 
       {
         this.reportPrep.overallOut      += parseFloat(element.totalMoneyOut);
@@ -160,7 +189,6 @@ export class CurrentAssetsComponent implements OnInit {
     Convert to 2 decimcal places
   */
   twoDecimalPlaces(){
-   console.log("2nd")
     this.reportDisp = {
       overallOut: this.reportPrep.overallOut.toFixed(2),
       overallIn: this.reportPrep.overallIn.toFixed(2),
@@ -173,10 +201,40 @@ export class CurrentAssetsComponent implements OnInit {
     Format so rather than 1111.11 we get $1,111.11
   */
   formatToString(){
-    console.log("3rd")
     this.reportDisp.overallCurrent  = this.reportDisp.overallCurrent.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     this.reportDisp.overallIn       = this.reportDisp.overallIn.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     this.reportDisp.overallOrgMoney = this.reportDisp.overallOrgMoney.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     this.reportDisp.overallOut      = this.reportDisp.overallOut.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+  }
+
+  verifyDelete(id: number, symbol: string) {
+    this.assetToDelete = id;
+    this.symbolToDel = symbol;
+    let modal = document.getElementById("deleteAsset");
+    modal.style.display = "block";
+  }
+
+  deleteAsset() {
+    try{
+      if(this.assetToDelete == null )
+        throw "Error, trying to delete asset but symbol is unkown";
+      else {
+        this.assetService.deleteAsset(this.assetToDelete)
+        .subscribe(
+                    res => console.log("successfully deleted asset"),
+                    rej => console.log("Was not able to successfully delete asset " + this.assetToDelete),
+                    ()  => this.getAssets('existing')
+        );
+      }
+    } catch(err){
+      console.log(err)
+    }
+  }
+
+  hideModal(){
+    this.assetToDelete = 0; // set to 0 in case we accidentally delete the wrong asset
+    this.symbolToDel = "";
+    let modal = document.getElementById("deleteAsset");
+    modal.style.display = "none";
   }
 }

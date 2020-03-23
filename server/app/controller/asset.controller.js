@@ -19,9 +19,9 @@ exports.create = (req, res) => {
 				"unRealMargin"	:req.body.unRealMargin,
 				"price"			:req.body.price,
 				"currentTotal"	:req.body.currentTotal,
-				"ownerid"		:req.body.ownerid
+				"ownerid"		:req.body.ownerid,
 			}).then(CurrentAsset => {		
-			console.log("Creating Asset");	
+			console.log("Creating Asset ");	
 			// Send created CurrentAsset to client
 			res.json(CurrentAsset);
 		}).catch(err => {
@@ -41,11 +41,26 @@ exports.findAll = (req, res) => {
 		});
 };
 
-// FETCH All Transactions
+// FETCH All Transactions by a specific type ie "existing or archived"
 exports.findAllByType = (req, res) => {
 	const type=req.params.type;
 	db.sequelize
 		.query('select * from assets where assettype=\''+type+'\';')
+		.then(Asset => {
+			// Send All CurrentAssets to Client
+			res.json(Asset[0].sort(function(c1, c2){return c1.id - c2.id}));
+		}).catch(err => {
+			console.log(err);
+			res.status(500).json({msg: "error", details: err});
+		});
+};
+
+// FETCH All Transactions by a specific type and by owner id ie "existing or archived for owner 1"
+exports.findAllByOwner = (req, res) => {
+	const type=req.params.type;
+	const id=req.params.owner;
+	db.sequelize
+		.query('select * from assets where ownerid ='+id+' and assettype=\''+type+'\';')
 		.then(Asset => {
 			// Send All CurrentAssets to Client
 			res.json(Asset[0].sort(function(c1, c2){return c1.id - c2.id}));
@@ -81,11 +96,11 @@ exports.update = (req, res) => {
 
 // Delete a CurrentAsset by symbol
 exports.delete = (req, res) => {
-	const symbol = req.params.symbol;
+	const id = req.params.id;
 	CurrentAsset.destroy({
-			where: { symbol: symbol }
+			where: { id: id }
 		}).then(() => {
-			res.status(200).json( { msg: 'Deleted Successfully -> Asset symbol = ' + symbol } );
+			res.status(200).json( { msg: 'Deleted Successfully -> Asset id = ' + id } );
 		}).catch(err => {
 			console.log(err);
 			res.status(500).json({msg: "error", details: err});

@@ -17,10 +17,13 @@ module.exports = function(capp) {
     capp.put('/api/currentassets', CurrentAssets.update);
  
     // Delete a CurrentAsset with Symbol
-    capp.delete('/api/currentassets/:symbol', CurrentAssets.delete);
+    capp.delete('/api/currentassets/:id', CurrentAssets.delete);
 
     // Retrieve all Assets by type
     capp.get('/api/allassets/:type', CurrentAssets.findAllByType);
+
+     // Retrieve all Assets by type and owner
+     capp.get('/api/allassets/:type/:owner', CurrentAssets.findAllByOwner);
 
     /*********************** ARCHVIED ASSETS  ***************************/
     capp.put('/api/transferAsset/:id/:status', CurrentAssets.transferAsset);

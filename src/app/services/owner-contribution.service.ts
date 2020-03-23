@@ -36,7 +36,6 @@ export class OwnerContributionService {
   }
 
   contribute(contribution: contributions) {
-      console.log("inside contributions ");
       return this.http.post<contributions>(this.Url+'contributions',contribution, httpOptions);
   }
 }
